@@ -1,0 +1,45 @@
+<header th:fragment="header" class="header">
+    <div class="container">
+        <div class="row align-items-center">
+			<span class="menu_bar align-center d-flex d-xl-none" title="Menu">
+				<img src="/897121/assets/bars47e9.png" width="32" height="32" alt="OH! Thương mại điện tử">
+			</span>
+            <a href="index.html" class="logo logo-index">
+                <img src="/897121/assets/logo47e9.png?1735554303306" width="171" height="48" alt="OH! Thương mại điện tử">
+            </a>
+            <form action="/search" class="input-group search-form" role="search">
+                <input type="text" aria-label="Tìm sản phẩm" name="query" value="" autocomplete="off" class="search-auto search-auto margin-0 position-relative" required="">
+                <button class="position-absolute padding-0" aria-label="search">
+                    <img src="http://bizweb.dktcdn.net/100/479/080/themes/897121/assets/searchico.svg?1735554303306" width="44" height="44" alt="search"/>
+                </button>
+                <p class="suggest margin-0 position-absolute">
+                    <a href="dien-thoai-may-tinh.html" title="Điện thoại - máy tính">Điện thoại - máy tính</a>
+                    <a href="dong-ho.html" title="Đồng hồ">Đồng hồ</a>
+                    <a href="me-va-be.html" title="Mẹ và bé">Mẹ và bé</a>
+                    <a href="noi-that-nha-cua.html" title="Nội thất nhà cửa">Nội thất nhà cửa</a>
+                    <a href="dung-cu-nha-bep.html" title="Dụng cụ nhà bếp">Dụng cụ nhà bếp</a>
+                    <a href="giay-dep.html" title="Giày dép">Giày dép</a>
+                    <a href="thoi-trang-nam.html" title="Thời trang nam">Thời trang nam</a>
+                    <a href="balo-va-vali.html" title="Balo và Vali">Balo và Vali</a>
+                </p>
+            </form>
+            <a class="text-ico hotline" href="tel:19006750" title="Hotline">Hotline<span class="d-block">1900 6750</span></a>
+            <div class="account position-relative">
+                <a href="account/logina3b1.html" class="text-ico account-head d-block" title="Tài khoản">Tài khoản
+                    <span class="d-block">Hello,  Khách</span>
+                </a>
+                <ul class="position-absolute">
+                    <li><a href="account/login.html" title="Đăng nhập">Đăng nhập</a></li>
+                    <li><a href="account/register.html" title="Đăng ký">Đăng ký</a></li>
+                    <li><a href="san-pham-yeu-thich.html" class="wishlist_header" title="Sản phẩm yêu thích">Yêu thích (<span class="headerWishlistCount">0</span>)</a></li>
+                    <li><a href="san-pham-da-xem.html" class="wishlist_header" title="Sản phẩm đã xem">Đã xem (<span class="countviewed">0</span>)</a></li>
+                </ul>
+            </div>
+            <a class="text-ico cart-head position-relative" href="cart.html" title="Giỏ hàng">
+                Giỏ hàng
+                <span class="d-block">Thanh toán</span>
+                <span class="d-block count_item_pr position-absolute border-radius-20 text-center">0</span>
+            </a>
+        </div>
+    </div>
+</header>
