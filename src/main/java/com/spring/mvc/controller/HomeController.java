@@ -18,4 +18,16 @@ public class HomeController {
     public String Test() {
         return "client/view/test"; // Trả về view "index.html" trong thư mục "templates/client/index"
     }
+    @GetMapping("/type")
+    public String Type() {
+        return "client/view/product_type";
+    }
+    @GetMapping("/login")
+    public String Login() {
+        return "client/view/login";
+    }
+    @GetMapping("/register")
+    public String Register() {
+        return "client/view/register";
+    }
 }
