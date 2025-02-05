@@ -30,4 +30,8 @@ public class HomeController {
     public String Register() {
         return "client/view/register";
     }
+    @GetMapping("/admin")
+    public String Admin() {
+        return "admin/view/index";
+    }
 }
