@@ -1,4 +1,4 @@
-package com.spring.mvc.repository;
+package com.spring.mvc.repository.admin;
 
 import com.spring.mvc.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
