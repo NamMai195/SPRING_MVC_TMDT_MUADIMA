@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-
 @Entity
 @Data
 @NoArgsConstructor
@@ -21,7 +20,7 @@ public class Product {
     private Seller seller;
 
     @ManyToOne
-    @JoinColumn(name = "type_id")
+    @JoinColumn(name = "product_type_id")
     private ProductType productType;
 
     private String name;

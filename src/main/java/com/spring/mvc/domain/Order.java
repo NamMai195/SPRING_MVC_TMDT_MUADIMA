@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
-
 @Entity(name = "orders")
 @Data
 @NoArgsConstructor
@@ -26,9 +25,8 @@ public class Order {
     private Voucher voucher;
 
     private Date createdAt;
+    private double totalAmount; // Tổng giá trị đơn hàng
     private String status;
-
-    private String address;
 
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;
