@@ -21,4 +21,5 @@ public class Admin {
     private String email;
     private String image;
     private String cccd;
+    private boolean status;
 }

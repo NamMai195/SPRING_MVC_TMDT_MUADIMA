@@ -23,7 +23,7 @@ public class Seller {
     private String address;
     private String sdt;
     private String cccd;
-    private String status; // Trạng thái người bán
+    private boolean status; // Trạng thái người bán
 
     @OneToOne(mappedBy = "seller")
     private WalletSeller walletSeller;
@@ -33,5 +33,8 @@ public class Seller {
 
     @OneToMany(mappedBy = "seller")
     private List<Complain> complains;
+
+    @OneToMany(mappedBy = "seller")
+    private List<Voucher> vouchers;
 }
 

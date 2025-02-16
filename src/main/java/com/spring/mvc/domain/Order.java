@@ -21,12 +21,13 @@ public class Order {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "voucher_id")
-    private Voucher voucher;
+    @JoinColumn(name = "voucher_storage_id")
+    private VoucherStorage voucherStorage;
+
 
     private Date createdAt;
     private double totalAmount; // Tổng giá trị đơn hàng
-    private String status;
+    private boolean status;
 
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;

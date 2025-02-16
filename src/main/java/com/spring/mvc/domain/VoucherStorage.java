@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -19,6 +21,9 @@ public class VoucherStorage {
     @ManyToOne
     @JoinColumn(name = "voucher_id")
     private Voucher voucher;
+
+    @OneToMany(mappedBy = "voucherStorage")
+    private List<Order> orders;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

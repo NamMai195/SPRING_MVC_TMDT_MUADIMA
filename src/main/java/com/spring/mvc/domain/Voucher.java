@@ -20,12 +20,13 @@ public class Voucher {
     private double discountAmount;
     private String code;
     private String type;
-    private String status;
+    private boolean status;
     private Date startDate;
     private Date endDate;
 
-    @OneToMany(mappedBy = "voucher")
-    private List<Order> orders; // Voucher có thể được sử dụng trong nhiều đơn hàng
+    @ManyToOne
+    @JoinColumn(name = "seller_id")
+    private Seller seller;
 
     @OneToMany(mappedBy = "voucher")
     private List<VoucherStorage> voucherStorages;

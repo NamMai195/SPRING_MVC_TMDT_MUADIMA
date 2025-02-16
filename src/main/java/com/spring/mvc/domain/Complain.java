@@ -27,5 +27,5 @@ public class Complain {
     private String image;
     private Date startDate;
     private Date endDate;
-    private String status;
+    private boolean status;
 }

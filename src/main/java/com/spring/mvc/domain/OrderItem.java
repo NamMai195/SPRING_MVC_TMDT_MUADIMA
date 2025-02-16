@@ -23,5 +23,5 @@ public class OrderItem {
 
     private int quantity;
     private double price;
-    private double subtotal; // Tổng giá trị cho sản phẩm này
+    private double subtotal;
 }
