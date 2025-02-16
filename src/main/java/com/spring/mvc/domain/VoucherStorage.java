@@ -22,8 +22,8 @@ public class VoucherStorage {
     @JoinColumn(name = "voucher_id")
     private Voucher voucher;
 
-    @OneToMany(mappedBy = "voucher")
-    private List<Order> orders; // Voucher có thể được sử dụng trong nhiều đơn hàng
+    @OneToMany(mappedBy = "voucherStorage")
+    private List<Order> orders;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
