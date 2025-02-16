@@ -19,5 +19,5 @@ public class WalletSeller {
     private Seller seller;
 
     private double balance;
-    private double transaction;
+    private double transactions;
 }
