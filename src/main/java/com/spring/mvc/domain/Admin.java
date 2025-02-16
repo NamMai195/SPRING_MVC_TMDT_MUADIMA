@@ -7,7 +7,6 @@ import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 @Entity
 @Data
 @NoArgsConstructor
@@ -22,4 +21,5 @@ public class Admin {
     private String email;
     private String image;
     private String cccd;
+    private boolean status;
 }

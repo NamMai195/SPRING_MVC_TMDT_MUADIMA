@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
-
 @Entity(name = "orders")
 @Data
 @NoArgsConstructor
@@ -22,13 +21,13 @@ public class Order {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "voucher_id")
-    private Voucher voucher;
+    @JoinColumn(name = "voucher_storage_id")
+    private VoucherStorage voucherStorage;
+
 
     private Date createdAt;
-    private String status;
-
-    private String address;
+    private double totalAmount; // Tổng giá trị đơn hàng
+    private boolean status;
 
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;

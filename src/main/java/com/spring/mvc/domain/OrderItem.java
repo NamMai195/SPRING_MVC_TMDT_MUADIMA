@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 @Entity
 @Data
 @NoArgsConstructor
@@ -24,5 +23,5 @@ public class OrderItem {
 
     private int quantity;
     private double price;
-    private double totalAmount;
+    private double subtotal;
 }

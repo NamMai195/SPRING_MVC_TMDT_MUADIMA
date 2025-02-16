@@ -23,6 +23,7 @@ public class User {
     private String email;
     private String address;
     private String sdt;
+    private boolean status;
 
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
@@ -37,5 +38,5 @@ public class User {
     private List<Complain> complains;
 
     @OneToMany(mappedBy = "user")
-    private List<Voucher> vouchers;
+    private List<VoucherStorage> voucherStorages;
 }
