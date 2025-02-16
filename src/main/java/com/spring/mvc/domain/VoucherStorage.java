@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -19,6 +21,9 @@ public class VoucherStorage {
     @ManyToOne
     @JoinColumn(name = "voucher_id")
     private Voucher voucher;
+
+    @OneToMany(mappedBy = "voucher")
+    private List<Order> orders; // Voucher có thể được sử dụng trong nhiều đơn hàng
 
     @ManyToOne
     @JoinColumn(name = "user_id")

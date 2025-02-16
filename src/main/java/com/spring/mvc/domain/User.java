@@ -23,7 +23,7 @@ public class User {
     private String email;
     private String address;
     private String sdt;
-    private String status;
+    private boolean status;
 
     @OneToMany(mappedBy = "user")
     private List<Order> orders;

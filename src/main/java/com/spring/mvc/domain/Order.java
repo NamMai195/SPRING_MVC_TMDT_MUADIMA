@@ -26,7 +26,7 @@ public class Order {
 
     private Date createdAt;
     private double totalAmount; // Tổng giá trị đơn hàng
-    private String status;
+    private boolean status;
 
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;
