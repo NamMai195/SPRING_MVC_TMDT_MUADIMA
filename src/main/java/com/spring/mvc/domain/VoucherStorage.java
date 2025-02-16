@@ -29,5 +29,4 @@ public class VoucherStorage {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private int quantity;
 }
