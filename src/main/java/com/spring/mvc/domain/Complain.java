@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-
 @Entity
 @Data
 @NoArgsConstructor
@@ -28,4 +27,5 @@ public class Complain {
     private String image;
     private Date startDate;
     private Date endDate;
+    private String status;
 }
