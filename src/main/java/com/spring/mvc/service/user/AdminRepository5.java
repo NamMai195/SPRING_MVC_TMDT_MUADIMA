@@ -8,13 +8,5 @@ import java.util.List;
 
 @Repository
 public interface AdminRepository5 extends JpaRepository<Admin, Long> {
-    Admin save(Admin admin);
 
-    void deleteById(long id);
-
-    List<Admin> findAll();
-
-    Admin findByid(long id);
-
-    Admin findByUsername(String username);
 }

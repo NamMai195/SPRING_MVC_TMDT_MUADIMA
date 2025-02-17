@@ -9,11 +9,5 @@ import java.util.List;
 @Repository
 public interface UserRepository2 extends JpaRepository<User, Integer> {
 
-    User save(User user);
 
-    void deleteById(long id);
-
-    List<User> findAll();
-
-    User findById(long id);
 }
