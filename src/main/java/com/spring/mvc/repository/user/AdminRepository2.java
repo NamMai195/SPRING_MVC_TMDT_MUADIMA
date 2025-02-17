@@ -1,4 +1,4 @@
-package com.spring.mvc.repository.seller;
+package com.spring.mvc.repository.user;
 
 import com.spring.mvc.domain.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AdminRepository extends JpaRepository<Admin, Long> {
+public interface AdminRepository2 extends JpaRepository<Admin, Long> {
     Admin save(Admin admin);
 
     void deleteById(long id);
