@@ -1,10 +1,10 @@
-package com.spring.mvc.controller.seller;
+package com.spring.mvc.controller.user;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class HomeController {
+public class HomeController3 {
 
     @GetMapping("/")
     public String home() {
