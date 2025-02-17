@@ -15,7 +15,7 @@ public class AdminController {
         return "admin/view/manager_user";
     }
 
-    @GetMapping("/admin/user")
+    @GetMapping("/admin/seller")
     public String Manager_seller() {
         return "admin/view/manager_seler";
     }
