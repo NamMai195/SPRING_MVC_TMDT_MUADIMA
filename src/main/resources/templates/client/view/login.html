@@ -145,6 +145,75 @@
   <link rel="preload" as='style' type="text/css" href="../../bizweb.dktcdn.net/100/479/080/themes/897121/assets/notify.scss47e9.css?1735554303306">
   <script src="../../bizweb.dktcdn.net/100/479/080/themes/897121/assets/jquery-plugin47e9.js?1735554303306"></script>
   <script src="../../bizweb.dktcdn.net/100/479/080/themes/897121/assets/swiper-plugin47e9.js?1735554303306"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const loginForm = document.getElementById("customer_login");
+
+      if (loginForm) {
+        loginForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+          let valid = true;
+
+          // Xóa thông báo lỗi cũ
+          document.querySelectorAll("#customer_login .error-message").forEach(el => el.textContent = "");
+
+          // Lấy dữ liệu nhập vào
+          const email = document.getElementById("customer_email").value.trim();
+          const password = document.getElementById("customer_password").value.trim();
+
+          // Nếu hợp lệ, gửi dữ liệu qua AJAX
+          if (valid) {
+            fetch("/user/login", {
+              method: "POST",
+              body: new FormData(loginForm)
+            })
+                    .then(response => response.json())
+                    .then(data => {
+                      if (data.status === "success") {
+                        Swal.fire({
+                          title: "Đăng nhập thành công!",
+                          text: "Chào mừng bạn!",
+                          icon: "success",
+                          timer: 2000,
+                          showConfirmButton: false
+                        }).then(() => {
+                          window.location.href = "/"; // Chuyển đến trang chủ
+                        });
+                      } else {
+                        // Hiển thị lỗi từ server đúng vị trí input
+                        if (data.field === "email") {
+                          showError("customer_email", data.message);
+                        } else if (data.field === "password") {
+                          showError("customer_password", data.message);
+                        } else {
+                          Swal.fire("Lỗi", data.message, "error");
+                        }
+                      }
+                    })
+                    .catch(error => Swal.fire("Lỗi", "Đã có lỗi xảy ra!", "error"));
+          }
+        });
+      }
+
+      function showError(fieldId, message) {
+        const field = document.getElementById(fieldId);
+        if (field) {
+          let errorElement = field.parentElement.querySelector(".error-message");
+          if (!errorElement) {
+            console.warn(`Không tìm thấy phần tử .error-message cho ${fieldId}`);
+            return;
+          }
+          errorElement.textContent = message;
+          errorElement.style.color = "red";
+          errorElement.style.fontSize = "14px";
+          errorElement.style.textAlign = "left"; // Căn trái thông báo lỗi
+          errorElement.style.marginTop = "5px"; // Tạo khoảng cách với input
+          errorElement.style.display = "block"; // Hiển thị thông báo lỗi
+        }
+      }
+    });
+  </script>
 </head>
 <body>
 <header class="header">
@@ -210,16 +279,16 @@
             <div class="left-col">
               <div class="group-login group-log">
                 <h1 class="title-block-page">Đăng nhập tài khoản</h1>
-                <form method="post" action="https://oh-thuong-mai-dien-tu.mysapo.net/account/login" id="customer_login" accept-charset="UTF-8"><input name="FormType" type="hidden" value="customer_login"/><input name="utf8" type="hidden" value="true"/>
-                  <p class="error">
-
-                  </p>
+                <form method="post" action="user/login" id="customer_login" accept-charset="UTF-8"><input name="FormType" type="hidden" value="customer_login"/><input name="utf8" type="hidden" value="true"/>
+                  <p class="error"></p>
                   <fieldset class="form-group">
                     <label>Email <span class="required">*</span></label>
+                    <p class="error-message"></p>
                     <input type="email" pattern="^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*(\+[a-zA-Z0-9-]+)?@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*{2,63}$" class="form-control form-control-lg" value="" name="email" id="customer_email" placeholder="Email" Required>
                   </fieldset>
                   <fieldset class="form-group">
                     <label>Mật khẩu <span class="required">*</span> </label>
+                    <p class="error-message"></p>
                     <input type="password" class="form-control form-control-lg" value="" name="password" id="customer_password" placeholder="Mật khẩu" Required>
                   </fieldset>
                   <button class="btn-login"  type="submit" value="Đăng nhập">Đăng nhập</button>
