@@ -132,6 +132,93 @@
     <link rel="preload" as='style' type="text/css" href="../../bizweb.dktcdn.net/100/479/080/themes/897121/assets/notify.scss47e9.css?1735554303306">
     <script src="../../bizweb.dktcdn.net/100/479/080/themes/897121/assets/jquery-plugin47e9.js?1735554303306"></script>
     <script src="../../bizweb.dktcdn.net/100/479/080/themes/897121/assets/swiper-plugin47e9.js?1735554303306"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const registerForm = document.getElementById("customer_register");
+
+            if (registerForm) {
+                registerForm.addEventListener("submit", function (event) {
+                    event.preventDefault();
+                    let valid = true;
+
+                    // Xóa thông báo lỗi cũ
+                    document.querySelectorAll("#customer_register .error-message").forEach(el => el.textContent = "");
+
+                    // Lấy dữ liệu nhập vào
+                    const name = document.getElementById("name").value.trim();
+                    const phone = document.getElementById("sdt").value.trim();
+                    const email = document.getElementById("email").value.trim();
+                    const address = document.getElementById("address").value.trim();
+                    const password = document.getElementById("password").value.trim();
+
+                    // Kiểm tra dữ liệu
+                    if (name.length < 3) {
+                        showError("name", "Họ tên phải có ít nhất 3 ký tự!");
+                        valid = false;
+                    }
+                    if (!/^\d{10,11}$/.test(phone)) {
+                        showError("sdt", "Số điện thoại phải có 10-11 số!");
+                        valid = false;
+                    }
+                    if (!/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$/.test(email)) {
+                        showError("email", "Email không hợp lệ!");
+                        valid = false;
+                    }
+                    if (address.length < 5) {
+                        showError("address", "Địa chỉ quá ngắn!");
+                        valid = false;
+                    }
+                    if (password.length < 6) {
+                        showError("password", "Mật khẩu phải có ít nhất 6 ký tự!");
+                        valid = false;
+                    }
+
+                    // Nếu hợp lệ, gửi dữ liệu qua AJAX
+                    if (valid) {
+                        fetch("/user/register", {
+                            method: "POST",
+                            body: new FormData(registerForm)
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === "success") {
+                                    Swal.fire({
+                                        title: "Đăng ký thành công!",
+                                        text: "Bạn sẽ được chuyển đến trang đăng nhập.",
+                                        icon: "success",
+                                        timer: 2000,
+                                        showConfirmButton: false
+                                    }).then(() => {
+                                        window.location.href = "login"; // Chuyển trang sau 2 giây
+                                    });
+                                } else {
+                                    Swal.fire("Lỗi", data.message, "error");
+                                }
+                            })
+                            .catch(error => Swal.fire("Lỗi", "Đã có lỗi xảy ra!", "error"));
+                    }
+                });
+            }
+
+            function showError(fieldId, message) {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    let errorElement = field.parentElement.querySelector(".error-message");
+                    if (!errorElement) {
+                        console.warn(`Không tìm thấy phần tử .error-message cho ${fieldId}`);
+                        return;
+                    }
+                    errorElement.textContent = message;
+                    errorElement.style.color = "red";
+                    errorElement.style.fontSize = "14px";
+                    errorElement.style.textAlign = "left"; // Căn trái thông báo lỗi
+                    errorElement.style.marginTop = "5px"; // Tạo khoảng cách với input
+                    errorElement.style.display = "block"; // Hiển thị thông báo lỗi
+                }
+            }
+        });
+    </script>
 </head>
 <body>
 <header class="header">
@@ -196,28 +283,31 @@
                         <div class="left-col">
                             <div class="group-login group-log">
                                 <h1>Đăng ký tài khoản</h1>
-                                <form method="post" action="https://oh-thuong-mai-dien-tu.mysapo.net/account/register" id="customer_register" accept-charset="UTF-8"><input name="FormType" type="hidden" value="customer_register"/><input name="utf8" type="hidden" value="true"/><input type="hidden" id="Token-49aea909c82742eca170102bb49ff7a2" name="Token" /><script src="../../www.google.com/recaptcha/apif78f.js?render=6Ldtu4IUAAAAAMQzG1gCw3wFlx_GytlZyLrXcsuK"></script><script>grecaptcha.ready(function() {grecaptcha.execute("6Ldtu4IUAAAAAMQzG1gCw3wFlx_GytlZyLrXcsuK", {action: "customer_register"}).then(function(token) {document.getElementById("Token-49aea909c82742eca170102bb49ff7a2").value = token});});</script>
-                                    <p class="error">
-
-                                    </p>
+                                <form method="post" action="user/register" id="customer_register" accept-charset="UTF-8"><input name="FormType" type="hidden" value="customer_register"/><input name="utf8" type="hidden" value="true"/><input type="hidden" id="Token-49aea909c82742eca170102bb49ff7a2" name="Token" /><script src="../../www.google.com/recaptc ha/apif78f.js?render=6Ldtu4IUAAAAAMQzG1gCw3wFlx_GytlZyLrXcsuK"></script><script>grecaptcha.ready(function() {grecaptcha.execute("6Ldtu4IUAAAAAMQzG1gCw3wFlx_GytlZyLrXcsuK", {action: "customer_register"}).then(function(token) {document.getElementById("Token-49aea909c82742eca170102bb49ff7a2").value = token});});</script>
+                                    <p class="error"></p>
                                     <fieldset class="form-group">
-                                        <label>Họ <span class="required">*</span></label>
-                                        <input type="text" class="form-control form-control-lg" value="" name="lastName" id="lastName"  placeholder="Họ" required >
+                                        <label>Họ tên: <span class="required">*</span></label>
+                                        <p class="error-message"></p>
+                                        <input type="text" class="form-control form-control-lg" value="" name="name" id="name"  placeholder="Họ tên" required >
                                     </fieldset>
                                     <fieldset class="form-group">
-                                        <label>Tên <span class="required">*</span></label>
-                                        <input type="text" class="form-control form-control-lg" value="" name="firstName" id="firstName"  placeholder="Tên" required >
+                                        <label>Số điện thoại: <span class="required">*</span></label>
+                                        <p class="error-message"></p>
+                                        <input placeholder="Số điện thoại" type="text" pattern="\d+" id="sdt" class="form-control form-control-comment form-control-lg" name="sdt" Required>
                                     </fieldset>
                                     <fieldset class="form-group">
-                                        <label>Số điện thoại <span class="required">*</span></label>
-                                        <input placeholder="Số điện thoại" type="text" pattern="\d+" id="PhoneNumber" class="form-control form-control-comment form-control-lg" name="Phone" Required>
-                                    </fieldset>
-                                    <fieldset class="form-group">
-                                        <label>Email <span class="required">*</span></label>
+                                        <label>Email: <span class="required">*</span></label>
+                                        <p class="error-message"></p>
                                         <input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$" class="form-control form-control-lg" value="" name="email" id="email"  placeholder="Email" required="">
                                     </fieldset>
                                     <fieldset class="form-group">
-                                        <label>Mật khẩu <span class="required">*</span> </label>
+                                        <label>Địa chỉ: <span class="required">*</span></label>
+                                        <p class="error-message"></p>
+                                        <input type="text" class="form-control form-control-lg" value="" name="address" id="address"  placeholder="Địa chỉ" required >
+                                    </fieldset>
+                                    <fieldset class="form-group">
+                                        <label>Mật khẩu: <span class="required">*</span> </label>
+                                        <p class="error-message"></p>
                                         <input type="password" class="form-control form-control-lg" value="" name="password" id="password" placeholder="Mật khẩu" required >
                                     </fieldset>
                                     <button class="btn-login"  type="submit" value="Đăng ký">Đăng ký</button>
