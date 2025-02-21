@@ -1,323 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/admin/layout/head :: head"></head>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/admin/layout/head:: head"></head>
 <body>
 <div class="wrapper">
-    <!-- Sidebar -->
-    <div th:replace="/admin/layout/Sidebar :: sidebar"></div>
-    <!-- End Sidebar -->
+    <div th:replace="/admin/layout/Sidebar:: sidebar"></div>
 
     <div class="main-panel">
-        <div th:replace="/admin/layout/header :: header"></div>
+        <div th:replace="/admin/layout/header:: header"></div>
 
         <div class="container">
             <div class="page-inner">
-                <div
-                        class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
-                >
+                <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
                     <div>
-                        <h3 class="fw-bold mb-3">Home View</h3>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6 col-md-3">
-                        <div class="card card-stats card-round">
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                    <div class="col-icon">
-                                        <div
-                                                class="icon-big text-center icon-primary bubble-shadow-small"
-                                        >
-                                            <i class="fas fa-users"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col col-stats ms-3 ms-sm-0">
-                                        <div class="numbers">
-                                            <p class="card-category">Total User</p>
-                                            <h4 class="card-title">1,294</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">
-                        <div class="card card-stats card-round">
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                    <div class="col-icon">
-                                        <div
-                                                class="icon-big text-center icon-info bubble-shadow-small"
-                                        >
-                                            <i class="fas fa-store"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col col-stats ms-3 ms-sm-0">
-                                        <div class="numbers">
-                                            <p class="card-category">Seler</p>
-                                            <h4 class="card-title">1303</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">
-                        <div class="card card-stats card-round">
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                    <div class="col-icon">
-                                        <div
-                                                class="icon-big text-center icon-success bubble-shadow-small"
-                                        >
-                                            <i class="fas fa-luggage-cart"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col col-stats ms-3 ms-sm-0">
-                                        <div class="numbers">
-                                            <p class="card-category">Revenue</p>
-                                            <h4 class="card-title">$ 1,345</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">
-                        <div class="card card-stats card-round">
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                    <div class="col-icon">
-                                        <div
-                                                class="icon-big text-center icon-secondary bubble-shadow-small"
-                                        >
-                                            <i class="fas fa-box"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col col-stats ms-3 ms-sm-0">
-                                        <div class="numbers">
-                                            <p class="card-category">Order</p>
-                                            <h4 class="card-title">576</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="card card-round">
-                            <div class="card-header">
-                                <div class="card-head-row">
-                                    <div class="card-title">User Statistics</div>
-                                    <div class="card-tools">
-                                        <a
-                                                href="#"
-                                                class="btn btn-label-success btn-round btn-sm me-2"
-                                        >
-                          <span class="btn-label">
-                            <i class="fa fa-pencil"></i>
-                          </span>
-                                            Export
-                                        </a>
-                                        <a href="#" class="btn btn-label-info btn-round btn-sm">
-                          <span class="btn-label">
-                            <i class="fa fa-print"></i>
-                          </span>
-                                            Print
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="chart-container" style="min-height: 375px">
-                                    <canvas id="statisticsChart"></canvas>
-                                </div>
-                                <div id="myChartLegend"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card card-primary card-round">
-                            <div class="card-header">
-                                <div class="card-head-row">
-                                    <div class="card-title">Daily Sales</div>
-                                    <div class="card-tools">
-                                        <div class="dropdown">
-                                            <button
-                                                    class="btn btn-sm btn-label-light dropdown-toggle"
-                                                    type="button"
-                                                    id="dropdownMenuButton"
-                                                    data-bs-toggle="dropdown"
-                                                    aria-haspopup="true"
-                                                    aria-expanded="false"
-                                            >
-                                                Export
-                                            </button>
-                                            <div
-                                                    class="dropdown-menu"
-                                                    aria-labelledby="dropdownMenuButton"
-                                            >
-                                                <a class="dropdown-item" href="#">Action</a>
-                                                <a class="dropdown-item" href="#">Another action</a>
-                                                <a class="dropdown-item" href="#"
-                                                >Something else here</a
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-category">March 25 - April 02</div>
-                            </div>
-                            <div class="card-body pb-0">
-                                <div class="mb-4 mt-2">
-                                    <h1>$4,578.58</h1>
-                                </div>
-                                <div class="pull-in">
-                                    <canvas id="dailySalesChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card card-round">
-                            <div class="card-body pb-0">
-                                <div class="h1 fw-bold float-end text-primary">+5%</div>
-                                <h2 class="mb-2">17</h2>
-                                <p class="text-muted">Users online</p>
-                                <div class="pull-in sparkline-fix">
-                                    <div id="lineChart"></div>
-                                </div>
-                            </div>
-                        </div>
+                        <h3 class="fw-bold mb-3">Danh sách người bán</h3>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="card card-round">
+                        <div class="card">
                             <div class="card-header">
-                                <div class="card-head-row card-tools-still-right">
-                                    <div class="card-title">Transaction History</div>
-
+                                <div class="d-flex align-items-center">
+                                    <h4 class="card-title">Người bán</h4>
+                                    <a class="btn btn-primary btn-round ms-auto" th:href="@{/admin/seller/create}">
+                                        <i class="fa fa-plus"></i>
+                                        Thêm người bán
+                                    </a>
                                 </div>
                             </div>
-                            <div class="card-body p-0">
+                            <div class="card-body">
                                 <div class="table-responsive">
-                                    <!-- Projects table -->
-                                    <table class="table align-items-center mb-0">
-                                        <thead class="thead-light">
+                                    <table id="add-row" class="display table table-striped table-hover">
+                                        <thead>
                                         <tr>
-                                            <th scope="col">Payment Number</th>
-                                            <th scope="col" class="text-end">Date & Time</th>
-                                            <th scope="col" class="text-end">Amount</th>
-                                            <th scope="col" class="text-end">Status</th>
+                                            <th>Tên</th>
+                                            <th>Email</th>
+                                            <th>Tên cửa hàng</th>
+                                            <th>Địa chỉ</th>
+                                            <th>Số điện thoại</th>
+                                            <th>CCCD</th>
+                                            <th>Trạng thái</th>
+                                            <th>Hành động</th>
                                         </tr>
                                         </thead>
+                                        <tfoot>
+                                        <tr>
+                                            <th>Tên</th>
+                                            <th>Email</th>
+                                            <th>Tên cửa hàng</th>
+                                            <th>Địa chỉ</th>
+                                            <th>Số điện thoại</th>
+                                            <th>CCCD</th>
+                                            <th>Trạng thái</th>
+                                            <th>Hành động</th>
+                                        </tr>
+                                        </tfoot>
                                         <tbody>
-                                        <tr>
-                                            <th scope="row">
-                                                <button
-                                                        class="btn btn-icon btn-round btn-success btn-sm me-2"
-                                                >
-                                                    <i class="fa fa-check"></i>
-                                                </button>
-                                                Payment from #10231
-                                            </th>
-                                            <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                            <td class="text-end">$250.00</td>
-                                            <td class="text-end">
-                                                <span class="badge badge-success">Completed</span>
+                                        <tr th:each="seller: ${sellers}">
+                                            <td th:text="${seller.name}"></td>
+                                            <td th:text="${seller.email}"></td>
+                                            <td th:text="${seller.nameShop}"></td>
+                                            <td th:text="${seller.address}"></td>
+                                            <td th:text="${seller.sdt}"></td>
+                                            <td th:text="${seller.cccd}"></td>
+                                            <td th:text="${seller.status? 'Hoạt động': 'Không hoạt động'}"></td>
+                                            <td>
+                                                <a th:href="@{/admin/seller/edit/{id}(id=${seller.id})}" class="btn btn-link btn-primary btn-sm" data-bs-toggle="tooltip" title="Sửa">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="#" th:data-id="${seller.id}" class="btn btn-link btn-danger btn-sm delete-btn" data-bs-toggle="tooltip" title="Xóa">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <button
-                                                        class="btn btn-icon btn-round btn-success btn-sm me-2"
-                                                >
-                                                    <i class="fa fa-check"></i>
-                                                </button>
-                                                Payment from #10231
-                                            </th>
-                                            <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                            <td class="text-end">$250.00</td>
-                                            <td class="text-end">
-                                                <span class="badge badge-success">Completed</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <button
-                                                        class="btn btn-icon btn-round btn-success btn-sm me-2"
-                                                >
-                                                    <i class="fa fa-check"></i>
-                                                </button>
-                                                Payment from #10231
-                                            </th>
-                                            <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                            <td class="text-end">$250.00</td>
-                                            <td class="text-end">
-                                                <span class="badge badge-success">Completed</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <button
-                                                        class="btn btn-icon btn-round btn-success btn-sm me-2"
-                                                >
-                                                    <i class="fa fa-check"></i>
-                                                </button>
-                                                Payment from #10231
-                                            </th>
-                                            <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                            <td class="text-end">$250.00</td>
-                                            <td class="text-end">
-                                                <span class="badge badge-success">Completed</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <button
-                                                        class="btn btn-icon btn-round btn-success btn-sm me-2"
-                                                >
-                                                    <i class="fa fa-check"></i>
-                                                </button>
-                                                Payment from #10231
-                                            </th>
-                                            <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                            <td class="text-end">$250.00</td>
-                                            <td class="text-end">
-                                                <span class="badge badge-success">Completed</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <button
-                                                        class="btn btn-icon btn-round btn-success btn-sm me-2"
-                                                >
-                                                    <i class="fa fa-check"></i>
-                                                </button>
-                                                Payment from #10231
-                                            </th>
-                                            <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                            <td class="text-end">$250.00</td>
-                                            <td class="text-end">
-                                                <span class="badge badge-success">Completed</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <button
-                                                        class="btn btn-icon btn-round btn-success btn-sm me-2"
-                                                >
-                                                    <i class="fa fa-check"></i>
-                                                </button>
-                                                Payment from #10231
-                                            </th>
-                                            <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                            <td class="text-end">$250.00</td>
-                                            <td class="text-end">
-                                                <span class="badge badge-success">Completed</span>
-                                            </td>
+                                        <tr th:if="${sellers.isEmpty()}">
+                                            <td colspan="8">Không tìm thấy người bán.</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -329,240 +85,28 @@
             </div>
         </div>
 
-        <footer th:replace="/admin/layout/footer :: footer"></footer>
+        <footer th:replace="/admin/layout/footer:: footer"></footer>
     </div>
-
-    <!-- Custom template | don't include it in your project! -->
-    <div class="custom-template">
-        <div class="title">Settings</div>
-        <div class="custom-content">
-            <div class="switcher">
-                <div class="switch-block">
-                    <h4>Logo Header</h4>
-                    <div class="btnSwitch">
-                        <button
-                                type="button"
-                                class="selected changeLogoHeaderColor"
-                                data-color="dark"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="blue"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="purple"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="light-blue"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="green"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="orange"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="red"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="white"
-                        ></button>
-                        <br />
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="dark2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="blue2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="purple2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="light-blue2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="green2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="orange2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="red2"
-                        ></button>
-                    </div>
-                </div>
-                <div class="switch-block">
-                    <h4>Navbar Header</h4>
-                    <div class="btnSwitch">
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="dark"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="blue"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="purple"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="light-blue"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="green"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="orange"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="red"
-                        ></button>
-                        <button
-                                type="button"
-                                class="selected changeTopBarColor"
-                                data-color="white"
-                        ></button>
-                        <br />
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="dark2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="blue2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="purple2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="light-blue2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="green2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="orange2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="red2"
-                        ></button>
-                    </div>
-                </div>
-                <div class="switch-block">
-                    <h4>Sidebar</h4>
-                    <div class="btnSwitch">
-                        <button
-                                type="button"
-                                class="changeSideBarColor"
-                                data-color="white"
-                        ></button>
-                        <button
-                                type="button"
-                                class="selected changeSideBarColor"
-                                data-color="dark"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeSideBarColor"
-                                data-color="dark2"
-                        ></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="custom-toggle">
-            <i class="icon-settings"></i>
-        </div>
-    </div>
-    <!-- End Custom template -->
 </div>
-<!--   Core JS Files   -->
+
 <script src="/assets/js/core/jquery-3.7.1.min.js"></script>
 <script src="/assets/js/core/popper.min.js"></script>
 <script src="/assets/js/core/bootstrap.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- jQuery Scrollbar -->
 <script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-
-<!-- Chart JS -->
 <script src="/assets/js/plugin/chart.js/chart.min.js"></script>
-
-<!-- jQuery Sparkline -->
 <script src="/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
-
-<!-- Chart Circle -->
 <script src="/assets/js/plugin/chart-circle/circles.min.js"></script>
-
-<!-- Datatables -->
 <script src="/assets/js/plugin/datatables/datatables.min.js"></script>
-
-<!-- Bootstrap Notify -->
 <script src="/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
-
-<!-- jQuery Vector Maps -->
 <script src="/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
 <script src="/assets/js/plugin/jsvectormap/world.js"></script>
-
-<!-- Sweet Alert -->
 <script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
-
-<!-- Kaiadmin JS -->
 <script src="/assets/js/kaiadmin.min.js"></script>
-
-<!-- Kaiadmin DEMO methods, don't include it in your project! -->
 <script src="/assets/js/setting-demo.js"></script>
 <script src="/assets/js/demo.js"></script>
+
 <script>
     $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
         type: "line",
@@ -589,6 +133,70 @@
         lineWidth: "2",
         lineColor: "#ffa534",
         fillColor: "rgba(255, 165, 52, .14)",
+    });
+    // Add Row
+    $("#add-row").DataTable({
+        pageLength: 5,
+    });
+
+    var action =
+        '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
+
+    $("#addRowButton").click(function () {
+        $("#add-row")
+            .dataTable()
+            .fnAddData([
+                $("#addName").val(),
+                $("#addPosition").val(),
+                $("#addOffice").val(),
+                action,
+            ]);
+        $("#addRowModal").modal("hide");
+    })
+    $('.delete-btn').click(function(event) {
+        event.preventDefault();
+        var sellerId = $(this).data('id');
+
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn xóa?',
+            text: "Hành động này không thể hoàn tác!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Gửi yêu cầu DELETE bằng AJAX
+                $.ajax({
+                    url: '/admin/seller/delete/' + sellerId,  // Use the correct URL for seller
+                    type: 'DELETE',
+                    success: function(result) {
+                        Swal.fire(
+                            'Đã xóa!',
+                            'Người bán đã được xóa.',
+                            'success'
+                        ).then(() => {
+                            window.location.reload();
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire(
+                            'Lỗi!',
+                            'Đã xảy ra lỗi khi xóa người bán.',
+                            'error'
+                        );
+                    }
+                });
+            } else {
+                Swal.fire(
+                    'Hủy bỏ xóa!',
+                    'Dữ liệu của bạn vẫn an toàn.',
+                    'info'
+                )
+            }
+        })
     });
 </script>
 </body>

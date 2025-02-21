@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/admin/layout/head:: head"></head>
+<body>
+<div class="wrapper">
+    <div th:replace="/admin/layout/Sidebar:: sidebar"></div>
+
+    <div class="main-panel">
+        <div th:replace="/admin/layout/header:: header"></div>
+
+        <div class="container">
+            <div class="page-inner">
+                <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+                    <div>
+                        <h3 class="fw-bold mb-3">Danh sách đơn hàng</h3>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="d-flex align-items-center">
+                                    <h4 class="card-title">Đơn hàng</h4>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="order-table" class="display table table-striped table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Khách hàng</th>
+                                            <th>Ngày tạo</th>
+                                            <th>Tổng giá trị</th>
+                                            <th>Trạng thái</th>
+                                            <th>Hành động</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="order: ${orders}">
+                                            <td th:text="${order.id}"></td>
+                                            <td th:text="${order.user.name}"></td>
+                                            <td th:text="${#dates.format(order.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
+                                            <td th:text="${order.totalAmount}"></td>
+                                            <td th:text="${order.status? 'Hoàn thành': 'Chờ xử lý'}"></td>
+                                            <td>
+                                                <a th:href="@{/admin/order/detail/{id}(id=${order.id})}" class="btn btn-link btn-primary btn-sm" data-bs-toggle="tooltip" title="Chi tiết">
+                                                    <i class="fas fa-info-circle"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr th:if="${orders.isEmpty()}">
+                                            <td colspan="6">Không tìm thấy đơn hàng.</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="/admin/layout/footer:: footer"></footer>
+    </div>
+</div>
+
+<script th:src="@{/assets/js/core/jquery-3.7.1.min.js}"></script>
+<script th:src="@{/assets/js/core/popper.min.js}"></script>
+<script th:src="@{/assets/js/core/bootstrap.min.js}"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script th:src="@{/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js}"></script>
+<script th:src="@{/assets/js/plugin/chart.js/chart.min.js}"></script>
+<script th:src="@{/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js}"></script>
+<script th:src="@{/assets/js/plugin/chart-circle/circles.min.js}"></script>
+<script th:src="@{/assets/js/plugin/datatables/datatables.min.js}"></script>
+<script th:src="@{/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js}"></script>
+<script th:src="@{/assets/js/plugin/jsvectormap/jsvectormap.min.js}"></script>
+<script th:src="@{/assets/js/plugin/jsvectormap/world.js}"></script>
+<script th:src="@{/assets/js/plugin/sweetalert/sweetalert.min.js}"></script>
+<script th:src="@{/assets/js/kaiadmin.min.js}"></script>
+<script th:src="@{/assets/js/setting-demo.js}"></script>
+<script th:src="@{/assets/js/demo.js}"></script>
+
+<script>
+    //... (Your existing JavaScript code for charts and DataTable)...
+</script>
+</body>
+</html>

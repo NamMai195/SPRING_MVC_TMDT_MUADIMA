@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/admin/layout/head:: head"></head>
+<body>
+<div class="wrapper">
+    <div th:replace="/admin/layout/Sidebar:: sidebar"></div>
+    <div class="main-panel">
+        <div th:replace="/admin/layout/header:: header"></div>
+
+        <div class="container">
+            <div class="page-inner">
+                <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+                    <div>
+                        <h3 class="fw-bold mb-3" th:text="${isEditMode? 'Sửa Sản Phẩm': 'Thêm Sản Phẩm'}"></h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="container d-flex justify-content-center align-items-center">
+                        <div class="card mb-4" style="width:700px ">
+                            <div class="card-header text-center">
+                                <h2 class="fw-bold" th:text="${isEditMode? 'Sửa Sản Phẩm': 'Thêm Sản Phẩm Mới'}"></h2>
+                            </div>
+                            <div class="card-body ">
+                                <form th:action="@{/admin/product/save}" th:object="${product}" method="post" enctype="multipart/form-data">
+                                    <input type="hidden" th:field="*{id}" th:if="${isEditMode}" />
+
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Tên Sản Phẩm:</label>
+                                        <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="productType" class="form-label">Loại Sản Phẩm:</label>
+                                        <select class="form-select" id="productType" th:field="*{productType.id}" required>
+                                            <option th:each="type: ${categories}" th:value="${type.id}" th:text="${type.name}"></option>
+                                        </select>
+
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="seller" class="form-label">Người Bán:</label>
+                                        <select class="form-select" id="seller" th:field="*{seller}" required>
+                                            <option th:each="seller: ${sellers}" th:value="${seller.id}" th:text="${seller.name}"></option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="price" class="form-label">Giá:</label>
+                                        <input type="number" class="form-control" id="price" th:field="*{price}" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="quantity" class="form-label">Số lượng:</label>
+                                        <input type="number" class="form-control" id="quantity" th:field="*{quantity}" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="image" class="form-label">Hình ảnh:</label>
+                                        <input type="file" class="form-control" id="image" name="image" accept="image/*" th:if="${not isEditMode}">
+                                        <img th:if="${isEditMode and product.image!= null}" th:src="@{${product.image}}" alt="Product Image" height="100">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="describe" class="form-label">Mô tả:</label>
+                                        <textarea class="form-control" id="describe" th:field="*{describe}"></textarea>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="status" class="form-label">Trạng thái:</label>
+                                        <select class="form-select" id="status" th:field="*{status}">
+                                            <option value="Hoạt động">Hoạt động</option>
+                                            <option value="Không hoạt động">Không hoạt động</option>
+                                        </select>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary" th:text="${isEditMode? 'Lưu Thay Đổi': 'Thêm Sản Phẩm'}"></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="/admin/layout/footer:: footer"></footer>
+    </div>
+</div>
+<script src="/assets/js/core/jquery-3.7.1.min.js"></script>
+<script src="/assets/js/core/popper.min.js"></script>
+<script src="/assets/js/core/bootstrap.min.js"></script>
+
+<script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+
+<script src="/assets/js/plugin/chart.js/chart.min.js"></script>
+
+<script src="/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+
+<script src="/assets/js/plugin/chart-circle/circles.min.js"></script>
+
+<script src="/assets/js/plugin/datatables/datatables.min.js"></script>
+
+<script src="/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<script src="/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
+<script src="/assets/js/plugin/jsvectormap/world.js"></script>
+
+<script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+
+<script src="/assets/js/kaiadmin.min.js"></script>
+
+<script src="/assets/js/setting-demo.js"></script>
+<script src="/assets/js/demo.js"></script>
+</body>
+</html>

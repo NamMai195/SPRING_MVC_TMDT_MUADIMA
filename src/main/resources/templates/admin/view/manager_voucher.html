@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/admin/layout/head:: head"></head>
+<body>
+<div class="wrapper">
+  <div th:replace="/admin/layout/Sidebar:: sidebar"></div>
+
+  <div class="main-panel">
+    <div th:replace="/admin/layout/header:: header"></div>
+
+    <div class="container">
+      <div class="page-inner">
+        <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+          <div>
+            <h3 class="fw-bold mb-3">Danh sách voucher</h3>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <div class="d-flex align-items-center">
+                  <h4 class="card-title">Voucher</h4>
+                  <a class="btn btn-primary btn-round ms-auto" th:href="@{/admin/voucher/create}">
+                    <i class="fa fa-plus"></i>
+                    Thêm voucher
+                  </a>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="voucher-table" class="display table table-striped table-hover">
+                    <thead>
+                    <tr>
+                      <th>Mã</th>
+                      <th>Người bán</th>
+                      <th>Loại</th>
+                      <th>Giá trị giảm</th>
+                      <th>Ngày bắt đầu</th>
+                      <th>Ngày kết thúc</th>
+                      <th>Trạng thái</th>
+                      <th>Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="voucher: ${vouchers}">
+                      <td th:text="${voucher.code}"></td>
+                      <td th:text="${voucher.seller.name}"></td>
+                      <td th:text="${voucher.type}"></td>
+                      <td th:text="${voucher.discountAmount}"></td>
+                      <td th:text="${#dates.format(voucher.startDate, 'dd/MM/yyyy')}"></td>
+                      <td th:text="${#dates.format(voucher.endDate, 'dd/MM/yyyy')}"></td>
+                      <td th:text="${voucher.status? 'Hoạt động': 'Không hoạt động'}"></td>
+                      <td>
+                        <a th:href="@{/admin/voucher/edit/{id}(id=${voucher.id})}" class="btn btn-link btn-primary btn-sm" data-bs-toggle="tooltip" title="Sửa">
+                          <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="#" th:data-id="${voucher.id}" class="btn btn-link btn-danger btn-sm delete-btn" data-bs-toggle="tooltip" title="Xóa">
+                          <i class="fas fa-trash-alt"></i>
+                        </a>
+                      </td>
+                    </tr>
+                    <tr th:if="${vouchers.isEmpty()}">
+                      <td colspan="8">Không tìm thấy voucher.</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer th:replace="/admin/layout/footer:: footer"></footer>
+  </div>
+</div>
+
+<script th:src="@{/assets/js/core/jquery-3.7.1.min.js}"></script>
+<script th:src="@{/assets/js/core/popper.min.js}"></script>
+<script th:src="@{/assets/js/core/bootstrap.min.js}"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script th:src="@{/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js}"></script>
+<script th:src="@{/assets/js/plugin/chart.js/chart.min.js}"></script>
+<script th:src="@{/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js}"></script>
+<script th:src="@{/assets/js/plugin/chart-circle/circles.min.js}"></script>
+<script th:src="@{/assets/js/plugin/datatables/datatables.min.js}"></script>
+<script th:src="@{/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js}"></script>
+<script th:src="@{/assets/js/plugin/jsvectormap/jsvectormap.min.js}"></script>
+<script th:src="@{/assets/js/plugin/jsvectormap/world.js}"></script>
+<script th:src="@{/assets/js/plugin/sweetalert/sweetalert.min.js}"></script>
+<script th:src="@{/assets/js/kaiadmin.min.js}"></script>
+<script th:src="@{/assets/js/setting-demo.js}"></script>
+<script th:src="@{/assets/js/demo.js}"></script>
+
+<script>
+  //... (Your existing JavaScript code for charts, DataTable and deleting)...
+</script>
+</body>
+</html>

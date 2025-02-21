@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/admin/layout/head:: head}"></head>
+<body>
+<div class="wrapper">
+    <div th:replace="~{/admin/layout/Sidebar:: sidebar}"></div>
+    <div class="main-panel">
+        <div th:replace="~{/admin/layout/header:: header}"></div>
+
+        <div class="container">
+            <div class="page-inner">
+                <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+                    <div>
+                        <h3 class="fw-bold mb-3" th:text="${isEditMode? 'Sửa voucher': 'Thêm voucher'}"></h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="container d-flex justify-content-center align-items-center">
+                        <div class="card mb-4" style="width:700px ">
+                            <div class="card-header text-center">
+                                <h2 class="fw-bold" th:text="${isEditMode? 'Sửa voucher': 'Thêm voucher mới'}"></h2>
+                            </div>
+                            <div class="card-body ">
+                                <form th:action="@{/admin/voucher/save}" th:object="${voucher}" method="post">
+                                    <input type="hidden" th:field="*{id}" th:if="${isEditMode}" />
+
+                                    <div class="mb-3">
+                                        <label for="code" class="form-label">Mã voucher:</label>
+                                        <input type="text" class="form-control" id="code" th:field="*{code}" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="seller" class="form-label">Người bán:</label>
+                                        <select class="form-select" id="seller" th:field="*{seller}" required>
+                                            <option th:each="seller: ${sellers}" th:value="${seller.id}" th:text="${seller.name}"></option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="type" class="form-label">Loại voucher:</label>
+                                        <input type="text" class="form-control" id="type" th:field="*{type}" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="discountAmount" class="form-label">Giá trị giảm:</label>
+                                        <input type="number" class="form-control" id="discountAmount" th:field="*{discountAmount}" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="startDate" class="form-label">Ngày bắt đầu:</label>
+                                        <input type="date" class="form-control" id="startDate" th:field="*{startDate}" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="endDate" class="form-label">Ngày kết thúc:</label>
+                                        <input type="date" class="form-control" id="endDate" th:field="*{endDate}" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="status" class="form-label">Trạng thái:</label>
+                                        <select class="form-select" id="status" th:field="*{status}">
+                                            <option value="true">Hoạt động</option>
+                                            <option value="false">Không hoạt động</option>
+                                        </select>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary" th:text="${isEditMode? 'Lưu thay đổi': 'Thêm voucher'}"></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="~{/admin/layout/footer:: footer}"></footer>
+    </div>
+</div>
+<script th:src="@{/assets/js/core/jquery-3.7.1.min.js}"></script>
+<script th:src="@{/assets/js/core/popper.min.js}"></script>
+<script th:src="@{/assets/js/core/bootstrap.min.js}"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script th:src="@{/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js}"></script>
+<script th:src="@{/assets/js/plugin/chart.js/chart.min.js}"></script>
+<script th:src="@{/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js}"></script>
+<script th:src="@{/assets/js/plugin/chart-circle/circles.min.js}"></script>
+<script th:src="@{/assets/js/plugin/datatables/datatables.min.js}"></script>
+<script th:src="@{/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js}"></script>
+<script th:src="@{/assets/js/plugin/jsvectormap/jsvectormap.min.js}"></script>
+<script th:src="@{/assets/js/plugin/jsvectormap/world.js}"></script>
+<script th:src="@{/assets/js/plugin/sweetalert/sweetalert.min.js}"></script>
+<script th:src="@{/assets/js/kaiadmin.min.js}"></script>
+<script th:src="@{/assets/js/setting-demo.js}"></script>
+<script th:src="@{/assets/js/demo.js}"></script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/admin/layout/head:: head"></head>
+<body>
+<div class="wrapper">
+    <div th:replace="/admin/layout/Sidebar:: sidebar"></div>
+
+    <div class="main-panel">
+        <div th:replace="/admin/layout/header:: header"></div>
+
+        <div class="container">
+            <div class="page-inner">
+                <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+                    <div>
+                        <h3 class="fw-bold mb-3">Chi tiết đơn hàng #<span th:text="${order.id}"></span></h3>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <p><b>Khách hàng:</b> <span th:text="${order.user.name}"></span></p>
+                                <p><b>Ngày tạo:</b> <span th:text="${#dates.format(order.createdAt, 'dd/MM/yyyy HH:mm')}"></span></p>
+                                <p><b>Tổng giá trị:</b> <span th:text="${order.totalAmount}"></span></p>
+                                <p><b>Trạng thái:</b> <span th:text="${order.status? 'Hoàn thành': 'Chờ xử lý'}"></span></p>
+
+                                <h4>Danh sách sản phẩm</h4>
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Số lượng</th>
+                                        <th>Giá</th>
+                                        <th>Thành tiền</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="orderItem: ${order.orderItems}">
+                                        <td th:text="${orderItem.product.name}"></td>
+                                        <td th:text="${orderItem.quantity}"></td>
+                                        <td th:text="${orderItem.price}"></td>
+                                        <td th:text="${orderItem.subtotal}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="/admin/layout/footer:: footer"></footer>
+    </div>
+</div>
+
+<script th:src="@{/assets/js/core/jquery-3.7.1.min.js}"></script>
+<script th:src="@{/assets/js/core/popper.min.js}"></script>
+<script th:src="@{/assets/js/core/bootstrap.min.js}"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script th:src="@{/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js}"></script>
+<script th:src="@{/assets/js/plugin/chart.js/chart.min.js}"></script>
+<script th:src="@{/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js}"></script>
+<script th:src="@{/assets/js/plugin/chart-circle/circles.min.js}"></script>
+<script th:src="@{/assets/js/plugin/datatables/datatables.min.js}"></script>
+<script th:src="@{/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js}"></script>
+<script th:src="@{/assets/js/plugin/jsvectormap/jsvectormap.min.js}"></script>
+<script th:src="@{/assets/js/plugin/jsvectormap/world.js}"></script>
+<script th:src="@{/assets/js/plugin/sweetalert/sweetalert.min.js}"></script>
+<script th:src="@{/assets/js/kaiadmin.min.js}"></script>
+<script th:src="@{/assets/js/setting-demo.js}"></script>
+<script th:src="@{/assets/js/demo.js}"></script>
+
+</body>
+</html>

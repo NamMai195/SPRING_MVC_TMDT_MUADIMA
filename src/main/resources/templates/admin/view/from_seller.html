@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/admin/layout/head:: head"></head>
+<body>
+<div class="wrapper">
+  <div th:replace="/admin/layout/Sidebar:: sidebar"></div>
+  <div class="main-panel">
+    <div th:replace="/admin/layout/header:: header"></div>
+
+    <div class="container">
+      <div class="page-inner">
+        <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+          <div>
+            <h3 class="fw-bold mb-3" th:text="${isEditMode? 'Sửa Người Bán': 'Thêm Người Bán'}"></h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="container d-flex justify-content-center align-items-center">
+            <div class="card mb-4" style="width:700px ">
+              <div class="card-header text-center">
+                <h2 class="fw-bold" th:text="${isEditMode? 'Sửa Người Bán': 'Thêm Người Bán Mới'}"></h2>
+              </div>
+              <div class="card-body ">
+                <form th:action="@{/admin/seller/save}" th:object="${seller}" method="post" enctype="multipart/form-data">
+                  <input type="hidden" th:field="*{id}" th:if="${isEditMode}" />
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Tên Người Bán:</label>
+                    <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" class="form-control" id="email" th:field="*{email}" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="nameShop" class="form-label">Tên Cửa Hàng:</label>
+                    <input type="text" class="form-control" id="nameShop" th:field="*{nameShop}" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Mật khẩu:</label>
+                    <input type="password" class="form-control" id="password" th:field="*{password}" required th:if="${not isEditMode}">
+                    <input type="password" class="form-control" id="password" th:if="${isEditMode}" placeholder="Nhập mật khẩu mới (để trống nếu không thay đổi)">
+                  </div>
+                  <div class="mb-3">
+                    <label for="address" class="form-label">Địa chỉ:</label>
+                    <input type="text" class="form-control" id="address" th:field="*{address}">
+                  </div>
+                  <div class="mb-3">
+                    <label for="sdt" class="form-label">Số điện thoại:</label>
+                    <input type="tel" class="form-control" id="sdt" th:field="*{sdt}">
+                  </div>
+                  <div class="mb-3">
+                    <label for="cccd" class="form-label">Số CCCD:</label>
+                    <input type="text" class="form-control" id="cccd" th:field="*{cccd}">
+                  </div>
+                  <div class="mb-3">
+                    <label for="status" class="form-label">Trạng thái:</label>
+                    <select class="form-select" id="status" th:field="*{status}">
+                      <option value="true">Hoạt động</option>
+                      <option value="false">Không hoạt động</option>
+                    </select>
+                  </div>
+                  <button type="submit" class="btn btn-primary" th:text="${isEditMode? 'Lưu Thay Đổi': 'Thêm Người Bán'}"></button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer th:replace="/admin/layout/footer:: footer"></footer>
+  </div>
+
+</div>
+<script src="/assets/js/core/jquery-3.7.1.min.js"></script>
+<script src="/assets/js/core/popper.min.js"></script>
+<script src="/assets/js/core/bootstrap.min.js"></script>
+
+<script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+
+<script src="/assets/js/plugin/chart.js/chart.min.js"></script>
+
+<script src="/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+
+<script src="/assets/js/plugin/chart-circle/circles.min.js"></script>
+
+<script src="/assets/js/plugin/datatables/datatables.min.js"></script>
+
+<script src="/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<script src="/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
+<script src="/assets/js/plugin/jsvectormap/world.js"></script>
+
+<script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+
+<script src="/assets/js/kaiadmin.min.js"></script>
+
+<script src="/assets/js/setting-demo.js"></script>
+<script src="/assets/js/demo.js"></script>
+</body>
+</html>

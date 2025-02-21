@@ -1,78 +1,58 @@
 <!DOCTYPE html>
-<html lang="vi">
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/admin/layout/head :: head">
-
-</head>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/admin/layout/head:: head"></head>
 <body>
 <div class="wrapper">
-    <!-- Sidebar -->
-    <div th:replace="/admin/layout/Sidebar :: sidebar"></div>
-    <!-- End Sidebar -->
+    <div th:replace="/admin/layout/Sidebar:: sidebar"></div>
 
     <div class="main-panel">
-        <div th:replace="/admin/layout/header :: header"></div>
+        <div th:replace="/admin/layout/header:: header"></div>
 
         <div class="container">
             <div class="page-inner">
                 <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
                     <div>
-                        <h3 class="fw-bold mb-3">Home View</h3>
+                        <h3 class="fw-bold mb-3">Danh sách loại sản phẩm</h3>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
                                 <div class="d-flex align-items-center">
-                                    <h4 class="card-title">User List</h4>
-                                    <a class="btn btn-primary btn-round ms-auto" href="/admin/user/create">
+                                    <h4 class="card-title">Loại sản phẩm</h4>
+                                    <a class="btn btn-primary btn-round ms-auto" th:href="@{/admin/product-type/create}">
                                         <i class="fa fa-plus"></i>
-                                        Add User
+                                        Thêm loại sản phẩm
                                     </a>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="add-row" class="display table table-striped table-hover">
+                                    <table id="product-type-table" class="display table table-striped table-hover">
                                         <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Address</th>
-                                            <th>Phone</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
+                                            <th>ID</th>
+                                            <th>Tên loại sản phẩm</th>
+                                            <th>Hành động</th>
                                         </tr>
                                         </thead>
-                                        <tfoot>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Address</th>
-                                            <th>Phone</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                        </tfoot>
                                         <tbody>
-                                        <tr th:each="user: ${users}">
-                                            <td th:text="${user.name}"></td>
-                                            <td th:text="${user.email}"></td>
-                                            <td th:text="${user.address}"></td>
-                                            <td th:text="${user.sdt}"></td>
-                                            <td th:text="${user.status}"></td>
+                                        <tr th:each="productType: ${productTypes}">
+                                            <td th:text="${productType.id}"></td>
+                                            <td th:text="${productType.name}"></td>
                                             <td>
-                                                <a th:href="@{/admin/user/edit/{id}(id=${user.id})}" class="btn btn-link btn-primary btn-sm" data-bs-toggle="tooltip" title="Edit">
+                                                <a th:href="@{/admin/product-type/edit/{id}(id=${productType.id})}" class="btn btn-link btn-primary btn-sm" data-bs-toggle="tooltip" title="Sửa">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <a href="#" th:data-id="${user.id}" class="btn btn-link btn-danger btn-sm delete-btn" data-bs-toggle="tooltip" title="Delete">
+                                                <a href="#" th:data-id="${productType.id}" class="btn btn-link btn-danger btn-sm delete-btn" data-bs-toggle="tooltip" title="Xóa">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </a>
                                             </td>
                                         </tr>
-                                        <tr th:if="${users.isEmpty()}">
-                                            <td colspan="6">No users found.</td>
+                                        <tr th:if="${productTypes.isEmpty()}">
+                                            <td colspan="3">Không tìm thấy loại sản phẩm.</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -84,52 +64,31 @@
             </div>
         </div>
 
-        <footer th:replace="/admin/layout/footer :: footer"></footer>
+        <footer th:replace="/admin/layout/footer:: footer"></footer>
     </div>
-
-
-
 </div>
-<!--   Core JS Files   -->
-<script src="/assets/js/core/jquery-3.7.1.min.js"></script>
-<script src="/assets/js/core/popper.min.js"></script>
-<script src="/assets/js/core/bootstrap.min.js"></script>
 
-<script src="/assets/js/core/jquery-3.7.1.min.js"></script>
+<script th:src="@{/assets/js/core/jquery-3.7.1.min.js}"></script>
+<script th:src="@{/assets/js/core/popper.min.js}"></script>
+<script th:src="@{/assets/js/core/bootstrap.min.js}"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- jQuery Scrollbar -->
-<script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-
-<!-- Chart JS -->
-<script src="/assets/js/plugin/chart.js/chart.min.js"></script>
-
-<!-- jQuery Sparkline -->
-<script src="/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
-
-<!-- Chart Circle -->
-<script src="/assets/js/plugin/chart-circle/circles.min.js"></script>
-
-<!-- Datatables -->
+<script th:src="@{/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js}"></script>
+<script th:src="@{/assets/js/plugin/chart.js/chart.min.js}"></script>
+<script th:src="@{/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js}"></script>
+<script th:src="@{/assets/js/plugin/chart-circle/circles.min.js}"></script>
+<script th:src="@{/assets/js/plugin/datatables/datatables.min.js}"></script>
 <script src="/assets/js/plugin/datatables/datatables.min.js"></script>
+<script th:src="@{/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js}"></script>
+<script th:src="@{/assets/js/plugin/jsvectormap/jsvectormap.min.js}"></script>
+<script th:src="@{/assets/js/plugin/jsvectormap/world.js}"></script>
+<script th:src="@{/assets/js/plugin/sweetalert/sweetalert.min.js}"></script>
+<script th:src="@{/assets/js/kaiadmin.min.js}"></script>
+<script th:src="@{/assets/js/setting-demo.js}"></script>
+<script th:src="@{/assets/js/demo.js}"></script>
 
-<!-- Bootstrap Notify -->
-<script src="/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
-
-<!-- jQuery Vector Maps -->
-<script src="/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
-<script src="/assets/js/plugin/jsvectormap/world.js"></script>
-
-<!-- Sweet Alert -->
-<script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
-
-<!-- Kaiadmin JS -->
-<script src="/assets/js/kaiadmin.min.js"></script>
-
-<!-- Kaiadmin DEMO methods, don't include it in your project! -->
-<script src="/assets/js/setting-demo.js"></script>
-<script src="/assets/js/demo.js"></script>
 <script>
+    //... (Your existing JavaScript code for charts, DataTable and deleting)...
     $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
         type: "line",
         height: "70",
@@ -177,7 +136,7 @@
     })
     $('.delete-btn').click(function(event) {
         event.preventDefault();
-        var userId = $(this).data('id');
+        var productId = $(this).data('id'); // Lấy ID sản phẩm
 
         Swal.fire({
             title: 'Bạn có chắc chắn muốn xóa?',
@@ -192,12 +151,12 @@
             if (result.isConfirmed) {
                 // Gửi yêu cầu DELETE bằng AJAX
                 $.ajax({
-                    url: '/admin/user/delete/' + userId,
-                    type: 'GET',
+                    url: '/admin/product-type/delete/' + productId, // Thay đổi URL
+                    type: 'DELETE',
                     success: function(result) {
                         Swal.fire(
                             'Đã xóa!',
-                            'Người dùng đã được xóa.',
+                            'Sản phẩm đã được xóa.',
                             'success'
                         ).then(() => {
                             window.location.reload();
@@ -206,7 +165,7 @@
                     error: function(xhr, status, error) {
                         Swal.fire(
                             'Lỗi!',
-                            'Đã xảy ra lỗi khi xóa người dùng.',
+                            'Đã xảy ra lỗi khi xóa sản phẩm.',
                             'error'
                         );
                     }

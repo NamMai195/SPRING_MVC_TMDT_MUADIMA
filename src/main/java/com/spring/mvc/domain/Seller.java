@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 @Entity
@@ -27,13 +28,13 @@ public class Seller {
 
     @OneToOne(mappedBy = "seller")
     private WalletSeller walletSeller;
-
+    @ToString.Exclude
     @OneToMany(mappedBy = "seller")
     private List<Product> products;
 
     @OneToMany(mappedBy = "seller")
     private List<Complain> complains;
-
+    @ToString.Exclude
     @OneToMany(mappedBy = "seller")
     private List<Voucher> vouchers;
 }

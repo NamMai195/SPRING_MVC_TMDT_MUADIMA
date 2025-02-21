@@ -7,13 +7,14 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface Admin_UserRepository extends JpaRepository<User, Integer> {
 
     User save(User user);
 
-    void deleteById(long id);
+    void deleteById(Long id);
 
     List<User> findAll();
 
     User findById(long id);
+
 }
