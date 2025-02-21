@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class AdminController {
+/*
 
     @GetMapping("/admin")
     public String Admin() {
@@ -19,5 +20,6 @@ public class AdminController {
     public String Manager_seller() {
         return "admin/view/manager_seler";
     }
+*/
 
 }

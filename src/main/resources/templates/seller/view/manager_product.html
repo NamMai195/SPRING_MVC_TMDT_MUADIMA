@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/seller/layout/head :: head"></head>
+<body>
+<div class="wrapper">
+    <!-- Sidebar -->
+    <div th:replace="/seller/layout/Sidebar :: sidebar"></div>
+    <!-- End Sidebar -->
+
+    <div class="main-panel">
+        <div th:replace="/seller/layout/header :: header"></div>
+
+        <div class="container">
+            <div class="page-inner ">
+                <div class="container d-flex justify-content-center align-items-center">
+
+                    <!-- Modal Thêm Loại Sản Phẩm -->
+                    <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title" id="addCategoryModalLabel">Thêm Loại Sản Phẩm</h3>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="addCategoryForm">
+                                        <div class="form-group">
+                                            <label for="nameType">Tên Loại:</label>
+                                            <input id="nameType" name="name_type" type="text" class="form-control" required />
+                                        </div>
+                                        <button type="submit" class="btn btn-primary mt-3">Thêm Loại Sản Phẩm</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form thêm sản phẩm -->
+                    <div class="card mb-4 " style="width:700px ">
+                        <div class="card-header text-center">
+                            <h2 class="fw-bold text-primary">Thêm Sản Phẩm</h2>
+                        </div>
+                        <div class="card-body ">
+                            <form enctype="multipart/form-data">
+                                <div class="">
+                                    <label for="name" class="fw-bold">Tên Sản Phẩm:</label>
+                                    <input id="name" name="name" type="text" class="form-control" required />
+                                </div>
+                                <div class="">
+                                    <label for="price" class="fw-bold">Giá:</label>
+                                    <input id="price" name="price" type="number" min="0" class="form-control" required />
+                                </div>
+                                <div class="">
+                                    <label for="quantity" class="fw-bold">Số Lượng:</label>
+                                    <input id="quantity" name="quantity" type="number" min="0" class="form-control" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="type" class="fw-bold">Loại Sản Phẩm:</label>
+                                    <select id="type" name="type_id" class="form-control mb-3">
+                                        <option>Điện tử</option>
+                                    </select>
+                                    <!-- Nút mở modal -->
+                                    <button type="button" class="" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                                        Khác...
+                                    </button>
+                                </div>
+                                <div class="">
+                                    <label for="images" class="fw-bold">Hình Ảnh:</label>
+                                    <input id="images" name="images" type="file" multiple class="form-control" />
+                                </div>
+                                <div class="">
+                                    <label for="description" class="fw-bold">Mô Tả:</label>
+                                    <textarea id="description" name="describe" class="form-control"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-info mt-3">Thêm Sản Phẩm</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+
+        <footer th:replace="/seller/layout/footer :: footer"></footer>
+    </div>
+
+    <!-- Custom template | don't include it in your project! -->
+    <div class="custom-template">
+        <div class="title">Settings</div>
+        <div class="custom-content">
+            <div class="switcher">
+                <div class="switch-block">
+                    <h4>Logo Header</h4>
+                    <div class="btnSwitch">
+                        <button
+                                type="button"
+                                class="selected changeLogoHeaderColor"
+                                data-color="dark"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeLogoHeaderColor"
+                                data-color="blue"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeLogoHeaderColor"
+                                data-color="purple"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeLogoHeaderColor"
+                                data-color="light-blue"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeLogoHeaderColor"
+                                data-color="green"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeLogoHeaderColor"
+                                data-color="orange"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeLogoHeaderColor"
+                                data-color="red"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeLogoHeaderColor"
+                                data-color="white"
+                        ></button>
+                        <br />
+                        <button
+                                type="button"
+                                class="changeLogoHeaderColor"
+                                data-color="dark2"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeLogoHeaderColor"
+                                data-color="blue2"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeLogoHeaderColor"
+                                data-color="purple2"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeLogoHeaderColor"
+                                data-color="light-blue2"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeLogoHeaderColor"
+                                data-color="green2"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeLogoHeaderColor"
+                                data-color="orange2"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeLogoHeaderColor"
+                                data-color="red2"
+                        ></button>
+                    </div>
+                </div>
+                <div class="switch-block">
+                    <h4>Navbar Header</h4>
+                    <div class="btnSwitch">
+                        <button
+                                type="button"
+                                class="changeTopBarColor"
+                                data-color="dark"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeTopBarColor"
+                                data-color="blue"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeTopBarColor"
+                                data-color="purple"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeTopBarColor"
+                                data-color="light-blue"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeTopBarColor"
+                                data-color="green"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeTopBarColor"
+                                data-color="orange"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeTopBarColor"
+                                data-color="red"
+                        ></button>
+                        <button
+                                type="button"
+                                class="selected changeTopBarColor"
+                                data-color="white"
+                        ></button>
+                        <br />
+                        <button
+                                type="button"
+                                class="changeTopBarColor"
+                                data-color="dark2"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeTopBarColor"
+                                data-color="blue2"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeTopBarColor"
+                                data-color="purple2"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeTopBarColor"
+                                data-color="light-blue2"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeTopBarColor"
+                                data-color="green2"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeTopBarColor"
+                                data-color="orange2"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeTopBarColor"
+                                data-color="red2"
+                        ></button>
+                    </div>
+                </div>
+                <div class="switch-block">
+                    <h4>Sidebar</h4>
+                    <div class="btnSwitch">
+                        <button
+                                type="button"
+                                class="changeSideBarColor"
+                                data-color="white"
+                        ></button>
+                        <button
+                                type="button"
+                                class="selected changeSideBarColor"
+                                data-color="dark"
+                        ></button>
+                        <button
+                                type="button"
+                                class="changeSideBarColor"
+                                data-color="dark2"
+                        ></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="custom-toggle">
+            <i class="icon-settings"></i>
+        </div>
+    </div>
+    <!-- End Custom template -->
+</div>
+
+<script>
+    document.getElementById("addCategoryForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        let categoryName = document.getElementById("nameType").value;
+
+        if (categoryName) {
+            // Thêm vào dropdown
+            let newOption = document.createElement("option");
+            newOption.text = categoryName;
+            document.getElementById("type").add(newOption);
+
+            // Đóng modal
+            let modal = bootstrap.Modal.getInstance(document.getElementById("addCategoryModal"));
+            modal.hide();
+
+            // Xóa nội dung input
+            document.getElementById("nameType").value = "";
+        }
+    });
+</script>
+
+<!--   Core JS Files   -->
+<script src="/assets/js/core/jquery-3.7.1.min.js"></script>
+<script src="/assets/js/core/popper.min.js"></script>
+<script src="/assets/js/core/bootstrap.min.js"></script>
+
+<!-- jQuery Scrollbar -->
+<script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+
+<!-- Chart JS -->
+<script src="/assets/js/plugin/chart.js/chart.min.js"></script>
+
+<!-- jQuery Sparkline -->
+<script src="/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+
+<!-- Chart Circle -->
+<script src="/assets/js/plugin/chart-circle/circles.min.js"></script>
+
+<!-- Datatables -->
+<script src="/assets/js/plugin/datatables/datatables.min.js"></script>
+
+<!-- Bootstrap Notify -->
+<script src="/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<!-- jQuery Vector Maps -->
+<script src="/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
+<script src="/assets/js/plugin/jsvectormap/world.js"></script>
+
+<!-- Sweet Alert -->
+<script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+
+<!-- Kaiadmin JS -->
+<script src="/assets/js/kaiadmin.min.js"></script>
+
+<!-- Kaiadmin DEMO methods, don't include it in your project! -->
+<script src="/assets/js/setting-demo.js"></script>
+<script src="/assets/js/demo.js"></script>
+<script>
+    $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
+        type: "line",
+        height: "70",
+        width: "100%",
+        lineWidth: "2",
+        lineColor: "#177dff",
+        fillColor: "rgba(23, 125, 255, 0.14)",
+    });
+
+    $("#lineChart2").sparkline([99, 125, 122, 105, 110, 124, 115], {
+        type: "line",
+        height: "70",
+        width: "100%",
+        lineWidth: "2",
+        lineColor: "#f3545d",
+        fillColor: "rgba(243, 84, 93, .14)",
+    });
+
+    $("#lineChart3").sparkline([105, 103, 123, 100, 95, 105, 115], {
+        type: "line",
+        height: "70",
+        width: "100%",
+        lineWidth: "2",
+        lineColor: "#ffa534",
+        fillColor: "rgba(255, 165, 52, .14)",
+    });
+</script>
+</body>
+</html>
