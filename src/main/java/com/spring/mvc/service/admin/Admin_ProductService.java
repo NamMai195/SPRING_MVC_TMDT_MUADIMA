@@ -61,7 +61,7 @@ public class Admin_ProductService {
     public void approveProduct(Long id) {
         Product product = adminProductRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + id));
-        product.setStatus("Hoạt động");
+        product.setStatus("False");
         adminProductRepository.save(product);
     }
 

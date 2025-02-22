@@ -15,9 +15,13 @@
       <div class="page-inner">
         <div class="container mt-5">
           <div class="row mb-3">
-            <div class="col">
-              <input type="text" class="form-control" placeholder="Search product">
-            </div>
+            <form th:action="@{/search}" method="get">
+              <div class="col">
+                <input type="text" name="query" class="form-control v-50" placeholder="Search product">
+                <button type="submit" class="btn btn-info mt-1">Search</button>
+              </div>
+            </form>
+
           </div>
           <table class="table table-striped">
             <thead class="thead-light">
@@ -29,61 +33,92 @@
               <th scope="col">ACTIONS</th>
             </tr>
             </thead>
+            <!--dùng vòng lặp để hiển thị tất cả sản phẩm-->
             <tbody>
-            <tr>
-              <td>Áo thun tay lỡ nam nữ, áo phông rộng unisex Sani</td>
-              <td>100000</td>
-              <td>100</td>
-              <td>Đợi duyệt</td>
+            <tr th:each="product : ${products}">
+              <td th:text="${product.name}"></td>
+              <td th:text="${product.price}"></td>
+              <td th:text="${product.quantity}"></td>
+              <td th:text="${product.status}"></td>
               <td>
-                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
+                <!-- Nút Edit -->
+                <button class="btn btn-warning btn-sm edit-btn"
+                        data-toggle="modal" data-target="#editModal"
+                        th:data-id="${product.id}"
+                        th:data-name="${product.name}"
+                        th:data-price="${product.price}"
+                        th:data-quantity="${product.quantity}"
+                        th:data-describe="${product.describe}"
+                        th:data-images="${product.image}"> <!-- JSON chứa danh sách ảnh -->
+                  Edit
+                </button>
+
+                <!-- Nút Delete -->
+                <button class="btn btn-danger btn-sm delete-btn"
+                        th:data-id="${product.id}">
+                  Delete
+                </button>
               </td>
             </tr>
-            <!-- Add more product rows as needed -->
             </tbody>
           </table>
         </div>
 
-        <!-- Modal -->
+        <!-- Modal để hiển thị chi tiết sản phẩm khi chọn edit ở từng sản phẩm -->
         <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Edit Product</h5>
+                <h5 class="modal-title" id="editModalLabel">Chỉnh sửa sản phẩm</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body">
-                <form>
+              <form action="/editProduct" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                  <input type="hidden" id="product-id" name="id">
+
                   <div class="form-group">
-                    <label for="product-name">Name</label>
-                    <input type="text" class="form-control" id="product-name" value="Áo thun tay lỡ nam nữ, áo phông rộng unisex Sani">
+                    <label for="product-name">Tên sản phẩm</label>
+                    <input type="text" class="form-control" id="product-name" name="name" required>
                   </div>
+
                   <div class="form-group">
-                    <label for="product-price">Price</label>
-                    <input type="text" class="form-control" id="product-price" value="165000.0">
+                    <label for="product-price">Giá</label>
+                    <input type="number" class="form-control" id="product-price" name="price" required>
                   </div>
+
                   <div class="form-group">
-                    <label for="product-quantity">Quantity</label>
-                    <input type="text" class="form-control" id="product-quantity" value="100">
+                    <label for="product-quantity">Số lượng</label>
+                    <input type="number" class="form-control" id="product-quantity" name="quantity" required>
                   </div>
+
                   <div class="form-group">
-                    <label for="product-category">Category</label>
-                    <input type="text" class="form-control" id="product-category" value="Áo thun">
+                    <label for="description">Mô tả</label>
+                    <textarea class="form-control" id="description" name="describe" rows="3"></textarea>
                   </div>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Submit</button>
-              </div>
+
+                  <div class="form-group">
+                    <label for="new-images">Hình ảnh mới (tùy chọn)</label>
+                    <input type="file" class="form-control-file" id="new-images" name="images" multiple>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Hình ảnh hiện tại</label>
+                    <div id="current-images"></div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                  <button type="submit" class="btn btn-primary">Cập nhật</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
 
       </div>
+
     </div>
 
     <footer th:replace="/seller/layout/footer :: footer"></footer>
@@ -284,6 +319,115 @@
   </div>
   <!-- End Custom template -->
 </div>
+<!-- Thêm thư viện SweetAlert2 -->
+<script>
+  document.querySelectorAll('.edit-btn').forEach(button => {
+    button.addEventListener('click', function () {
+      // Load dữ liệu vào form
+      document.getElementById('product-id').value = this.getAttribute('data-id');
+      document.getElementById('product-name').value = this.getAttribute('data-name');
+      document.getElementById('product-price').value = this.getAttribute('data-price');
+      document.getElementById('product-quantity').value = this.getAttribute('data-quantity');
+      document.getElementById('description').value = this.getAttribute('data-describe');
+
+      // Xử lý ảnh JSON
+      let currentImagesContainer = document.getElementById('current-images');
+      currentImagesContainer.innerHTML = ''; // Xóa ảnh cũ
+
+      let imageJson = this.getAttribute('data-images'); // Lấy dữ liệu ảnh JSON
+
+      if (imageJson && imageJson.trim() !== '') {  // Kiểm tra nếu chuỗi JSON không rỗng
+        try {
+          // Định dạng lại JSON nếu cần (loại bỏ dấu ngoặc kép dư thừa)
+          let cleanedJson = imageJson.replace(/&quot;/g, '"');
+          let imagePaths = JSON.parse(cleanedJson); // Chuyển JSON thành mảng ảnh
+
+          if (Array.isArray(imagePaths)) {
+            imagePaths.forEach(imgPath => {
+              if (imgPath.trim() !== '') {
+                let imgElement = document.createElement('img');
+                imgElement.src = imgPath.trim(); // Gán đường dẫn ảnh
+                imgElement.style.width = '100px';
+                imgElement.style.marginRight = '10px';
+                imgElement.style.border = '1px solid #ddd';
+                imgElement.style.borderRadius = '5px';
+                imgElement.style.padding = '5px';
+                currentImagesContainer.appendChild(imgElement);
+              }
+            });
+          } else {
+            console.error("Lỗi: JSON không phải là mảng hợp lệ");
+          }
+        } catch (error) {
+          console.error("Lỗi khi đọc JSON ảnh: ", error);
+        }
+      }
+    });
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  document.querySelectorAll('.delete-btn').forEach(button => {
+    button.addEventListener('click', function () {
+      let productId = this.getAttribute('data-id');
+
+      Swal.fire({
+        title: "Bạn có chắc muốn xóa?",
+        text: "Hành động này không thể hoàn tác!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Xóa ngay"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch('/deleteProduct', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `id=${productId}`
+          })
+                  .then(response => response.text())
+                  .then(() => {
+                    Swal.fire("Đã xóa!", "Sản phẩm đã được xóa thành công.", "success")
+                            .then(() => location.reload());  // Reload sau khi xóa thành công
+                  })
+                  .catch(error => console.error("Lỗi khi xóa sản phẩm:", error));
+        }
+      });
+    });
+  });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Hiển thị thông báo thành công
+    const successMessage = "[[${successMessage}]]";
+    if (successMessage !== "null" && successMessage.trim() !== "") {
+      Swal.fire({
+        icon: 'success',
+        title: 'Thành công!',
+        text: successMessage,
+        showConfirmButton: false,
+        timer: 3000
+      });
+    }
+
+    // Hiển thị thông báo lỗi
+    const errorMessage = "[[${errorMessage}]]";
+    if (errorMessage !== "null" && errorMessage.trim() !== "") {
+      Swal.fire({
+        icon: 'error',
+        title: 'Lỗi!',
+        text: errorMessage,
+        showConfirmButton: false,
+        timer: 3000
+      });
+    }
+  });
+</script>
 <!--   Core JS Files   -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

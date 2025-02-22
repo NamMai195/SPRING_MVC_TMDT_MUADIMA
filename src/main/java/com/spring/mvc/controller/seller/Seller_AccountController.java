@@ -73,6 +73,7 @@ public class Seller_AccountController {
         return "redirect:/registerseller";
     }
 
+    // login
     @GetMapping("/sellerlogin")
     public String showLoginForm() {
         return "/seller/view/login_seller";
@@ -97,16 +98,16 @@ public class Seller_AccountController {
                 session.setAttribute("loggedInSeller", seller);
                 return "redirect:/seller";
             } else {
-                redirectAttributes.addFlashAttribute("error", "Mật khẩu không đúng hoặc Email không tồn tại!");
+                redirectAttributes.addFlashAttribute("error", "Mật khẩu không đúng!");
             }
         } else {
-            redirectAttributes.addFlashAttribute("error", "Mật khẩu không đúng hoặc Email không tồn tại!");
+            redirectAttributes.addFlashAttribute("error", "Email không tồn tại!");
         }
 
         return "redirect:/sellerlogin";
     }
 
-
+    // logout
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
@@ -140,6 +141,7 @@ public class Seller_AccountController {
             return "redirect:/sellerlogin";
         }
 
+        // Kiểm tra các thông tin khác trước khi cập nhật
         Optional<Seller> existingSellerBySdt = sellerRepository.findBySdt(sdt);
         if (existingSellerBySdt.isPresent() && !existingSellerBySdt.get().getId().equals(seller.getId())) {
             redirectAttributes.addFlashAttribute("error", "Số điện thoại đã được sử dụng!");
@@ -158,30 +160,45 @@ public class Seller_AccountController {
             return "redirect:/profile";
         }
 
+        // Cập nhật thông tin người bán
         seller.setName(name);
         seller.setSdt(sdt);
         seller.setAddress(address);
         seller.setCccd(cccd);
         seller.setNameShop(nameShop);
 
+        // Xử lý upload ảnh
         if (image != null && !image.isEmpty()) {
             try {
-                String fileName = image.getOriginalFilename();
-                String uploadDir = "src/main/resources/static/assets/img";
+                // Định nghĩa thư mục lưu ảnh (cùng cấp với thư mục src)
+                String uploadDir = "C:/uploads/";
+                File uploadFolder = new File(uploadDir);
+                // Kiểm tra và tạo thư mục nếu chưa tồn tại
+                if (!uploadFolder.exists()) {
+                    uploadFolder.mkdirs();
+                }
+                // Đổi tên file để tránh trùng lặp
+                String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
                 File file = new File(uploadDir + fileName);
+                // Lưu file vào thư mục
                 image.transferTo(file);
-                seller.setImage("/img/" + fileName);
+                // Cập nhật đường dẫn ảnh trong database
+                seller.setImage("/uploads/" + fileName);
             } catch (IOException e) {
                 e.printStackTrace();
+                redirectAttributes.addFlashAttribute("error", "Lỗi khi tải ảnh lên!");
+                return "redirect:/profile";
             }
         }
 
+        // Lưu seller vào database
         sellerRepository.save(seller);
-        session.setAttribute("loggedInSeller", seller);
-        redirectAttributes.addFlashAttribute("success", "Cập nhật thành công!");
 
+        redirectAttributes.addFlashAttribute("success", "Cập nhật hồ sơ thành công!");
         return "redirect:/profile";
     }
+
+
 
 
     // quên mk
@@ -232,8 +249,6 @@ public class Seller_AccountController {
         if (seller == null) {
             return "redirect:/sellerlogin";
         }
-
-
         Random random = new Random();
         int otp = 100000 + random.nextInt(900000);
 

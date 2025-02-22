@@ -75,7 +75,7 @@
                             <form action="profile" method="POST" enctype="multipart/form-data">
                                 <!-- Ảnh đại diện -->
                                 <div class="text-center mb-3">
-                                    <img id="avatarPreview" th:src="${seller.image}" alt="Avatar" class="rounded-circle" width="120" height="120">
+                                    <img id="avatarPreview" th:src="@{${seller.image}}" alt="Avatar" class="rounded-circle" width="120" height="120">
                                     <br>
                                     <label class="btn btn-secondary mt-2">
                                         Tải ảnh mới <input type="file" name="image" accept="image/*" class="d-none" id="imageInput">

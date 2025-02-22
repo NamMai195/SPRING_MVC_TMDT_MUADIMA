@@ -27,7 +27,8 @@ public class Product {
     private String name;
     private double price;
     private int quantity;
-    private String image;
+    @Column(columnDefinition = "TEXT")
+    private String image; // Lưu danh sách ảnh dưới dạng chuỗi JSON
     private String describe;
     private String status;
 
