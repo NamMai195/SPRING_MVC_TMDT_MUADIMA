@@ -22,11 +22,11 @@ public class HomeController {
     public String Type() {
         return "client/view/product_type";
     }
-    @GetMapping("/login")
+    @GetMapping("/user/login")
     public String Login() {
         return "client/view/login";
     }
-    @GetMapping("/register")
+    @GetMapping("/user/register")
     public String Register() {
         return "client/view/register";
     }

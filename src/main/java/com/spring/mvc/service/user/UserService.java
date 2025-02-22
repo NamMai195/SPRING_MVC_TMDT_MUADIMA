@@ -3,7 +3,7 @@ package com.spring.mvc.service.user;
 import com.spring.mvc.domain.User;
 import com.spring.mvc.dto.user.UserLoginDTO;
 import com.spring.mvc.dto.user.UserRegisterDTO;
-import com.spring.mvc.repository.user.UserRepository_vinh;
+import com.spring.mvc.repository.user.User_UserRepository;
 import com.spring.mvc.utils.PasswordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.Optional;
 @Service
 public class UserService {
     @Autowired
-    private UserRepository_vinh userRepository;
+    private User_UserRepository userRepository;
 
     // Xử lý đăng ký người dùng
     public Map<String, String> registerUser(UserRegisterDTO userDTO) {
@@ -44,8 +44,8 @@ public class UserService {
     }
 
     // Xử lý đăng nhập người dùng
-    public Map<String, String> loginUser(UserLoginDTO userDTO) {
-        Map<String, String> response = new HashMap<>();
+    public Map<String, Object> loginUser(UserLoginDTO userDTO) {
+        Map<String, Object> response = new HashMap<>(); // Thay đổi kiểu dữ liệu
 
         Optional<User> userOptional = userRepository.findByEmail(userDTO.getEmail());
         if (userOptional.isEmpty()) {
@@ -63,7 +63,24 @@ public class UserService {
 
         response.put("status", "success");
         response.put("message", "Đăng nhập thành công!");
-        response.put("name", user.getName()); // Gửi tên người dùng về cho UI
+        response.put("user", user); // Lưu đối tượng User vào response
         return response;
+    }
+
+    public void updateUser(Long userId, User updatedUser) {
+        User existingUser = userRepository.findById(userId).orElse(null);
+        if (existingUser != null) {
+            existingUser.setName(updatedUser.getName());
+            existingUser.setEmail(updatedUser.getEmail());
+            existingUser.setAddress(updatedUser.getAddress());
+            existingUser.setSdt(updatedUser.getSdt());
+
+            // Cập nhật ảnh nếu có
+            if (updatedUser.getImage() != null) {
+                existingUser.setImage(updatedUser.getImage());
+            }
+
+            userRepository.save(existingUser);
+        }
     }
 }

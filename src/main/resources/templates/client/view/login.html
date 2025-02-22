@@ -153,64 +153,37 @@
       if (loginForm) {
         loginForm.addEventListener("submit", function (event) {
           event.preventDefault();
-          let valid = true;
 
-          // Xóa thông báo lỗi cũ
-          document.querySelectorAll("#customer_login .error-message").forEach(el => el.textContent = "");
-
-          // Lấy dữ liệu nhập vào
-          const email = document.getElementById("customer_email").value.trim();
-          const password = document.getElementById("customer_password").value.trim();
-
-          // Nếu hợp lệ, gửi dữ liệu qua AJAX
-          if (valid) {
-            fetch("/user/login", {
-              method: "POST",
-              body: new FormData(loginForm)
-            })
-                    .then(response => response.json())
-                    .then(data => {
-                      if (data.status === "success") {
-                        Swal.fire({
-                          title: "Đăng nhập thành công!",
-                          text: "Chào mừng bạn!",
-                          icon: "success",
-                          timer: 2000,
-                          showConfirmButton: false
-                        }).then(() => {
-                          window.location.href = "/"; // Chuyển đến trang chủ
-                        });
+          fetch("/user/login", {
+            method: "POST",
+            body: new FormData(loginForm)
+          })
+                  .then(response => response.json())
+                  .then(data => {
+                    if (data.status === "success") {
+                      Swal.fire({
+                        title: "Đăng nhập thành công!",
+                        icon: "success",
+                        timer: 2000,
+                        showConfirmButton: false
+                      }).then(() => {
+                        window.location.href = "/"; // Chuyển về trang chủ
+                      });
+                    } else {
+                      if (data.field === "email") {
+                        showError("customer_email", data.message);
+                      } else if (data.field === "password") {
+                        showError("customer_password", data.message);
                       } else {
-                        // Hiển thị lỗi từ server đúng vị trí input
-                        if (data.field === "email") {
-                          showError("customer_email", data.message);
-                        } else if (data.field === "password") {
-                          showError("customer_password", data.message);
-                        } else {
-                          Swal.fire("Lỗi", data.message, "error");
-                        }
+                        Swal.fire("Lỗi", data.message, "error");
                       }
-                    })
-                    .catch(error => Swal.fire("Lỗi", "Đã có lỗi xảy ra!", "error"));
-          }
+                    }
+                  })
+                  .catch(error => {
+                    console.error("Lỗi đăng nhập:", error);
+                    Swal.fire("Lỗi", "Đã có lỗi xảy ra!", "error");
+                  });
         });
-      }
-
-      function showError(fieldId, message) {
-        const field = document.getElementById(fieldId);
-        if (field) {
-          let errorElement = field.parentElement.querySelector(".error-message");
-          if (!errorElement) {
-            console.warn(`Không tìm thấy phần tử .error-message cho ${fieldId}`);
-            return;
-          }
-          errorElement.textContent = message;
-          errorElement.style.color = "red";
-          errorElement.style.fontSize = "14px";
-          errorElement.style.textAlign = "left"; // Căn trái thông báo lỗi
-          errorElement.style.marginTop = "5px"; // Tạo khoảng cách với input
-          errorElement.style.display = "block"; // Hiển thị thông báo lỗi
-        }
       }
     });
   </script>
@@ -247,8 +220,8 @@
           <span class="d-block">Hello,  Khách</span>
         </a>
         <ul class="position-absolute">
-          <li><a href="login.html" title="Đăng nhập">Đăng nhập</a></li>
-          <li><a href="register.html" title="Đăng ký">Đăng ký</a></li>
+          <li><a href="login" title="Đăng nhập">Đăng nhập</a></li>
+          <li><a href="register" title="Đăng ký">Đăng ký</a></li>
           <li><a href="../san-pham-yeu-thich.html" class="wishlist_header" title="Sản phẩm yêu thích">Yêu thích (<span class="headerWishlistCount">0</span>)</a></li>
           <li><a href="../san-pham-da-xem.html" class="wishlist_header" title="Sản phẩm đã xem">Đã xem (<span class="countviewed">0</span>)</a></li>
         </ul>
@@ -279,7 +252,7 @@
             <div class="left-col">
               <div class="group-login group-log">
                 <h1 class="title-block-page">Đăng nhập tài khoản</h1>
-                <form method="post" action="user/login" id="customer_login" accept-charset="UTF-8"><input name="FormType" type="hidden" value="customer_login"/><input name="utf8" type="hidden" value="true"/>
+                <form method="post" action="login" id="customer_login" accept-charset="UTF-8"><input name="FormType" type="hidden" value="customer_login"/><input name="utf8" type="hidden" value="true"/>
                   <p class="error"></p>
                   <fieldset class="form-group">
                     <label>Email <span class="required">*</span></label>
@@ -323,7 +296,7 @@
               <h4>Quyền lợi với thành viên</h4>
               <div><p>Vận chuyển siêu tốc</p>							<p>Sản phẩm đa dạng</p>							<p>Đổi trả dễ dàng</p>
                 <p>Tích điểm đổi quà</p>						<p>Nhiều mã coupon dành cho thành viên thường xuyên</p></div>
-              <a href="register.html" class="btn-register-default">Đăng ký</a>
+              <a href="register" class="btn-register-default">Đăng ký</a>
             </div>
           </div>
         </div>

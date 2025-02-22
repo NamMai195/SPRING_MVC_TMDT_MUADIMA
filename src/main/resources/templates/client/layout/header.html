@@ -27,17 +27,16 @@
             <div class="account position-relative">
                 <a href="#" class="text-ico account-head d-block" title="Tài khoản">
                     Tài khoản
-                    <span class="d-block" id="user-name">Hello, ...</span>
+                    <span class="d-block" th:text="${session.loggedInUser != null ? session.loggedInUser.name : 'Chưa đăng nhập!'}"></span>
                 </a>
                 <ul class="position-absolute" id="user-menu">
-                    <li><a href="account/login.html" id="login-link" title="Đăng nhập">Đăng nhập</a></li>
-                    <li><a href="account/register.html" id="register-link" title="Đăng ký">Đăng ký</a></li>
-                    <li><a href="account/profile.html" id="profile-link" title="Tài Khoản" style="display: none;">Tài Khoản</a></li>
-                    <li><a href="san-pham-yeu-thich.html" class="wishlist_header" title="Sản phẩm yêu thích">Yêu thích (<span class="headerWishlistCount">0</span>)</a></li>
-                    <li><a href="san-pham-da-xem.html" class="wishlist_header" title="Sản phẩm đã xem">Đã xem (<span class="countviewed">0</span>)</a></li>
-                    <li><a href="#" id="logout-link" style="display: none;" title="Đăng Xuất">Đăng Xuất</a></li>
+                    <li th:if="${session.loggedInUser == null}"><a href="/user/login" id="login-link" title="Đăng nhập">Đăng nhập</a></li>
+                    <li th:if="${session.loggedInUser == null}"><a href="/user/register" id="register-link" title="Đăng ký">Đăng ký</a></li>
+                    <li th:if="${session.loggedInUser != null}"><a href="/user/profile" id="profile-link" title="Tài Khoản">Tài Khoản</a></li>
+                    <li th:if="${session.loggedInUser != null}"><a href="/user/login" id="logout-link" title="Đăng Xuất">Đăng Xuất</a></li>
                 </ul>
             </div>
+
             <a class="text-ico cart-head position-relative" href="cart.html" title="Giỏ hàng">
                 Giỏ hàng
                 <span class="d-block">Thanh toán</span>
@@ -46,25 +45,39 @@
         </div>
     </div>
 </header>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    // Kiểm tra người dùng hiện tại
-    fetch("/user/current-user")
-        .then(response => response.json())
-        .then(data => {
-            if (data.name) {
-                document.getElementById("user-name").innerText = "Hello, " + data.name;
-                document.getElementById("login-link").style.display = "none";
-                document.getElementById("register-link").style.display = "none";
-                document.getElementById("profile-link").style.display = "block";
-                document.getElementById("logout-link").style.display = "block";
-            }
-        });
+    document.addEventListener("DOMContentLoaded", function () {
+        const logoutLink = document.getElementById("logout-link");
 
-    // Xử lý đăng xuất
-    document.getElementById("logout-link").addEventListener("click", function () {
-        fetch("/user/logout")
-            .then(() => {
-                window.location.reload();
+        if (logoutLink) {
+            logoutLink.addEventListener("click", function (event) {
+                event.preventDefault();
+
+                fetch("/user/logout", {
+                    method: "GET",
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === "success") {
+                            Swal.fire({
+                                title: data.message,
+                                icon: "success",
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                window.location.href = data.redirect; // Chuyển hướng sau khi đăng xuất
+                            });
+                        } else {
+                            Swal.fire("Lỗi", "Không thể đăng xuất!", "error");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Lỗi khi đăng xuất:", error);
+                        Swal.fire("Lỗi", "Có lỗi xảy ra khi đăng xuất!", "error");
+                    });
             });
+        }
     });
 </script>
+
