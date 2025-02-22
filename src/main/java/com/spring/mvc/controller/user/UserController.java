@@ -1,58 +1,115 @@
+// UserController.java
 package com.spring.mvc.controller.user;
 
-import com.spring.mvc.dto.user.UserRegisterDTO;
+import com.spring.mvc.domain.User;
 import com.spring.mvc.dto.user.UserLoginDTO;
+import com.spring.mvc.dto.user.UserRegisterDTO;
 import com.spring.mvc.service.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
+@Controller
 @RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserService userService;
 
-    // Xử lý đăng ký
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> register(@ModelAttribute UserRegisterDTO userDTO) {
         Map<String, String> result = userService.registerUser(userDTO);
-
         if ("success".equals(result.get("status"))) {
-            result.put("redirect", "/login"); // Chuyển hướng đến trang đăng nhập
+            result.put("redirect", "/login");
         }
-
         return ResponseEntity.ok(result);
     }
 
-    // Xử lý đăng nhập
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@ModelAttribute UserLoginDTO userDTO, HttpSession session) {
-        Map<String, String> result = userService.loginUser(userDTO);
-
+    public ResponseEntity<Map<String, Object>> login(@ModelAttribute UserLoginDTO userDTO, HttpSession session) {
+        Map<String, Object> result = userService.loginUser(userDTO);
         if ("success".equals(result.get("status"))) {
-            session.setAttribute("user", result.get("name")); // Lưu tên vào session
-            result.put("redirect", "/"); // Chuyển hướng về trang chủ
+            session.setAttribute("loggedInUser", result.get("user"));
+            result.put("redirect", "/");
         }
-
         return ResponseEntity.ok(result);
     }
 
-    // Kiểm tra thông tin người dùng đang đăng nhập
-    @GetMapping("/current-user")
-    public ResponseEntity<Map<String, String>> getCurrentUser(HttpSession session) {
-        String userName = (String) session.getAttribute("user");
-        return ResponseEntity.ok(Map.of("name", userName != null ? userName : ""));
+    @GetMapping("/logout")
+    public ResponseEntity<Map<String, String>> logout(HttpSession session) {
+        session.invalidate();
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("message", "Đăng xuất thành công!");
+        response.put("redirect", "/user/login");
+        return ResponseEntity.ok(response);
     }
 
-    // Xử lý đăng xuất
-    @GetMapping("/logout")
-    public ResponseEntity<String> logout(HttpSession session) {
-        session.invalidate();
-        return ResponseEntity.ok("Đăng xuất thành công!");
+    @GetMapping("/profile")
+    public String profile(HttpSession session, Model model) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/user/login";
+        }
+        model.addAttribute("user", loggedInUser);
+        return "client/view/user-profile";
+    }
+
+    @PostMapping("/update")
+    public String updateUser(@ModelAttribute User updatedUser,
+                             @RequestParam("imageFile") MultipartFile image,
+                             HttpSession session, RedirectAttributes redirectAttributes) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+
+        if (loggedInUser != null) {
+            if (image != null && !image.isEmpty()) {
+                try {
+                    // Định danh file mới
+                    String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
+
+                    // Thư mục lưu ảnh (ngoài project)
+                    String uploadDir = new File("uploads/").getAbsolutePath();
+                    File uploadPath = new File(uploadDir);
+
+                    if (!uploadPath.exists()) {
+                        uploadPath.mkdirs();
+                    }
+
+                    // Lưu ảnh vào thư mục ngoài project
+                    File file = new File(uploadPath, fileName);
+                    image.transferTo(file);
+
+                    // Cập nhật ảnh mới trong database
+                    loggedInUser.setImage(fileName);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    redirectAttributes.addFlashAttribute("error", "Lỗi khi lưu ảnh!");
+                    return "redirect:/user/profile?error";
+                }
+            }
+
+            // Cập nhật thông tin người dùng
+            loggedInUser.setName(updatedUser.getName());
+            loggedInUser.setEmail(updatedUser.getEmail());
+            loggedInUser.setAddress(updatedUser.getAddress());
+            loggedInUser.setSdt(updatedUser.getSdt());
+
+            userService.updateUser(loggedInUser.getId(), loggedInUser);
+            session.setAttribute("loggedInUser", loggedInUser);
+
+            redirectAttributes.addFlashAttribute("success", "Cập nhật thành công!");
+            return "redirect:/user/profile";
+        }
+
+        return "redirect:/user/profile?error";
     }
 }
