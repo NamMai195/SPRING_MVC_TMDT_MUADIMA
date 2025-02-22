@@ -15,73 +15,80 @@
             <div class="page-inner ">
                 <div class="container d-flex justify-content-center align-items-center">
 
-                    <!-- Modal Thêm Loại Sản Phẩm -->
-                    <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h3 class="modal-title" id="addCategoryModalLabel">Thêm Loại Sản Phẩm</h3>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form id="addCategoryForm">
-                                        <div class="form-group">
-                                            <label for="nameType">Tên Loại:</label>
-                                            <input id="nameType" name="name_type" type="text" class="form-control" required />
-                                        </div>
-                                        <button type="submit" class="btn btn-primary mt-3">Thêm Loại Sản Phẩm</button>
-                                    </form>
+                    <div class="container d-flex justify-content-center align-items-center">
+                        <!-- Modal Thêm Loại Sản Phẩm -->
+                        <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title" id="addCategoryModalLabel">Thêm Loại Sản Phẩm</h3>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- Form gửi về backend -->
+                                        <form th:action="@{/addProductType}" method="post">
+                                            <div class="form-group">
+                                                <label for="nameType">Tên Loại:</label>
+                                                <input id="nameType" name="name_type" type="text" class="form-control" required />
+                                            </div>
+                                            <button type="submit" class="btn btn-primary mt-3">Thêm Loại Sản Phẩm</button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Form thêm sản phẩm -->
-                    <div class="card mb-4 " style="width:700px ">
-                        <div class="card-header text-center">
-                            <h2 class="fw-bold text-primary">Thêm Sản Phẩm</h2>
-                        </div>
-                        <div class="card-body ">
-                            <form enctype="multipart/form-data">
-                                <div class="">
-                                    <label for="name" class="fw-bold">Tên Sản Phẩm:</label>
-                                    <input id="name" name="name" type="text" class="form-control" required />
-                                </div>
-                                <div class="">
-                                    <label for="price" class="fw-bold">Giá:</label>
-                                    <input id="price" name="price" type="number" min="0" class="form-control" required />
-                                </div>
-                                <div class="">
-                                    <label for="quantity" class="fw-bold">Số Lượng:</label>
-                                    <input id="quantity" name="quantity" type="number" min="0" class="form-control" required />
-                                </div>
-                                <div class="mb-3">
-                                    <label for="type" class="fw-bold">Loại Sản Phẩm:</label>
-                                    <select id="type" name="type_id" class="form-control mb-3">
-                                        <option>Điện tử</option>
-                                    </select>
-                                    <!-- Nút mở modal -->
-                                    <button type="button" class="" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
-                                        Khác...
-                                    </button>
-                                </div>
-                                <div class="">
-                                    <label for="images" class="fw-bold">Hình Ảnh:</label>
-                                    <input id="images" name="images" type="file" multiple class="form-control" />
-                                </div>
-                                <div class="">
-                                    <label for="description" class="fw-bold">Mô Tả:</label>
-                                    <textarea id="description" name="describe" class="form-control"></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-info mt-3">Thêm Sản Phẩm</button>
-                            </form>
+                        <!-- Form thêm sản phẩm -->
+                        <div class="card mb-4" style="width:700px">
+                            <div class="card-header text-center">
+                                <h2 class="fw-bold text-primary">Thêm Sản Phẩm</h2>
+                            </div>
+                            <div class="card-body">
+                                <form th:action="@{/addProduct}" method="post" enctype="multipart/form-data">
+                                    <div>
+                                        <label for="name" class="fw-bold">Tên Sản Phẩm:</label>
+                                        <input id="name" name="name" type="text" class="form-control" required />
+                                    </div>
+                                    <div>
+                                        <label for="price" class="fw-bold">Giá:</label>
+                                        <input id="price" name="price" type="number" min="0" class="form-control" required />
+                                    </div>
+                                    <div>
+                                        <label for="quantity" class="fw-bold">Số Lượng:</label>
+                                        <input id="quantity" name="quantity" type="number" min="0" class="form-control" required />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="type" class="fw-bold">Loại Sản Phẩm:</label>
+                                        <select id="type" name="type_id" class="form-control mb-3">
+                                            <!-- Hiển thị danh sách loại sản phẩm -->
+                                            <option th:each="productType : ${productTypes}"
+                                                    th:value="${productType.id}"
+                                                    th:text="${productType.name}">
+                                            </option>
+                                        </select>
+                                        <!-- Nút mở modal -->
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                                            Thêm loại sản phẩm
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <label for="images" class="fw-bold">Hình Ảnh:</label>
+                                        <input id="images" name="images" type="file" multiple class="form-control" accept="image/*" onchange="previewImages(event)" />
+                                        <div id="imagePreview" class="mt-2"></div>
+                                    </div>
+                                    <div>
+                                        <label for="description" class="fw-bold">Mô Tả:</label>
+                                        <textarea id="description" name="describe" class="form-control"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-info mt-3">Thêm Sản Phẩm</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
 
 
-
-            </div>
+                </div>
         </div>
 
         <footer th:replace="/seller/layout/footer :: footer"></footer>
@@ -282,7 +289,59 @@
     </div>
     <!-- End Custom template -->
 </div>
+<!-- Thêm SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Hiển thị thông báo thành công
+        const successMessage = "[[${successMessage}]]";
+        if (successMessage !== "null" && successMessage.trim() !== "") {
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: successMessage,
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }
+
+        // Hiển thị thông báo lỗi
+        const errorMessage = "[[${errorMessage}]]";
+        if (errorMessage !== "null" && errorMessage.trim() !== "") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi!',
+                text: errorMessage,
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }
+    });
+</script>
+
+
+    <script>
+        function previewImages(event) {
+            let imagePreview = document.getElementById("imagePreview");
+            imagePreview.innerHTML = "";
+
+            let files = event.target.files;
+            for (let i = 0; i < files.length; i++) {
+                let file = files[i];
+                let reader = new FileReader();
+
+                reader.onload = function(e) {
+                    let img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.style.width = "100px";
+                    img.style.marginRight = "10px";
+                    imagePreview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
 <script>
     document.getElementById("addCategoryForm").addEventListener("submit", function(event) {
         event.preventDefault();

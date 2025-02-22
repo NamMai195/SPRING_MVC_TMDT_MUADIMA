@@ -8,7 +8,7 @@
   }
   .container {
     max-width: 500px;
-    margin-top: 50px;
+    margin-top: 5px;
     padding: 20px;
     background-color: #ffffff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -33,10 +33,6 @@
     transform: scale(1.05);
   }
 
-  .error-message {
-    color: red;
-    font-size: 0.9rem;
-  }
 </style>
 <body>
 <div class="wrapper">
@@ -49,7 +45,7 @@
 
     <div class="container">
       <div class="page-inner">
-        <div class="container">
+        <div class="container card">
           <h2 class="text-center text-success fw-bold">Đăng ký Người Bán</h2>
           <form action="/register" method="post" enctype="multipart/form-data">
             <div class="form-group">
@@ -76,7 +72,7 @@
               <label for="cccd">CCCD:</label>
               <input type="text" class="form-control" id="cccd" name="cccd" required th:value="${cccd}">
             </div>
-            <button type="submit" class="btn btn-register w-100 m-1">Đăng Ký</button>
+            <button type="submit" class="btn btn-register m-1">Đăng Ký</button>
           </form>
           <a href="/sellerlogin" class="login-link text-primary fw-bold">Đã có tài khoản? Đăng nhập</a>
 
