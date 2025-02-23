@@ -7,11 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 
 public class Seller_Controller {
-    /*@RequestMapping("/seller")
-    public String SellerController() {
-
-        return "/seller/view/index";
-    }*/
     @GetMapping("/manager_order")
     public String SellerOrder() {
 

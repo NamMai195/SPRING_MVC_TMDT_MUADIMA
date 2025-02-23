@@ -58,26 +58,31 @@ public class Seller_ProductController {
             return "redirect:/sellerlogin";
         }
 
-        // Lưu ảnh vào thư mục và lấy danh sách đường dẫn
-        String uploadDir = "C:/uploads/";
+        // Lấy đường dẫn thư mục uploads theo hệ điều hành
+        String uploadDir = System.getProperty("user.dir") + "/uploads/";
         File uploadFolder = new File(uploadDir);
         if (!uploadFolder.exists()) {
             uploadFolder.mkdirs();
         }
 
-        List<String> imageNames = new ArrayList<>();
+        List<String> imagePaths = new ArrayList<>();
         for (MultipartFile file : images) {
             if (!file.isEmpty()) {
-                String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                // Xóa ký tự đặc biệt khỏi tên file
+                String originalFileName = file.getOriginalFilename();
+                String cleanFileName = originalFileName.replaceAll("[^a-zA-Z0-9.]", "_");
+                String fileName = System.currentTimeMillis() + "_" + cleanFileName;
+
+                // Lưu file
                 File destination = new File(uploadDir + fileName);
                 file.transferTo(destination);
-                imageNames.add("/uploads/" + fileName); // Lưu đường dẫn ảnh
+                imagePaths.add("/uploads/" + fileName);
             }
         }
 
-        // Chuyển danh sách ảnh thành JSON
+        // Chuyển danh sách ảnh thành JSON để lưu vào database
         ObjectMapper objectMapper = new ObjectMapper();
-        String jsonImages = objectMapper.writeValueAsString(imageNames);
+        String jsonImages = objectMapper.writeValueAsString(imagePaths);
 
         // Tạo sản phẩm mới
         Product product = new Product();
@@ -94,6 +99,7 @@ public class Seller_ProductController {
         redirectAttributes.addFlashAttribute("successMessage", "Thêm sản phẩm thành công! Vui lòng đợi duyệt.");
         return "redirect:/products";
     }
+
 
     @PostMapping("/addProductType")
     public String addProductType(@RequestParam("name_type") String nameType, RedirectAttributes redirectAttributes) {
@@ -138,23 +144,32 @@ public class Seller_ProductController {
             product.setQuantity(quantity);
             product.setDescribe(describe);
 
+            // Lấy đường dẫn thư mục uploads theo hệ điều hành
+            String uploadDir = System.getProperty("user.dir") + "/uploads/";
+            File uploadFolder = new File(uploadDir);
+            if (!uploadFolder.exists()) {
+                uploadFolder.mkdirs();
+            }
+
             ObjectMapper objectMapper = new ObjectMapper();
             if (images != null && !images.isEmpty()) {
-                List<String> imageNames = images.stream()
-                        .map(file -> {
-                            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-                            File filePath = new File("C:/uploads/" + fileName);
-                            try {
-                                file.transferTo(filePath);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            return "/uploads/" + fileName;
-                        })
-                        .collect(Collectors.toList());
+                List<String> imagePaths = new ArrayList<>();
+                for (MultipartFile file : images) {
+                    if (!file.isEmpty()) {
+                        // Xóa ký tự đặc biệt khỏi tên file
+                        String originalFileName = file.getOriginalFilename();
+                        String cleanFileName = originalFileName.replaceAll("[^a-zA-Z0-9.]", "_");
+                        String fileName = System.currentTimeMillis() + "_" + cleanFileName;
 
-                // Chuyển thành JSON để lưu vào database
-                String jsonImages = objectMapper.writeValueAsString(imageNames);
+                        // Lưu file
+                        File destination = new File(uploadDir + fileName);
+                        file.transferTo(destination);
+                        imagePaths.add("/uploads/" + fileName);
+                    }
+                }
+
+                // Chuyển danh sách ảnh thành JSON để lưu vào database
+                String jsonImages = objectMapper.writeValueAsString(imagePaths);
                 product.setImage(jsonImages);
             }
 
@@ -165,6 +180,7 @@ public class Seller_ProductController {
         }
         return "redirect:/manager_product_list";
     }
+
 
     @PostMapping("/deleteProduct")
     public String deleteProduct(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
@@ -191,13 +207,13 @@ public class Seller_ProductController {
     }
 
     @GetMapping("/seller")
-    public String seller_index(Model model, HttpSession session) {
-        /*Seller seller = (Seller) session.getAttribute("loggedInSeller");
+    public String sellerIndex(Model model, HttpSession session) {
+        Seller seller = (Seller) session.getAttribute("loggedInSeller");
         if (seller == null) {
             return "redirect:/sellerlogin";
         }
         List<Product> approvedProducts = productService.getApprovedProductsBySeller(seller);
-        model.addAttribute("products", approvedProducts);*/
+        model.addAttribute("products", approvedProducts);
 
         return "/seller/view/index";
     }
