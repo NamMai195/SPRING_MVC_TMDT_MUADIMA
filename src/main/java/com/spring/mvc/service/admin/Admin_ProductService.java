@@ -35,7 +35,7 @@ public class Admin_ProductService {
     }
 
     public List<Product> findPendingProducts() {
-        return adminProductRepository.findByStatus("C");
+        return adminProductRepository.findByStatus("Chờ duyệt");
     }
 
     public Optional<Product> findProductById(Long id) {
@@ -61,7 +61,7 @@ public class Admin_ProductService {
     public void approveProduct(Long id) {
         Product product = adminProductRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + id));
-        product.setStatus("False");
+        product.setStatus("Hoạt động");
         adminProductRepository.save(product);
     }
 
