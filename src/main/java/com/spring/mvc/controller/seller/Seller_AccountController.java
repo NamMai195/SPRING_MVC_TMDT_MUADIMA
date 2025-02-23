@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.Optional;
 import java.util.Random;
 
@@ -170,20 +171,25 @@ public class Seller_AccountController {
         // Xử lý upload ảnh
         if (image != null && !image.isEmpty()) {
             try {
-                // Định nghĩa thư mục lưu ảnh (cùng cấp với thư mục src)
-                String uploadDir = "C:/uploads/";
+                // Lấy đường dẫn thư mục uploads theo hệ điều hành
+                String uploadDir = System.getProperty("user.dir") + "/uploads/";
                 File uploadFolder = new File(uploadDir);
-                // Kiểm tra và tạo thư mục nếu chưa tồn tại
                 if (!uploadFolder.exists()) {
                     uploadFolder.mkdirs();
                 }
-                // Đổi tên file để tránh trùng lặp
-                String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
+
+                // Xóa ký tự đặc biệt khỏi tên file
+                String originalFileName = image.getOriginalFilename();
+                String cleanFileName = originalFileName.replaceAll("[^a-zA-Z0-9.]", "_");
+                String fileName = System.currentTimeMillis() + "_" + cleanFileName;
+
+                // Lưu file
                 File file = new File(uploadDir + fileName);
-                // Lưu file vào thư mục
                 image.transferTo(file);
-                // Cập nhật đường dẫn ảnh trong database
+
+                // Lưu đường dẫn chính xác vào database
                 seller.setImage("/uploads/" + fileName);
+
             } catch (IOException e) {
                 e.printStackTrace();
                 redirectAttributes.addFlashAttribute("error", "Lỗi khi tải ảnh lên!");
@@ -197,7 +203,6 @@ public class Seller_AccountController {
         redirectAttributes.addFlashAttribute("success", "Cập nhật hồ sơ thành công!");
         return "redirect:/profile";
     }
-
 
 
 

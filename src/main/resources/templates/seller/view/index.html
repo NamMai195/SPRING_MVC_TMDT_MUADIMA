@@ -52,7 +52,7 @@
                 <h1 th:if="${session.loggedInSeller != null}"><span class="fw-bold text-primary" th:text="${session.loggedInSeller.nameShop}+' Xin Chào !'"></span></h1>
                 <h1 th:unless="${session.loggedInSeller != null}" class="fw-bold text-danger" >Bạn chưa đăng nhập!</h1>
               </div>
-              <div class="row">
+              <!--<div class="row">
                 <div th:each="product : ${products}" class="col-md-3">
                   <div class="card mb-4 shadow-sm">
                     <img th:src="${#lists.isEmpty(#objectMapper.readValue(product.image, T(java.util.List)))} ? '/default-image.jpg' : #lists.first(#objectMapper.readValue(product.image, T(java.util.List)))"
@@ -65,7 +65,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div>-->
 
             </div>
 
