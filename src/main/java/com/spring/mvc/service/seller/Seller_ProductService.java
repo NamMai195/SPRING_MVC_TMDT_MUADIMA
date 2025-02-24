@@ -33,7 +33,7 @@ public class Seller_ProductService {
         return productRepository.findByNameContainingOrProductType_NameContainingAndSeller(query, seller);
     }
     public List<Product> getApprovedProductsBySeller(Seller seller) {
-        return productRepository.findBySellerAndStatus(seller, "Đã duyệt");
+        return productRepository.findBySellerAndStatus(seller, "Hoạt động");
     }
 
 

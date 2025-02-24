@@ -1,5 +1,7 @@
 package com.spring.mvc.controller.seller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.mvc.domain.Product;
 import com.spring.mvc.domain.ProductType;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -76,7 +79,7 @@ public class Seller_ProductController {
                 // Lưu file
                 File destination = new File(uploadDir + fileName);
                 file.transferTo(destination);
-                imagePaths.add("/uploads/" + fileName);
+                imagePaths.add(fileName);
             }
         }
 
@@ -93,7 +96,7 @@ public class Seller_ProductController {
         product.setProductType(new ProductType(typeId, "", false));
         product.setImage(jsonImages); // Lưu JSON vào DB
         product.setDescribe(describe);
-        product.setStatus("Chưa duyệt");
+        product.setStatus("Chờ duyệt");
 
         productService.saveProduct(product);
         redirectAttributes.addFlashAttribute("successMessage", "Thêm sản phẩm thành công! Vui lòng đợi duyệt.");
@@ -164,7 +167,7 @@ public class Seller_ProductController {
                         // Lưu file
                         File destination = new File(uploadDir + fileName);
                         file.transferTo(destination);
-                        imagePaths.add("/uploads/" + fileName);
+                        imagePaths.add(fileName);
                     }
                 }
 
@@ -193,6 +196,7 @@ public class Seller_ProductController {
         }
         return "redirect:/manager_product_list";
     }
+
     @GetMapping("/search")
     public String searchProducts(@RequestParam("query") String query, Model model, HttpSession session) {
         Seller seller = (Seller) session.getAttribute("loggedInSeller");
@@ -206,16 +210,56 @@ public class Seller_ProductController {
         return "/seller/view/manager_product_list";
     }
 
+
     @GetMapping("/seller")
     public String sellerIndex(Model model, HttpSession session) {
         Seller seller = (Seller) session.getAttribute("loggedInSeller");
         if (seller == null) {
             return "redirect:/sellerlogin";
         }
-        List<Product> approvedProducts = productService.getApprovedProductsBySeller(seller);
-        model.addAttribute("products", approvedProducts);
 
+        List<Product> approvedProducts = productService.getApprovedProductsBySeller(seller);
+
+        // Chuyển đổi JSON image thành danh sách ảnh trong Java
+        ObjectMapper objectMapper = new ObjectMapper();
+        for (Product product : approvedProducts) {
+            try {
+                List<String> images = objectMapper.readValue(product.getImage(), new TypeReference<List<String>>() {});
+                if (!images.isEmpty()) {
+                    product.setFirstImage(images.get(0)); // Lưu ảnh đầu tiên vào thuộc tính riêng
+                }
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                product.setFirstImage("/default-image.jpg"); // Nếu lỗi thì hiển thị ảnh mặc định
+            }
+        }
+
+        model.addAttribute("products", approvedProducts);
         return "/seller/view/index";
+    }
+
+    @GetMapping("/product/{id}")
+    public String productDetail(@PathVariable("id") Long id, Model model) {
+        Optional<Product> optionalProduct = productService.getProductById(id);
+        if (optionalProduct.isPresent()) {
+            Product product = optionalProduct.get();
+
+            // Chuyển JSON ảnh thành danh sách ảnh
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<String> images = new ArrayList<>();
+            try {
+                images = objectMapper.readValue(product.getImage(), new TypeReference<List<String>>() {});
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
+            product.setFirstImage(images.isEmpty() ? "/default-image.jpg" : images.get(0));
+            model.addAttribute("product", product);
+            model.addAttribute("images", images);
+
+            return "/seller/view/product_detail"; // Trả về trang Thymeleaf
+        }
+        return "redirect:/seller"; // Nếu không tìm thấy sản phẩm, quay lại trang chủ
     }
 
 }

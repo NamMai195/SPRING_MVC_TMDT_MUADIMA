@@ -1,3 +1,4 @@
+
 <header class="header" th:fragment="header">
     <div class="container">
         <div class="row align-items-center">
@@ -34,17 +35,28 @@
                     <li th:if="${session.loggedInUser == null}"><a href="/user/register" id="register-link" title="Đăng ký">Đăng ký</a></li>
                     <li th:if="${session.loggedInUser != null}"><a href="/user/profile" id="profile-link" title="Tài Khoản">Tài Khoản</a></li>
                     <li th:if="${session.loggedInUser != null}"><a href="/user/login" id="logout-link" title="Đăng Xuất">Đăng Xuất</a></li>
+                    <li th:if="${session.loggedInUser != null}"><a href="/registerseller" id="register-link-seller" title="Đăng Kí bán hàng">Đăng Kí bán hàng</a></li>
                 </ul>
             </div>
 
-            <a class="text-ico cart-head position-relative" href="cart.html" title="Giỏ hàng">
+            <!--thao tác hiển thị giỏ hàng-->
+            <a class="text-ico cart-head position-relative" href="#"
+               title="Giỏ hàng" id="openCartModal">
                 Giỏ hàng
                 <span class="d-block">Thanh toán</span>
                 <span class="d-block count_item_pr position-absolute border-radius-20 text-center">0</span>
             </a>
+
+
+
         </div>
     </div>
 </header>
+
+
+
+
+<!--thông báo lỗi-->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {

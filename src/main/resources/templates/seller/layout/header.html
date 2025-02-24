@@ -268,7 +268,7 @@
                 <li class="nav-item topbar-user dropdown hidden-caret">
                     <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
                         <div class="avatar-sm">
-                            <img th:src="${session.loggedInSeller != null ? session.loggedInSeller.image : '/static/assets/img/default-avatar.jpg'}"
+                            <img th:src="${session.loggedInSeller != null ? '/uploads/'+session.loggedInSeller.image : 'https://th.bing.com/th/id/OIP.b0OQvXXKNtK8qw6EU0MaKQHaFj?w=271&h=203&c=7&r=0&o=5&dpr=1.6&pid=1.7'}"
                                  class="avatar-img rounded"/>
 
                         </div>
@@ -283,7 +283,7 @@
                             <li>
                                 <div class="user-box">
                                     <div class="avatar-lg">
-                                        <img th:src="${session.loggedInSeller != null ? session.loggedInSeller.image : '/assets/img/default-avatar.jpg'}"
+                                        <img th:src="${session.loggedInSeller != null ? '/uploads/'+session.loggedInSeller.image : 'https://th.bing.com/th/id/OIP.6fYhzferp02cows5AXbPEAHaEK?w=328&h=184&c=7&r=0&o=5&dpr=1.6&pid=1.7'}"
                                              class="avatar-img rounded"/>
                                     </div>
                                     <div class="u-text">

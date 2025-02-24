@@ -188,7 +188,7 @@ public class Seller_AccountController {
                 image.transferTo(file);
 
                 // Lưu đường dẫn chính xác vào database
-                seller.setImage("/uploads/" + fileName);
+                seller.setImage(fileName);
 
             } catch (IOException e) {
                 e.printStackTrace();

@@ -52,20 +52,21 @@
                 <h1 th:if="${session.loggedInSeller != null}"><span class="fw-bold text-primary" th:text="${session.loggedInSeller.nameShop}+' Xin Chào !'"></span></h1>
                 <h1 th:unless="${session.loggedInSeller != null}" class="fw-bold text-danger" >Bạn chưa đăng nhập!</h1>
               </div>
-              <!--<div class="row">
+
+              <div class="row">
                 <div th:each="product : ${products}" class="col-md-3">
                   <div class="card mb-4 shadow-sm">
-                    <img th:src="${#lists.isEmpty(#objectMapper.readValue(product.image, T(java.util.List)))} ? '/default-image.jpg' : #lists.first(#objectMapper.readValue(product.image, T(java.util.List)))"
-                         class="card-img-top" alt="Ảnh sản phẩm">
+                    <img th:src="'/uploads/'+${product.firstImage}" class="card-img-top" alt="Ảnh sản phẩm">
                     <div class="card-body">
                       <h5 class="card-title" th:text="${product.name}">Tên sản phẩm</h5>
-                      <p class="card-text" th:text="${product.describe}">Mô tả sản phẩm.</p>
-                      <a href="#" class="btn btn-primary">Chi tiết</a>
+                      <p><strong>Giá:</strong> <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')} + ' VNĐ'"></span></p>
+                      <a th:href="@{'/product/' + ${product.id}}" class="btn btn-primary">Chi tiết</a>
                       <a href="#" class="btn btn-success">Mua Ngay</a>
                     </div>
                   </div>
                 </div>
-              </div>-->
+              </div>
+
 
             </div>
 

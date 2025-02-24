@@ -13,4 +13,10 @@ public class Seller_Controller {
         return "/seller/view/manager_order";
     }
 
+    @GetMapping("/manager")
+    public String SellerOrder1() {
+
+        return "/seller/view/cart";
+    }
+
 }
