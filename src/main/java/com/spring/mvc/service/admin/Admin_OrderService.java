@@ -23,4 +23,11 @@ public class Admin_OrderService {
     public Optional<Order> findOrderById(Long id) {
         return adminOrderRepository.findById(id);
     }
+
+    public Object countOrders() {
+        return this.adminOrderRepository.count();
+    }
+
+    public Object calculateTotalRevenue() {
+     return null;}
 }

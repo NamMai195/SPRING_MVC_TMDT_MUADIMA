@@ -44,4 +44,8 @@ public class Admin_SellerService {
     public List<Seller> findApprovedSellers() {
         return adminSellerRepository.findByStatusTrue(); // Add this method
     }
+
+    public Object countSellers() {
+        return this.adminSellerRepository.count();
+    }
 }

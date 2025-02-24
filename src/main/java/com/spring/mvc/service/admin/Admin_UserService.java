@@ -26,4 +26,8 @@ public class Admin_UserService {
     public User findUserById(Long id) {
         return this.admin_userRepository.findById(id);
     }
+
+    public Object countUsers() {
+        return this.admin_userRepository.count();
+    }
 }

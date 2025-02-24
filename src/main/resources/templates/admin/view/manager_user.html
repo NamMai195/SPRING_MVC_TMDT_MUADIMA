@@ -61,7 +61,7 @@
                                             <td th:text="${user.email}"></td>
                                             <td th:text="${user.address}"></td>
                                             <td th:text="${user.sdt}"></td>
-                                            <td th:text="${user.status}"></td>
+                                            <td th:text="${user.status} ? 'Hoat Dong' : 'Vo Hieu'"></td>
                                             <td>
                                                 <a th:href="@{/admin/user/edit/{id}(id=${user.id})}" class="btn btn-link btn-primary btn-sm" data-bs-toggle="tooltip" title="Edit">
                                                     <i class="fas fa-edit"></i>

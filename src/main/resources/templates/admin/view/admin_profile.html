@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/admin/layout/head :: head"></head> <style>
+  /* Keep your existing styles, or adjust as needed for the admin theme */
+  .profile-card {
+    background-color: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 600px; /* Or whatever width you prefer */
+  }
+  .profile-card h3 {
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .form-label {
+    font-weight: bold;
+  }
+
+  .form-control {
+    border-radius: 10px;
+  }
+  .btn-update {
+    background-color: #28a745; /* Or your admin theme's success color */
+    color: white;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+    padding: 10px 20px;
+    border: none;
+  }
+
+  .btn-update:hover {
+    background-color: #218838; /* Darker shade on hover */
+  }
+</style>
+<body>
+<div class="wrapper">
+  <div th:replace="/admin/layout/Sidebar :: sidebar"></div>
+  <div class="main-panel">
+    <div th:replace="/admin/layout/header :: header"></div>
+
+    <div class="container">
+      <div class="container py-5 d-flex justify-content-center align-items-center">
+        <div class="profile-card">
+          <h3>Admin Profile</h3>
+
+          <div th:if="${success}" class="alert alert-success" role="alert">
+            <p th:text="${success}"></p>
+          </div>
+          <div th:if="${error}" class="alert alert-danger" role="alert">
+            <p th:text="${error}"></p>
+          </div>
+
+          <form action="/admin/profile" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="id" th:value="${admin.id}" />
+
+            <div class="text-center mb-3">
+              <img id="avatarPreview" th:src="@{${admin.image}}" alt="Avatar" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover;">
+              <br>
+              <label class="btn btn-secondary mt-2">
+                Change Avatar
+                <input type="file" name="image" accept="image/*" class="d-none" id="imageInput">
+              </label>
+            </div>
+
+
+            <div class="mb-3">
+              <label for="name" class="form-label">Name</label>
+              <input type="text" class="form-control" id="name" name="name" th:value="${admin.name}" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email" th:value="${admin.email}" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label">New Password (leave blank to keep current)</label>
+              <input type="password" class="form-control" id="password" name="password">
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-update">Update Profile</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <footer th:replace="/admin/layout/footer :: footer"></footer>
+  </div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Get messages
+    let errorMessage = "[[${error}]]";
+    let successMessage = "[[${success}]]";
+
+    if (errorMessage && errorMessage !== "null") {
+      Swal.fire({
+        title: "Error!",
+        text: errorMessage,
+        icon: "error",
+        confirmButtonText: "OK"
+      });
+    }
+
+    if (successMessage && successMessage !== "null") {
+      Swal.fire({
+        title: "Success!",
+        text: successMessage,
+        icon: "success",
+        confirmButtonText: "OK"
+      }).then(() => {
+        // This is important: Clear the flash attributes from the URL
+        window.history.replaceState(null, null, window.location.pathname);
+      });
+    }
+  });
+</script>
+<script>
+  // Preview image before upload
+  document.getElementById('imageInput').addEventListener('change', function(event) {
+    let reader = new FileReader();
+    reader.onload = function(){
+      document.getElementById('avatarPreview').src = reader.result;
+    }
+    reader.readAsDataURL(event.target.files[0]);
+  });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="/assets/js/core/jquery-3.7.1.min.js"></script>
+<script src="/assets/js/core/popper.min.js"></script>
+<script src="/assets/js/core/bootstrap.min.js"></script>
+
+<script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+
+<script src="/assets/js/plugin/chart.js/chart.min.js"></script>
+
+<script src="/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+
+<script src="/assets/js/plugin/chart-circle/circles.min.js"></script>
+
+<script src="/assets/js/plugin/datatables/datatables.min.js"></script>
+
+<script src="/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<script src="/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
+<script src="/assets/js/plugin/jsvectormap/world.js"></script>
+
+<script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+
+<script src="/assets/js/kaiadmin.min.js"></script>
+
+<script src="/assets/js/setting-demo.js"></script>
+<script src="/assets/js/demo.js"></script>
+<script>
+  $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
+    type: "line",
+    height: "70",
+    width: "100%",
+    lineWidth: "2",
+    lineColor: "#177dff",
+    fillColor: "rgba(23, 125, 255, 0.14)",
+  });
+
+  $("#lineChart2").sparkline([99, 125, 122, 105, 110, 124, 115], {
+    type: "line",
+    height: "70",
+    width: "100%",
+    lineWidth: "2",
+    lineColor: "#f3545d",
+    fillColor: "rgba(243, 84, 93, .14)",
+  });
+
+  $("#lineChart3").sparkline([105, 103, 123, 100, 95, 105, 115], {
+    type: "line",
+    height: "70",
+    width: "100%",
+    lineWidth: "2",
+    lineColor: "#ffa534",
+    fillColor: "rgba(255, 165, 52, .14)",
+  });
+</script>
+</body>
+</html>
