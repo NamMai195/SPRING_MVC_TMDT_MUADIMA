@@ -43,160 +43,29 @@
                 <div class="tab-1 tab-content current padding-left-4 padding-right-4">
                     <div class="swiper_tab swiper-container swiper-carousel ajax-carousel">
                         <div class="swiper-wrapper">
-                            <div class="item swiper-slide">
-
-                                <form action="https://oh-thuong-mai-dien-tu.mysapo.net/cart/add" method="post" class="item_product_main variants product-action wishItem"  data-cart-form data-id="product-actions-29814017" enctype="multipart/form-data">
-                                    <div class="image_thumb">
-                                        <span class="flag-label"><span class="label-sale">Sale</span></span>
-                                        <a href="/detail" class="position-relative d-block aspect" title="MacBook Pro 16-inch Max Option Apple M1 MAX 10">
-                                            <img width="199" height="199" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="//bizweb.dktcdn.net/thumb/large/100/479/080/products/macbook-pro-16-inch-m1-2021-gray-828a5364-34d9-4349-a843-3cebe4720e79.jpg?v=1677614081773"
-                                                 alt="MacBook Pro 16-inch Max Option Apple M1 MAX 10" class="lazyload position-absolute" />
-                                        </a>
-                                        <div class="action-cart">
-                                            <input type="hidden" name="variantId" value="82804547" />
-                                            <button class="btn-buy btn-left btn-views add_to_cart " title="Cho vào giỏ">
-                                                Cho vào giỏ
-                                            </button>
+                            <th:block th:each="product : ${products}">
+                                <div class="swiper-slide">
+                                    <form th:action="@{/cart/add}" method="post" class="item_product_main variants product-action wishItem"
+                                          data-cart-form data-id="product-actions-29813946" enctype="multipart/form-data">
+                                        <div class="image_thumb">
+                                            <a th:href="@{/detail/{id}(id=${product.id})}" class="position-relative d-block aspect"
+                                               th:title="${product.name}">
+                                                <img width="199" height="199" class="position-absolute"
+                                                     th:src="@{/uploads/{filename}(filename=${product.image})}"
+                                                     th:alt="${product.name}">
+                                            </a>
                                         </div>
-                                    </div>
-                                    <div class="info-product">
-                                        <h3 class="product-name text2line"><a href="macbook-pro-16-inch-max-option-apple-m1-max-10.html" title="MacBook Pro 16-inch Max Option Apple M1 MAX 10">MacBook Pro 16-inch Max Option Apple M1 MAX 10</a></h3>
-                                        <div class="price-box position-relative">
-                                            <span class="price">46.990.000₫</span>
-                                            <span class="compare-price">-6%</span>
-
+                                        <div class="info-product">
+                                            <h3 class="product-name text2line">
+                                                <a th:href="@{/detail/{id}(id=${product.id})}" th:title="${product.name}" th:text="${product.name}"></a>
+                                            </h3>
+                                            <div class="price-box position-relative">
+                                                <span th:text="${product.price} + '₫'"></span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="item swiper-slide">
-
-                                <form action="https://oh-thuong-mai-dien-tu.mysapo.net/cart/add" method="post" class="item_product_main variants product-action wishItem"  data-cart-form data-id="product-actions-29814018" enctype="multipart/form-data">
-                                    <div class="image_thumb">
-                                        <span class="flag-label"><span class="label-sale">Sale</span></span>
-                                        <a href="laptop-asus-rog-strix-scar-18-g834jy-n6039w-intel-core-i9-13980hx-rtx-4090-16gb-18-inch-qhd-240hz.html" class="position-relative d-block aspect" title="Laptop Asus ROG Strix SCAR 18 G834JY-N6039W - Intel Core i9 - 13980HX | RTX 4090 16GB | 18 Inch QHD+ 240Hz">
-                                            <img width="199" height="199" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="//bizweb.dktcdn.net/thumb/large/100/479/080/products/7869-scar-18-e1672832298197-ac9f9d9c-590c-49e6-b4d6-5906badee510.jpg?v=1677614085920"
-                                                 alt="Laptop Asus ROG Strix SCAR 18 G834JY-N6039W - Intel Core i9 - 13980HX | RTX 4090 16GB | 18 Inch QHD+ 240Hz" class="lazyload position-absolute" />
-                                        </a>
-                                        <div class="action-cart">
-                                            <input type="hidden" name="variantId" value="82804548" />
-                                            <button class="btn-buy btn-left btn-views add_to_cart " title="Cho vào giỏ">
-                                                Cho vào giỏ
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="info-product">
-                                        <h3 class="product-name text2line"><a href="laptop-asus-rog-strix-scar-18-g834jy-n6039w-intel-core-i9-13980hx-rtx-4090-16gb-18-inch-qhd-240hz.html" title="Laptop Asus ROG Strix SCAR 18 G834JY-N6039W - Intel Core i9 - 13980HX | RTX 4090 16GB | 18 Inch QHD+ 240Hz">Laptop Asus ROG Strix SCAR 18 G834JY-N6039W - Intel Core i9 - 13980HX | RTX 4090 16GB | 18 Inch QHD+ 240Hz</a></h3>
-                                        <div class="price-box position-relative">
-                                            <span class="price">35.000.000₫</span>
-                                            <span class="compare-price">-8%</span>
-
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="item swiper-slide">
-
-                                <form action="https://oh-thuong-mai-dien-tu.mysapo.net/cart/add" method="post" class="item_product_main variants product-action wishItem"  data-cart-form data-id="product-actions-29814019" enctype="multipart/form-data">
-                                    <div class="image_thumb">
-                                        <span class="flag-label"><span class="label-fea">Sắp ra mắt</span></span>
-                                        <a href="dien-thoai-xiaomi-12t-pro-12gb-256gb.html" class="position-relative d-block aspect" title="Điện Thoại Xiaomi 12T Pro 12GB/256GB">
-                                            <img width="199" height="199" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="//bizweb.dktcdn.net/thumb/large/100/479/080/products/1-2318ced8-255e-48eb-a929-a61c7d8cd827-3cfab871-9ead-48ff-9408-8373fd1004d5.jpg?v=1677614091640"
-                                                 alt="Điện Thoại Xiaomi 12T Pro 12GB/256GB" class="lazyload position-absolute" />
-                                        </a>
-                                        <div class="action-cart">
-                                            <input class="hidden" type="hidden" name="variantId" value="82804549" />
-                                            <button class="btn-cart btn-left  btn-views left-to option-choice" title="Xem thêm lựa chọn" type="button" onclick="window.location.href='dien-thoai-xiaomi-12t-pro-12gb-256gb.html'" >
-                                                Lựa chọn
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="info-product">
-                                        <h3 class="product-name text2line"><a href="dien-thoai-xiaomi-12t-pro-12gb-256gb.html" title="Điện Thoại Xiaomi 12T Pro 12GB/256GB">Điện Thoại Xiaomi 12T Pro 12GB/256GB</a></h3>
-                                        <div class="price-box position-relative">
-                                            16.990.000₫
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="item swiper-slide">
-
-                                <form action="https://oh-thuong-mai-dien-tu.mysapo.net/cart/add" method="post" class="item_product_main variants product-action wishItem"  data-cart-form data-id="product-actions-29814020" enctype="multipart/form-data">
-                                    <div class="image_thumb">
-                                        <span class="flag-label"><span class="label-sale">Sale</span><span class="label-fea">Freeship</span></span>
-                                        <a href="samsung-galaxy-s22-5g-8gb-256gb-chinh-hang.html" class="position-relative d-block aspect" title="Samsung Galaxy S22 5G (8GB|256GB) Chính Hãng">
-                                            <img width="199" height="199" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="../bizweb.dktcdn.net/thumb/large/100/479/080/products/1-a57eb1f5-c320-4ad3-b2ea-8b5d75a1c82b-6beae862-bd19-4cb9-9368-f5c9e2ac2d927185.jpg?v=1677614094237"
-                                                 alt="Samsung Galaxy S22 5G (8GB|256GB) Chính Hãng" class="lazyload position-absolute" />
-                                        </a>
-                                        <div class="action-cart">
-                                            <input class="hidden" type="hidden" name="variantId" value="82804552" />
-                                            <button class="btn-cart btn-left  btn-views left-to option-choice" title="Xem thêm lựa chọn" type="button" onclick="window.location.href='samsung-galaxy-s22-5g-8gb-256gb-chinh-hang.html'" >
-                                                Lựa chọn
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="info-product">
-                                        <h3 class="product-name text2line"><a href="samsung-galaxy-s22-5g-8gb-256gb-chinh-hang.html" title="Samsung Galaxy S22 5G (8GB|256GB) Chính Hãng">Samsung Galaxy S22 5G (8GB|256GB) Chính Hãng</a></h3>
-                                        <div class="price-box position-relative">
-                                            <span class="price">28.990.000₫</span>
-                                            <span class="compare-price">-12%</span>
-
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="item swiper-slide">
-
-                                <form action="https://oh-thuong-mai-dien-tu.mysapo.net/cart/add" method="post" class="item_product_main variants product-action wishItem"  data-cart-form data-id="product-actions-29814021" enctype="multipart/form-data">
-                                    <div class="image_thumb">
-                                        <span class="flag-label"><span class="label-sale">Sale</span><span class="label-fea">Extra</span></span>
-                                        <a href="samsung-galaxy-s23-ultra-5g-8gb-256gb-chinh-hang.html" class="position-relative d-block aspect" title="Samsung Galaxy S23 Ultra 5G (8GB|256GB) Chính Hãng">
-                                            <img width="199" height="199" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="../bizweb.dktcdn.net/thumb/large/100/479/080/products/1-9b89edd8-44fd-4cd9-814d-3180bd171bd5-9320bb2d-8e33-4b1f-be0a-afe7c88b6c941cb0.jpg?v=1677614097447"
-                                                 alt="Samsung Galaxy S23 Ultra 5G (8GB|256GB) Chính Hãng" class="lazyload position-absolute" />
-                                        </a>
-                                        <div class="action-cart">
-                                            <input class="hidden" type="hidden" name="variantId" value="82804556" />
-                                            <button class="btn-cart btn-left  btn-views left-to option-choice" title="Xem thêm lựa chọn" type="button" onclick="window.location.href='samsung-galaxy-s23-ultra-5g-8gb-256gb-chinh-hang.html'" >
-                                                Lựa chọn
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="info-product">
-                                        <h3 class="product-name text2line"><a href="samsung-galaxy-s23-ultra-5g-8gb-256gb-chinh-hang.html" title="Samsung Galaxy S23 Ultra 5G (8GB|256GB) Chính Hãng">Samsung Galaxy S23 Ultra 5G (8GB|256GB) Chính Hãng</a></h3>
-                                        <div class="price-box position-relative">
-                                            <span class="price">28.990.000₫</span>
-                                            <span class="compare-price">-9%</span>
-
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="item swiper-slide">
-
-                                <form action="https://oh-thuong-mai-dien-tu.mysapo.net/cart/add" method="post" class="item_product_main variants product-action wishItem"  data-cart-form data-id="product-actions-29814022" enctype="multipart/form-data">
-                                    <div class="image_thumb">
-                                        <span class="flag-label"><span class="label-sale">Sale</span><span class="label-fea">New</span></span>
-                                        <a href="dien-thoai-di-dong-apple-iphone-13-hang-chinh-hang.html" class="position-relative d-block aspect" title="Điện thoại di động Apple iPhone 13 - Hàng chính hãng">
-                                            <img width="199" height="199" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="../bizweb.dktcdn.net/thumb/large/100/479/080/products/1-dd869221-be9c-4d52-8ccf-28dd927cb665-557c7710-28a4-4c64-9c52-66505cebe86d518d.jpg?v=1677614101073"
-                                                 alt="Điện thoại di động Apple iPhone 13 - Hàng chính hãng" class="lazyload position-absolute" />
-                                        </a>
-                                        <div class="action-cart">
-                                            <input class="hidden" type="hidden" name="variantId" value="82804560" />
-                                            <button class="btn-cart btn-left  btn-views left-to option-choice" title="Xem thêm lựa chọn" type="button" onclick="window.location.href='dien-thoai-di-dong-apple-iphone-13-hang-chinh-hang.html'" >
-                                                Lựa chọn
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="info-product">
-                                        <h3 class="product-name text2line"><a href="dien-thoai-di-dong-apple-iphone-13-hang-chinh-hang.html" title="Điện thoại di động Apple iPhone 13 - Hàng chính hãng">Điện thoại di động Apple iPhone 13 - Hàng chính hãng</a></h3>
-                                        <div class="price-box position-relative">
-                                            <span class="price">18.990.000₫</span>
-                                            <span class="compare-price">-7%</span>
-
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+                                    </form>
+                                </div>
+                            </th:block>
                         </div>
                     </div>
                 </div>
