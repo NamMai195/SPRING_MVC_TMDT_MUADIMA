@@ -35,7 +35,7 @@ public class Admin_ProductService {
     }
 
     public List<Product> findPendingProducts() {
-        return adminProductRepository.findByStatus("Chờ duyệt");
+        return adminProductRepository.findByStatus("Chưa duyệt");
     }
 
     public Optional<Product> findProductById(Long id) {
