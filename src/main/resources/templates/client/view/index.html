@@ -5,7 +5,188 @@
 <!-- Mirrored from oh-thuong-mai-dien-tu.mysapo.net/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 09 Jan 2025 04:29:59 GMT -->
 <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
 <head th:replace="/client/layout/head :: head"></head>
+<style>
+    /* Đảm bảo modal hiển thị chính xác trên cùng */
+    .custom-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 9999; /* Đặt giá trị cao để modal luôn hiển thị trên cùng */
+    }
+
+    /* Nội dung modal */
+    .custom-modal-content {
+        background: white;
+        width: 60%;
+        max-width: 700px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        padding: 15px;
+        position: relative; /* Giữ vị trí cố định trong modal */
+        z-index: 10000; /* Đảm bảo modal content luôn nổi lên trên */
+    }
+
+
+    /* Header modal */
+    .custom-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+    }
+
+    .custom-modal-title {
+        font-size: 22px;
+        font-weight: bold;
+        color: #00AEEF;
+    }
+
+    .custom-modal-close {
+        background: none;
+        border: none;
+        font-size: 22px;
+        cursor: pointer;
+    }
+
+    /* Nội dung modal */
+    .custom-modal-body {
+        padding: 20px;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    /* Sản phẩm trong giỏ hàng */
+    .cart-item {
+        display: flex;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #ddd;
+        gap: 15px;
+    }
+
+    /* Checkbox */
+    .cart-checkbox {
+        transform: scale(1.2);
+        margin-right: 15px;
+        background: #2BB930;
+    }
+
+    /* Ảnh sản phẩm */
+    .cart-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 5px;
+    }
+
+    /* Thông tin sản phẩm */
+    .cart-info {
+        flex-grow: 1;
+    }
+
+    .product-name {
+        margin-bottom: 5px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .product-price {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 5px;
+    }
+
+    /* Số lượng sản phẩm */
+    .quantity-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 8px;
+    }
+
+    .quantity-input {
+        width: 30px;
+        text-align: center;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    /* Tổng tiền sản phẩm */
+    .total-price {
+        font-weight: bold;
+        font-size: 16px;
+        text-align: right;
+    }
+
+    /* Nút xóa sản phẩm */
+    .delete-btn {
+        color: red;
+        border: 1px solid red;
+        background: none;
+        padding: 5px 10px;
+        font-size: 14px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    /* Tổng cộng */
+    .cart-footer {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 15px;
+        border-top: 1px solid #ddd;
+        font-size: 18px;
+    }
+
+    /* Footer modal */
+    .custom-modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        padding: 15px;
+        background: white;
+        border-top: 1px solid #ddd;
+    }
+
+    /* Các nút trong modal */
+    .custom-modal-footer a,
+    .custom-modal-footer button {
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    /* Nút thanh toán */
+    .checkout-btn {
+        background: #28a745;
+        color: white;
+    }
+
+    /* Nút xóa tất cả */
+    .clear-btn {
+        background: #dc3545;
+        color: white;
+    }
+
+    .update-btn{
+        background: blue;
+        color: white;
+    }
+
+</style>
 <body>
+
 <header th:replace="/client/layout/header :: header"></header>
 <main class="wrapperMain_content">
     <h1 class="d-none">OH! Thương mại điện tử</h1>
@@ -15,6 +196,7 @@
             <div th:replace="/client/layout/slider :: slider"></div>
         </div>
     </section>
+
     <!--  Danh muc noi bat-->
     <section class="section_product_tab section_product_tab_1 module_product container margin-bottom-20">
         <div class="wrap_tab_index not-dqtab e-tabs ajax-tab-1 white-border-10 padding-bottom-4" data-section="ajax-tab-1">
@@ -642,9 +824,103 @@
             </div>
         </div>
     </section>
+
 </main>
 <footer th:replace="/client/layout/footer :: footer"></footer>
 <div class="opacity_menu"></div>
+<!-- Modal Giỏ Hàng -->
+<div class="custom-modal" id="cartModal">
+    <div class="custom-modal-content">
+        <div class="custom-modal-header">
+            <h3 class="custom-modal-title">Giỏ Hàng</h3>
+            <button class="custom-modal-close btn-close">✖</button>
+        </div>
+        <div class="custom-modal-body">
+            <div class="cart-items">
+                <div class="cart-item">
+                    <input type="checkbox" class="cart-checkbox">
+                    <img src="/uploads/1740297401058_macbook.jpg" alt="Product Image" class="cart-image">
+                    <div class="cart-info">
+                        <h5 class="product-name">Tên Sản Phẩm</h5>
+                        <p class="product-price">Giá: <span>100</span> VND</p>
+                        <div class="quantity-container">
+                            <label for="quantity">Số lượng:</label>
+                            <input type="number" id="quantity" name="quantity" class="quantity-input" min="1">
+                        </div>
+                    </div>
+                    <p class="total-price">Tổng: <span>100</span>VND</p>
+                    <button type="submit" class="delete-btn btn">Xóa</button>
+                </div>
+            </div>
+            <div class="cart-footer">
+                <h4>Tổng Cộng: <span>100</span>VND</h4>
+            </div>
+        </div>
+        <div class="custom-modal-footer">
+            <a href="#" class="checkout-btn btn">Thanh Toán</a>
+            <button type="submit" class="clear-btn btn">Xóa Tất Cả</button>
+        </div>
+    </div>
+</div>
+
+<!-- mở modal -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const cartModal = document.getElementById("cartModal");
+        const openCartModalBtn = document.getElementById("openCartModal");
+        const closeCartModalBtns = cartModal.querySelectorAll(".btn-close, .modal-footer button");
+
+        if (openCartModalBtn) {
+            openCartModalBtn.addEventListener("click", function (event) {
+                event.preventDefault();
+                cartModal.style.display = "block";
+                cartModal.classList.add("show");
+                document.body.classList.add("modal-open");
+            });
+        }
+
+        closeCartModalBtns.forEach(btn => {
+            btn.addEventListener("click", function () {
+                cartModal.style.display = "none";
+                cartModal.classList.remove("show");
+                document.body.classList.remove("modal-open");
+            });
+        });
+
+        window.addEventListener("click", function (event) {
+            if (event.target === cartModal) {
+                cartModal.style.display = "none";
+                cartModal.classList.remove("show");
+                document.body.classList.remove("modal-open");
+            }
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const modal = document.getElementById("cartModal");
+        const openBtn = document.getElementById("openCartModal");
+        const closeBtn = modal.querySelector(".close");
+
+        if (openBtn) {
+            openBtn.addEventListener("click", function (event) {
+                event.preventDefault();
+                modal.style.display = "flex"; // Hiển thị modal
+            });
+        }
+
+        closeBtn.addEventListener("click", function () {
+            modal.style.display = "none"; // Ẩn modal
+        });
+
+        window.addEventListener("click", function (event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+    });
+
+
+</script>
 <script src="../bizweb.dktcdn.net/100/479/080/themes/897121/assets/jquery-plugin47e9.js?1735554303306"></script>
 <script src="../bizweb.dktcdn.net/100/479/080/themes/897121/assets/swiper-plugin47e9.js?1735554303306"></script>
 <script rel="dns-prefetch">
