@@ -3,8 +3,9 @@ package com.spring.mvc.service.user;
 import com.spring.mvc.domain.Cart;
 import com.spring.mvc.domain.Product;
 import com.spring.mvc.domain.User;
+import com.spring.mvc.repository.seller.Seller_ProductReponsitory;
 import com.spring.mvc.repository.user.CartReponsitory;
-import com.spring.mvc.repository.user.ProductRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public class CartService {
     @Autowired
     private CartReponsitory cartRepository;
     @Autowired
-    private ProductRepository productRepository;
+    private Seller_ProductReponsitory productRepository;
 
     public List<Cart> getCartItemsByUser(User user) {
         List<Cart> cartItems = cartRepository.findByUser(user);
