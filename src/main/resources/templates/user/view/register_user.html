@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/seller/layout/head :: head"></head>
+<head th:replace="/user/layout/head :: head"></head>
 <style>
   body {
     background-color: #f8f9fa;
@@ -37,17 +37,17 @@
 <body>
 <div class="wrapper">
   <!-- Sidebar -->
-  <div th:replace="/seller/layout/Sidebar :: sidebar"></div>
+  <div th:replace="/user/layout/Sidebar :: sidebar"></div>
   <!-- End Sidebar -->
 
   <div class="main-panel">
-    <div th:replace="/seller/layout/header :: header"></div>
+    <div th:replace="/user/layout/header :: header"></div>
 
     <div class="container">
       <div class="page-inner">
         <div class="container card">
-          <h2 class="text-center text-success fw-bold">Đăng ký Người Bán</h2>
-          <form action="/register" method="post" enctype="multipart/form-data">
+          <h2 class="text-center text-success fw-bold">Đăng ký</h2>
+          <form action="/registeruser" method="post" enctype="multipart/form-data">
             <div class="form-group">
               <label for="name">Tên:</label>
               <input type="text" class="form-control" id="name" name="name" required th:value="${name}">
@@ -67,10 +67,6 @@
             <div class="form-group">
               <label for="sdt">Số điện thoại:</label>
               <input type="tel" class="form-control" id="sdt" name="sdt" required th:value="${sdt}">
-            </div>
-            <div class="form-group">
-              <label for="cccd">CCCD:</label>
-              <input type="text" class="form-control" id="cccd" name="cccd" required th:value="${cccd}">
             </div>
             <button type="submit" class="btn btn-register m-1">Đăng Ký</button>
           </form>
@@ -306,7 +302,7 @@
         icon: "success",
         confirmButtonText: "OK"
       }).then(() => {
-        window.location.href = "/sellerlogin";
+        window.location.href = "/login";
       });
     }
   });

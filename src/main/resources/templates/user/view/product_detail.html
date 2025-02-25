@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/seller/layout/head :: head"></head>
+<head th:replace="/user/layout/head :: head"></head>
 <style>
     .thumbnail {
         cursor: pointer;
@@ -52,10 +52,10 @@
 <body>
 <div class="wrapper">
     <!-- Sidebar -->
-    <div th:replace="/seller/layout/Sidebar :: sidebar"></div>
+    <div th:replace="/user/layout/Sidebar :: sidebar"></div>
     <!-- End Sidebar -->
     <div class="main-panel">
-        <div th:replace="/seller/layout/header :: header"></div>
+        <div th:replace="/user/layout/header :: header"></div>
 
         <div class="container">
             <div class="page-inner">
@@ -102,7 +102,7 @@
             </div>
         </div>
 
-        <footer th:replace="/seller/layout/footer :: footer"></footer>
+        <footer th:replace="/user/layout/footer :: footer"></footer>
     </div>
 
     <!-- Custom template | don't include it in your project! -->
