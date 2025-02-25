@@ -115,6 +115,7 @@ public class Seller_AccountController {
         return "redirect:/sellerlogin";
     }
 
+
     @GetMapping("/profile")
     public String showProfile(HttpSession session, Model model) {
         Seller seller = (Seller) session.getAttribute("loggedInSeller");

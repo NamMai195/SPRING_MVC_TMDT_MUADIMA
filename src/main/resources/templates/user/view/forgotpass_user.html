@@ -1,69 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/seller/layout/head :: head"></head>
+<head th:replace="/user/layout/head :: head"></head>
 <style>
-    .login-card h2 {
-        font-weight: bold;
-        color: #007bff;
-        text-align: center;
-        margin-bottom: 20px;
+    body {
+        background-color: #f8f9fa;
     }
-    .form-label {
+    .container {
+        max-width: 500px;
+        margin-top: 50px;
+        padding: 20px;
+        background-color: #ffffff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+    .form-group {
+        margin-bottom: -10px;
+    }
+    .form-group label {
         font-weight: bold;
     }
-    .form-control {
+
+    .btn-register {
+        background-color: #28a745;
+        color: white;
         border-radius: 10px;
+        transition: all 0.3s ease-in-out;
     }
 
+    .btn-register:hover {
+        background-color: #218838;
+        transform: scale(1.05);
+    }
 
+    .error-message {
+        color: red;
+        font-size: 0.9rem;
+    }
 </style>
-
 <body>
 <div class="wrapper">
     <!-- Sidebar -->
-    <div th:replace="/seller/layout/Sidebar :: sidebar"></div>
+    <div th:replace="/user/layout/Sidebar :: sidebar"></div>
     <!-- End Sidebar -->
 
     <div class="main-panel">
-        <div th:replace="/seller/layout/header :: header"></div>
-
+        <div th:replace="/user/layout/header :: header"></div>
         <div class="container">
-            <div class="container py-3 d-flex justify-content-center align-items-center">
-                <div class="card m-5" style="width: 500px">
-                    <h2 class="card-title text-center mb-4">Đổi mật khẩu</h2>
-
-                    <!-- Thông báo -->
-                   <!-- <div th:if="${success}" class="alert alert-success text-center" role="alert">
-                        <span th:text="${success}"></span>
+            <div class="page-inner d-flex justify-content-center align-items-center">
+                    <div class="card p-4">
+                        <h2>Quên mật khẩu</h2>
+                        <p>Chúng tôi sẽ gửi cho bạn một email để kích hoạt việc đặt lại mật khẩu.</p>
+                        <form  action="/forgotpassword" method="post">
+                            <div class="form-group">
+                                <label for="email">Nhập email để nhận lại mật khẩu:</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <button type="submit" class="btn btn-primary m-3">GỬI YÊU CẦU</button>
+                                <a type="button" class="btn btn-secondary m-3" href="/sellerlogin">HỦY</a>
+                            </div>
+                        </form>
                     </div>
-                    <div th:if="${error}" class="alert alert-danger text-center" role="alert">
-                        <span th:text="${error}"></span>
-                    </div>-->
-
-                    <!-- Gửi OTP -->
-                    <form th:if="${!showForm}" method="POST" action="/send-otp">
-                        <button type="submit" class="btn btn-primary w-100">Gửi mã OTP</button>
-                    </form>
-
-                    <!-- Nhập OTP và mật khẩu mới -->
-                    <form th:if="${showForm}" method="POST" action="/confirm-change-password">
-                        <div class="m-3">
-                            <label for="otp" class="form-label">Nhập mã OTP:</label>
-                            <input type="text" id="otp" name="otp" class="form-control" placeholder="Mã OTP" required>
-                        </div>
-                        <div class="m-3">
-                            <label for="newPassword" class="form-label">Nhập mật khẩu mới:</label>
-                            <input type="password" id="newPassword" name="newPassword" class="form-control" placeholder="Mật khẩu mới" required>
-                        </div>
-                        <button type="submit" class="btn btn-success m-3">Xác nhận</button>
-                    </form>
-                </div>
-
             </div>
         </div>
 
-        <footer th:replace="/seller/layout/footer :: footer"></footer>
+        <footer th:replace="/user/layout/footer :: footer"></footer>
     </div>
 
     <!-- Custom template | don't include it in your project! -->
@@ -261,13 +263,10 @@
     </div>
     <!-- End Custom template -->
 </div>
-<!-- Import SweetAlert2 -->
-<!-- Import SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // Lấy thông báo từ Flash Attribute
         let errorMessage = "[[${error}]]";
         let successMessage = "[[${success}]]";
 
@@ -277,6 +276,8 @@
                 text: errorMessage,
                 icon: "error",
                 confirmButtonText: "OK"
+            }).then(() => {
+                window.history.replaceState(null, null, window.location.pathname);
             });
         }
 
@@ -287,23 +288,11 @@
                 icon: "success",
                 confirmButtonText: "OK"
             }).then(() => {
-                window.history.replaceState(null, null, window.location.pathname);
+                window.location.href = "/login";
             });
         }
     });
 </script>
-
-
-<!--<script>
-    // Hiển thị ảnh trước khi upload
-    document.getElementById('imageInput').addEventListener('change', function(event) {
-        let reader = new FileReader();
-        reader.onload = function(){
-            document.getElementById('avatarPreview').src = reader.result;
-        }
-        reader.readAsDataURL(event.target.files[0]);
-    });
-</script>-->
 <!--   Core JS Files   -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

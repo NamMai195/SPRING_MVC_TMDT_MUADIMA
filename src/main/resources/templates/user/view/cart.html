@@ -28,9 +28,7 @@
                         <!--tick chọn sản phẩm-->
                         <input type="checkbox" class="cart-checkbox form-check-input me-3" onchange="updateTotal()">
                         <!-- Ảnh sản phẩm -->
-                          <a href="">
                               <img th:src="@{'/uploads/' + ${cartItem.product.firstImage}}" alt="Product Image" class="rounded" style="width: 80px; height: 80px;">
-                          </a>
                        <!-- Thông tin sản phẩm -->
                         <div class="ms-3 flex-grow-1">
                           <h5 class="mb-1 text-primary" th:text="${cartItem.product.name}">Tên Sản Phẩm</h5>

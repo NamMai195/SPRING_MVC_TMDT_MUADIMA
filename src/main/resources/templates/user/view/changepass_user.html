@@ -1,17 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/seller/layout/head :: head"></head>
+<head th:replace="/user/layout/head :: head"></head>
 <style>
-    .login-card {
-        background-color: white;
-        border-radius: 20px;
-        padding: 40px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        width: 100%;
-        max-width: 400px;
-    }
-
     .login-card h2 {
         font-weight: bold;
         color: #007bff;
@@ -25,112 +16,46 @@
         border-radius: 10px;
     }
 
-    .btn-login {
-        background-color: #007bff;
-        color: white;
-        border-radius: 10px;
-        transition: all 0.3s ease-in-out;
-    }
 
-    .btn-login:hover {
-        background-color: #0056b3;
-        transform: scale(1.05);
-    }
-
-    .form-check-label {
-        font-size: 0.9rem;
-    }
-
-    .forgot-password {
-        display: block;
-        text-align: center;
-        font-size: 0.9rem;
-        color: #6c757d;
-        margin-top: 10px;
-        text-decoration: none;
-    }
-
-    .forgot-password:hover {
-        color: #007bff;
-    }
 </style>
 
 <body>
 <div class="wrapper">
     <!-- Sidebar -->
-    <div th:replace="/seller/layout/Sidebar :: sidebar"></div>
+    <div th:replace="/user/layout/Sidebar :: sidebar"></div>
     <!-- End Sidebar -->
 
     <div class="main-panel">
-        <div th:replace="/seller/layout/header :: header"></div>
+        <div th:replace="/user/layout/header :: header"></div>
 
         <div class="container">
             <div class="container py-3 d-flex justify-content-center align-items-center">
-                <div class="container" style="width: 600px">
-                    <div class="card">
-                        <div class="card-header bg-primary text-white text-center">
-                            <h3>Chỉnh sửa hồ sơ</h3>
+                <div class="card m-5" style="width: 500px">
+                    <h2 class="card-title text-center mb-4">Đổi mật khẩu</h2>
+
+                    <!-- Gửi OTP -->
+                    <form th:if="${!showForm}" method="POST" action="/sendotp">
+                        <button type="submit" class="btn btn-primary w-100">Gửi mã OTP</button>
+                    </form>
+
+                    <!-- Nhập OTP và mật khẩu mới -->
+                    <form th:if="${showForm}" method="POST" action="/confirmchangepassword">
+                        <div class="m-3">
+                            <label for="otp" class="form-label">Nhập mã OTP:</label>
+                            <input type="text" id="otp" name="otp" class="form-control" placeholder="Mã OTP" required>
                         </div>
-                        <div class="card-body">
-                            <form action="profile" method="POST" enctype="multipart/form-data">
-                                <!-- Ảnh đại diện -->
-                                <div class="text-center mb-3">
-                                    <img id="avatarPreview" th:src="@{'/uploads/'+${seller.image}}" alt="Avatar" class="rounded-circle" width="120" height="120">
-                                    <br>
-                                    <label class="btn btn-secondary mt-2">
-                                        Tải ảnh mới <input type="file" name="image" accept="image/*" class="d-none" id="imageInput">
-                                    </label>
-                                </div>
-
-                                <!-- Họ tên -->
-                                <div class="mb-1">
-                                    <label class="form-label">Họ và tên</label>
-                                    <input type="text" class="form-control" name="name" th:value="${seller.name}" required>
-                                </div>
-
-                                <!-- Email -->
-                                <div class="mb-1">
-                                    <label class="form-label">Email</label>
-                                    <input type="email" class="form-control" name="email" th:value="${seller.email}" readonly>
-                                </div>
-
-                                <!-- Số điện thoại -->
-                                <div class="mb-1">
-                                    <label class="form-label">Số điện thoại</label>
-                                    <input type="text" class="form-control" name="sdt" th:value="${seller.sdt}" required>
-                                </div>
-
-                                <!-- Địa chỉ -->
-                                <div class="mb-1">
-                                    <label class="form-label">Địa chỉ</label>
-                                    <input type="text" class="form-control" name="address" th:value="${seller.address}">
-                                </div>
-
-                                <!-- CCCD -->
-                                <div class="mb-1">
-                                    <label class="form-label">CCCD</label>
-                                    <input type="text" class="form-control" name="cccd" th:value="${seller.cccd}">
-                                </div>
-
-                                <!-- Tên shop -->
-                                <div class="mb-1">
-                                    <label class="form-label">Tên cửa hàng</label>
-                                    <input type="text" class="form-control" name="name_shop" th:value="${seller.nameShop}">
-                                </div>
-
-                                <!-- Nút cập nhật -->
-                                <div class="text-center">
-                                    <button type="submit" class="btn btn-success">Cập nhật hồ sơ</button>
-                                </div>
-                            </form>
-
+                        <div class="m-3">
+                            <label for="newPassword" class="form-label">Nhập mật khẩu mới:</label>
+                            <input type="password" id="newPassword" name="newPassword" class="form-control" placeholder="Mật khẩu mới" required>
                         </div>
-                    </div>
+                        <button type="submit" class="btn btn-success m-3">Xác nhận</button>
+                    </form>
                 </div>
+
             </div>
         </div>
 
-        <footer th:replace="/seller/layout/footer :: footer"></footer>
+        <footer th:replace="/user/layout/footer :: footer"></footer>
     </div>
 
     <!-- Custom template | don't include it in your project! -->
@@ -361,7 +286,7 @@
 </script>
 
 
-<script>
+<!--<script>
     // Hiển thị ảnh trước khi upload
     document.getElementById('imageInput').addEventListener('change', function(event) {
         let reader = new FileReader();
@@ -370,7 +295,7 @@
         }
         reader.readAsDataURL(event.target.files[0]);
     });
-</script>
+</script>-->
 <!--   Core JS Files   -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

@@ -1,71 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/seller/layout/head :: head"></head>
+<head th:replace="/user/layout/head :: head"></head>
 <style>
-    body {
-        background-color: #f8f9fa;
-    }
-    .container {
-        max-width: 500px;
-        margin-top: 50px;
-        padding: 20px;
-        background-color: #ffffff;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-    }
-    .form-group {
-        margin-bottom: -10px;
-    }
-    .form-group label {
-        font-weight: bold;
+    .login-card {
+        background-color: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 400px;
     }
 
-    .btn-register {
-        background-color: #28a745;
+    .login-card h2 {
+        font-weight: bold;
+        color: #007bff;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .form-label {
+        font-weight: bold;
+    }
+    .form-control {
+        border-radius: 10px;
+    }
+
+    .btn-login {
+        background-color: #007bff;
         color: white;
         border-radius: 10px;
         transition: all 0.3s ease-in-out;
     }
 
-    .btn-register:hover {
-        background-color: #218838;
+    .btn-login:hover {
+        background-color: #0056b3;
         transform: scale(1.05);
     }
 
-    .error-message {
-        color: red;
+    .form-check-label {
         font-size: 0.9rem;
     }
+
+    .forgot-password {
+        display: block;
+        text-align: center;
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-top: 10px;
+        text-decoration: none;
+    }
+
+    .forgot-password:hover {
+        color: #007bff;
+    }
 </style>
+
 <body>
 <div class="wrapper">
     <!-- Sidebar -->
-    <div th:replace="/seller/layout/Sidebar :: sidebar"></div>
+    <div th:replace="/user/layout/Sidebar :: sidebar"></div>
     <!-- End Sidebar -->
 
     <div class="main-panel">
-        <div th:replace="/seller/layout/header :: header"></div>
+        <div th:replace="/user/layout/header :: header"></div>
+
         <div class="container">
-            <div class="page-inner d-flex justify-content-center align-items-center">
-                    <div class="card p-4">
-                        <h2>Quên mật khẩu</h2>
-                        <p>Chúng tôi sẽ gửi cho bạn một email để kích hoạt việc đặt lại mật khẩu.</p>
-                        <form  action="/forgot-password" method="post">
-                            <div class="form-group">
-                                <label for="email">Nhập email để nhận lại mật khẩu:</label>
-                                <input type="email" class="form-control" id="email" name="email" required>
-                            </div>
-                            <div class="d-flex justify-content-center">
-                                <button type="submit" class="btn btn-primary m-3">GỬI YÊU CẦU</button>
-                                <a type="button" class="btn btn-secondary m-3" href="/sellerlogin">HỦY</a>
-                            </div>
-                        </form>
+            <div class="container py-3 d-flex justify-content-center align-items-center">
+                <div class="container" style="width: 600px">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white text-center">
+                            <h3>Chỉnh sửa hồ sơ</h3>
+                        </div>
+                        <div class="card-body">
+                            <form action="/profileuser" method="POST" enctype="multipart/form-data">
+                                <!-- Ảnh đại diện -->
+                                <div class="text-center mb-3">
+                                    <img id="avatarPreview" th:src="@{'/uploads/'+${user.image}}" alt="Avatar" class="rounded-circle" width="120" height="120">
+                                    <br>
+                                    <label class="btn btn-secondary mt-2">
+                                        Tải ảnh mới <input type="file" name="image" accept="image/*" class="d-none" id="imageInput">
+                                    </label>
+                                </div>
+
+                                <!-- Họ tên -->
+                                <div class="mb-1">
+                                    <label class="form-label">Họ và tên</label>
+                                    <input type="text" class="form-control" name="name" th:value="${user.name}" required>
+                                </div>
+
+                                <!-- Email -->
+                                <div class="mb-1">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="email" th:value="${user.email}" readonly>
+                                </div>
+
+                                <!-- Số điện thoại -->
+                                <div class="mb-1">
+                                    <label class="form-label">Số điện thoại</label>
+                                    <input type="text" class="form-control" name="sdt" th:value="${user.sdt}" required>
+                                </div>
+
+                                <!-- Địa chỉ -->
+                                <div class="mb-1">
+                                    <label class="form-label">Địa chỉ</label>
+                                    <input type="text" class="form-control" name="address" th:value="${user.address}">
+                                </div>
+                                <!-- Nút cập nhật -->
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-success">Cập nhật hồ sơ</button>
+                                </div>
+                            </form>
+
+                        </div>
                     </div>
+                </div>
             </div>
         </div>
 
-        <footer th:replace="/seller/layout/footer :: footer"></footer>
+        <footer th:replace="/user/layout/footer :: footer"></footer>
     </div>
 
     <!-- Custom template | don't include it in your project! -->
@@ -263,10 +315,13 @@
     </div>
     <!-- End Custom template -->
 </div>
-
+<!-- Import SweetAlert2 -->
+<!-- Import SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        // Lấy thông báo từ Flash Attribute
         let errorMessage = "[[${error}]]";
         let successMessage = "[[${success}]]";
 
@@ -276,8 +331,6 @@
                 text: errorMessage,
                 icon: "error",
                 confirmButtonText: "OK"
-            }).then(() => {
-                window.history.replaceState(null, null, window.location.pathname);
             });
         }
 
@@ -288,9 +341,21 @@
                 icon: "success",
                 confirmButtonText: "OK"
             }).then(() => {
-                window.location.href = "/sellerlogin";
+                window.history.replaceState(null, null, window.location.pathname);
             });
         }
+    });
+</script>
+
+
+<script>
+    // Hiển thị ảnh trước khi upload
+    document.getElementById('imageInput').addEventListener('change', function(event) {
+        let reader = new FileReader();
+        reader.onload = function(){
+            document.getElementById('avatarPreview').src = reader.result;
+        }
+        reader.readAsDataURL(event.target.files[0]);
     });
 </script>
 <!--   Core JS Files   -->
