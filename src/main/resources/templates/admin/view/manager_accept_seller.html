@@ -46,12 +46,14 @@
                                             <td th:text="${seller.sdt}"></td>
                                             <td th:text="${seller.cccd}"></td>
                                             <td>
-                                                <a href="#" th:data-id="${seller.id}" class="btn btn-link btn-success btn-sm approve-btn" data-bs-toggle="tooltip" title="Duyệt">
+                                                <button th:data-id="${seller.id}" class="btn btn-link btn-info btn-sm view-btn" data-bs-toggle="tooltip" title="Xem">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button th:data-id="${seller.id}" class="btn btn-link btn-success btn-sm approve-btn" data-bs-toggle="tooltip" title="Duyệt">
                                                     <i class="fas fa-check"></i>
-                                                </a>
-                                                <a href="#" th:data-id="${seller.id}" class="btn btn-link btn-danger btn-sm delete-btn" data-bs-toggle="tooltip" title="Xóa">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </a>
+                                                </button>
+                                                <button th:data-id="${seller.id}" class="btn btn-link btn-danger btn-sm delete-btn" data-bs-toggle="tooltip" title="Từ chối">
+                                                    <i class="fas fa-times"></i> </button>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -66,6 +68,31 @@
 
         <footer th:replace="/admin/layout/footer:: footer"></footer>
     </div>
+
+    <div class="modal fade" id="viewSellerModal" tabindex="-1" role="dialog" aria-labelledby="viewSellerModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewSellerModalLabel">Chi tiết người bán</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Tên:</strong> <span id="viewName"></span></p>
+                    <p><strong>Email:</strong> <span id="viewEmail"></span></p>
+                    <p><strong>Tên cửa hàng:</strong> <span id="viewNameShop"></span></p>
+                    <p><strong>Địa chỉ:</strong> <span id="viewAddress"></span></p>
+                    <p><strong>Số điện thoại:</strong> <span id="viewSdt"></span></p>
+                    <p><strong>CCCD:</strong> <span id="viewCccd"></span></p>
+                    <p><strong>Trạng thái:</strong> <span id="viewStatus"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="/assets/js/core/jquery-3.7.1.min.js"></script>
@@ -74,153 +101,112 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-<script src="/assets/js/plugin/chart.js/chart.min.js"></script>
-<script src="/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
-<script src="/assets/js/plugin/chart-circle/circles.min.js"></script>
 <script src="/assets/js/plugin/datatables/datatables.min.js"></script>
 <script src="/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
-<script src="/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
-<script src="/assets/js/plugin/jsvectormap/world.js"></script>
-<script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
 <script src="/assets/js/kaiadmin.min.js"></script>
-<script src="/assets/js/setting-demo.js"></script>
-<script src="/assets/js/demo.js"></script>
+
 
 <script>
-    $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
-        type: "line",
-        height: "70",
-        width: "100%",
-        lineWidth: "2",
-        lineColor: "#177dff",
-        fillColor: "rgba(23, 125, 255, 0.14)",
-    });
+    $(document).ready(function() {
+        $('#pending-seller-table').DataTable({ // Initialize DataTable
+            pageLength: 5,
+        });
 
-    $("#lineChart2").sparkline([99, 125, 122, 105, 110, 124, 115], {
-        type: "line",
-        height: "70",
-        width: "100%",
-        lineWidth: "2",
-        lineColor: "#f3545d",
-        fillColor: "rgba(243, 84, 93, .14)",
-    });
 
-    $("#lineChart3").sparkline([105, 103, 123, 100, 95, 105, 115], {
-        type: "line",
-        height: "70",
-        width: "100%",
-        lineWidth: "2",
-        lineColor: "#ffa534",
-        fillColor: "rgba(255, 165, 52, .14)",
-    });
-    // Add Row
-    $("#add-row").DataTable({
-        pageLength: 5,
-    });
+        // View Seller Details
+        $('.view-btn').click(function() {
+            var sellerId = $(this).data('id');
+            $.ajax({
+                url: '/admin/seller/get/' + sellerId,
+                type: 'GET',
+                success: function(seller) {
+                    $('#viewName').text(seller.name);
+                    $('#viewEmail').text(seller.email);
+                    $('#viewNameShop').text(seller.nameShop);
+                    $('#viewAddress').text(seller.address);
+                    $('#viewSdt').text(seller.sdt);
+                    $('#viewCccd').text(seller.cccd);
+                    $('#viewStatus').text(seller.status ? 'Hoạt động' : 'Chờ duyệt'); // Show appropriate status
+                    $('#viewSellerModal').modal('show');
+                },
+                error: function() {
+                    Swal.fire('Lỗi!', 'Không thể lấy thông tin người bán.', 'error');
+                }
+            });
+        });
 
-    var action =
-        '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
 
-    $("#addRowButton").click(function () {
-        $("#add-row")
-            .dataTable()
-            .fnAddData([
-                $("#addName").val(),
-                $("#addPosition").val(),
-                $("#addOffice").val(),
-                action,
-            ]);
-        $("#addRowModal").modal("hide");
-    })
-    $('.delete-btn').click(function(event) {
-        event.preventDefault();
-        var sellerId = $(this).data('id');
+        // Approve Seller
+        $('.approve-btn').click(function(event) {
+            event.preventDefault();
+            var sellerId = $(this).data('id');
 
-        Swal.fire({
-            title: 'Bạn có chắc chắn muốn xóa?',
-            text: "Hành động này không thể hoàn tác!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Xóa',
-            cancelButtonText: 'Hủy'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Gửi yêu cầu DELETE bằng AJAX
-                $.ajax({
-                    url: '/admin/seller/delete/' + sellerId,  // Use the correct URL for seller
-                    type: 'DELETE',
-                    success: function(result) {
-                        Swal.fire(
-                            'Đã xóa!',
-                            'Người bán đã được xóa.',
-                            'success'
-                        ).then(() => {
-                            window.location.reload();
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        Swal.fire(
-                            'Lỗi!',
-                            'Đã xảy ra lỗi khi xóa người bán.',
-                            'error'
-                        );
-                    }
-                });
-            } else {
-                Swal.fire(
-                    'Hủy bỏ xóa!',
-                    'Dữ liệu của bạn vẫn an toàn.',
-                    'info'
-                )
-            }
-        })
-    });
-    $('.approve-btn').click(function(event) {
-        event.preventDefault();
-        var sellerId = $(this).data('id');
+            Swal.fire({
+                title: 'Duyệt người bán?',
+                text: "Bạn có chắc chắn muốn duyệt người bán này?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Duyệt',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/admin/seller/approve/' + sellerId,
+                        type: 'POST', // Use POST for approval
+                        success: function(result) {
+                            Swal.fire(
+                                'Thành công!',
+                                'Người bán đã được duyệt.',
+                                'success'
+                            ).then(() => {
+                                window.location.reload(); // Reload the page
+                            });
+                        },
+                        error: function() {
+                            Swal.fire('Lỗi!', 'Đã xảy ra lỗi khi duyệt người bán.', 'error');
+                        }
+                    });
+                }
+            });
+        });
 
-        Swal.fire({
-            title: 'Duyệt người bán?',
-            text: "Bạn có chắc chắn muốn duyệt người bán này?",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Duyệt',
-            cancelButtonText: 'Hủy'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Gửi yêu cầu POST bằng AJAX
-                $.ajax({
-                    url: '/admin/seller/approve/' + sellerId,
-                    type: 'POST',
-                    success: function(result) {
-                        Swal.fire(
-                            'Thành công!',
-                            'Người bán đã được duyệt.',
-                            'success'
-                        ).then(() => {
-                            window.location.reload();
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        Swal.fire(
-                            'Lỗi!',
-                            'Đã xảy ra lỗi khi duyệt người bán.',
-                            'error'
-                        );
-                    }
-                });
-            } else {
-                Swal.fire(
-                    'Hủy bỏ!',
-                    'Người bán chưa được duyệt.',
-                    'info'
-                )
-            }
-        })
+        // Delete/Reject Seller
+        $('.delete-btn').click(function(event) {
+            event.preventDefault();
+            var sellerId = $(this).data('id');
+
+            Swal.fire({
+                title: 'Từ chối người bán?', // Changed title
+                text: "Bạn có chắc chắn muốn từ chối người bán này?  Hành động này sẽ xóa người bán.", // Updated text
+                icon: 'warning', // Use warning icon
+                showCancelButton: true,
+                confirmButtonColor: '#d33', // Red color for delete/reject
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Từ chối', // Changed button text
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/admin/seller/delete/' + sellerId,
+                        type: 'GET', // Use GET for delete (as in your controller)
+                        success: function(result) {
+                            Swal.fire(
+                                'Đã từ chối!',
+                                'Người bán đã bị từ chối và xóa.',
+                                'success'
+                            ).then(() => {
+                                window.location.reload();
+                            });
+                        },
+                        error: function() {
+                            Swal.fire('Lỗi!', 'Đã xảy ra lỗi khi từ chối người bán.', 'error');
+                        }
+                    });
+                }
+            });
+        });
     });
 </script>
 </body>

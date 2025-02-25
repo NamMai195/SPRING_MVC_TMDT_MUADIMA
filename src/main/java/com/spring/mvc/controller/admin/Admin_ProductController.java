@@ -2,12 +2,15 @@ package com.spring.mvc.controller.admin;
 
 import com.spring.mvc.domain.Product;
 import com.spring.mvc.domain.ProductType;
-import com.spring.mvc.service.admin.Admin_ProductService; // You'll need to create this service
+import com.spring.mvc.domain.Seller;
+import com.spring.mvc.service.admin.Admin_ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,59 +25,70 @@ public class Admin_ProductController {
     public String showCreateForm(Model model) {
         model.addAttribute("product", new Product());
         model.addAttribute("isEditMode", false);
-        // Add categories and sellers to the model
         model.addAttribute("categories", adminProductService.findAllProductTypes());
-        List<ProductType> test = adminProductService.findAllProductTypes();
-        for (ProductType productType : test) {
-            System.out.println(productType);
-        }
         model.addAttribute("sellers", adminProductService.findAllSellers());
-        return "admin/view/form_product"; // Adjust the template path
+        return "admin/view/from_product";
     }
 
     @PostMapping("/save")
-    public String saveProduct(@ModelAttribute("product") Product product) {
+    public String saveProduct(@ModelAttribute("product") Product product,
+                              @RequestParam("productTypeId") Long productTypeId,
+                              @RequestParam("sellerId") Long sellerId) {
+
+        Optional<ProductType> productType = adminProductService.findProductTypeById(productTypeId);
+        Optional<Seller> seller = adminProductService.findSellerById(sellerId);
+
+        productType.ifPresent(product::setProductType);
+        seller.ifPresent(product::setSeller);
+
+        product.setStatus("Chờ duyệt");
+
         adminProductService.saveProduct(product);
-        return "redirect:/admin/product/list"; // Adjust the redirect path
+        return "redirect:/admin/product/listNoAccept";
     }
 
-    @DeleteMapping("/delete/{id}")
+
+    @GetMapping("/delete/{id}")
+    @Transactional
     public String deleteProduct(@PathVariable("id") Long id) {
         adminProductService.deleteProduct(id);
-        return "redirect:/admin/product/list"; // Adjust the redirect path
-    }
-
-    @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable("id") Long id, Model model) {
-        Optional<Product> productOptional = adminProductService.findProductById(id);
-        if (productOptional.isPresent()) {
-            model.addAttribute("product", productOptional.get());
-            model.addAttribute("isEditMode", true);
-            // Add categories and sellers to the model
-            model.addAttribute("categories", adminProductService.findAllProductTypes());
-            model.addAttribute("sellers", adminProductService.findAllSellers());
-            return "admin/view/form_product"; // Adjust the template path
-        } else {
-            // Handle product not found
-            return "redirect:/admin/product/list"; // Adjust the redirect path
-        }
+        return "redirect:/admin/product/listNoAccept";
     }
 
     @GetMapping("/list")
     public String listProducts(Model model) {
         model.addAttribute("products", adminProductService.findApprovedProducts());
-        model.addAttribute("pendingProducts", adminProductService.findPendingProducts());
-        return "admin/view/manager_product"; // Adjust the template path
+        model.addAttribute("pendingProducts", adminProductService.findPendingProducts()); // Add pendingProducts
+        return "admin/view/manager_product";
     }
 
     @PostMapping("/approve/{id}")
+    @Transactional
     public String approveProduct(@PathVariable("id") Long id) {
         adminProductService.approveProduct(id);
-        return "redirect:/admin/product/list"; // Adjust the redirect path
+        return "redirect:/admin/product/listNoAccept";
     }
+
+    @PostMapping("/reject/{id}")
+    @Transactional
+    public String rejectProduct(@PathVariable("id") Long id) {
+        adminProductService.deleteProduct(id);
+        return "redirect:/admin/product/listNoAccept";
+    }
+
     @GetMapping("/listNoAccept")
     public String showApproveProductList(Model model) {
         model.addAttribute("pendingProducts", adminProductService.findPendingProducts());
+        model.addAttribute("products", adminProductService.findApprovedProducts()); // Add approved products
         return "admin/view/manager_accept_product";
+    }
+
+    @GetMapping("/get/{id}")
+    @ResponseBody
+    public ResponseEntity<Product> getProduct(@PathVariable("id") Long id) {
+        Optional<Product> productOptional = adminProductService.findProductById(id);
+        return productOptional
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

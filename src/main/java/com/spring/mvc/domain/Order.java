@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 @Entity(name = "orders")
@@ -25,9 +26,10 @@ public class Order {
     private VoucherStorage voucherStorage;
 
 
-    private Date createdAt;
+    private LocalDateTime createdAt;
     private double totalAmount; // Tổng giá trị đơn hàng
     private boolean status;
+
 
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;

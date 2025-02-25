@@ -48,4 +48,22 @@ public class Admin_SellerService {
     public Object countSellers() {
         return this.adminSellerRepository.count();
     }
+
+    @Transactional
+    public void lockSeller(Long id) {
+        Optional<Seller> optionalSeller = adminSellerRepository.findById(id);
+        optionalSeller.ifPresent(seller -> {
+            seller.setStatus(false); // Set status to inactive (locked)
+            adminSellerRepository.save(seller);
+        });
+    }
+
+    @Transactional
+    public void unlockSeller(Long id){
+        Optional<Seller> optionalSeller = adminSellerRepository.findById(id);
+        optionalSeller.ifPresent(seller -> {
+            seller.setStatus(true);
+            adminSellerRepository.save(seller);
+        });
+    }
 }
