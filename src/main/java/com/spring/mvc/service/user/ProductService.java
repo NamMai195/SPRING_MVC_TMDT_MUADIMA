@@ -18,7 +18,9 @@ public class ProductService {
         return productRepository.findById(id);
     }
     public List<Product> getProductsByType(Long typeId) {
-        return productRepository.findByProductTypeIdAndStatus(typeId, "Hoạt động");
+        List<Product> products = productRepository.findByProductTypeIdAndStatus(typeId, "Hoạt động");
+        setFirstImageForProducts(products);
+        return products;
     }
     public List<Product> getActiveProducts() {
         List<Product> products = productRepository.findByStatus("Hoạt động");
@@ -43,6 +45,11 @@ public class ProductService {
             e.printStackTrace();
         }
         return "default.png"; // Ảnh mặc định nếu không có ảnh
+    }
+    public List<Product> searchByName(String keyword) {
+        List<Product> products = productRepository.findByNameContainingIgnoreCaseAndStatus(keyword, "Hoạt động");
+        setFirstImageForProducts(products);
+        return products;
     }
 }
 
