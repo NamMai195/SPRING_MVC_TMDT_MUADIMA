@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="/seller/layout/head :: head"></head>
 <style>
     .thumbnail {
@@ -62,7 +61,7 @@
             <div class="page-inner">
                 <div class="container">
                     <div class="text-center my-2 mb-3">
-                       <h1  class="fw-bold text-danger" th:text="${product.name}" ></h1>
+                        <h1  class="fw-bold text-danger" th:text="${product.name}" ></h1>
                     </div>
 
                     <div class="container mt-5">
@@ -72,7 +71,7 @@
                                 <div class="image-container">
                                     <!-- Nút điều hướng ảnh -->
                                     <button class="nav-arrow left" onclick="prevImage()">❮</button>
-                                    <img id="mainImage" th:src="'/uploads/'+${product.firstImage}" class="img-fluid main-image" alt="Ảnh sản phẩm">
+                                    <img id="mainImage" th:src="'/uploads/'+${product.firstImage} " class="img-fluid main-image" alt="Ảnh sản phẩm">
                                     <button class="nav-arrow right" onclick="nextImage()">❯</button>
                                 </div>
                             </div>
@@ -82,9 +81,13 @@
                                 <h2 th:text="${product.name}">Tên sản phẩm</h2>
                                 <p><strong>Giá:</strong> <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')} + ' VNĐ'"></span></p>
                                 <p><strong>Mô tả:</strong> <span th:text="${product.describe}">Mô tả sản phẩm.</span></p>
-
-                                <a href="/seller" class="btn btn-secondary">Quay lại</a>
-                                <a href="#" class="btn btn-primary">Mua ngay</a>
+                                <div class="d-flex gap-2">
+                                    <a href="/" class="btn btn-secondary">Quay lại</a>
+                                    <form method="POST" th:action="@{/cart/add}">
+                                        <input type="hidden" name="productId" th:value="${product.id}">
+                                        <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>
+                                    </form>
+                                </div>
                                 <!-- Danh sách ảnh nhỏ -->
                                 <div class="d-flex flex-wrap mt-2">
                                     <div th:each="img, iterStat : ${images}">
@@ -94,8 +97,6 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
 
             </div>
@@ -300,34 +301,30 @@
     <!-- End Custom template -->
 </div>
 <script>
-    let images = [];
-    document.querySelectorAll('.thumbnail').forEach(img => images.push(img.src));
+    document.addEventListener("DOMContentLoaded", function () {
+        let images = Array.from(document.querySelectorAll('.thumbnail')).map(img => img.src);
+        let currentIndex = 0;
+        let mainImage = document.getElementById("mainImage");
 
-    let currentIndex = 0;
-    let mainImage = document.getElementById("mainImage");
-
-    function changeImage(imgElement) {
-        mainImage.src = imgElement.src;
-        currentIndex = parseInt(imgElement.getAttribute("data-index"));
-    }
-
-    function prevImage() {
-        if (currentIndex > 0) {
-            currentIndex--;
-        } else {
-            currentIndex = images.length - 1;
+        function changeImage(imgElement) {
+            mainImage.src = imgElement.src;
+            currentIndex = parseInt(imgElement.getAttribute("data-index"));
         }
-        mainImage.src = images[currentIndex];
-    }
 
-    function nextImage() {
-        if (currentIndex < images.length - 1) {
-            currentIndex++;
-        } else {
-            currentIndex = 0;
+        function prevImage() {
+            currentIndex = (currentIndex > 0) ? currentIndex - 1 : images.length - 1;
+            mainImage.src = images[currentIndex];
         }
-        mainImage.src = images[currentIndex];
-    }
+
+        function nextImage() {
+            currentIndex = (currentIndex < images.length - 1) ? currentIndex + 1 : 0;
+            mainImage.src = images[currentIndex];
+        }
+
+        window.changeImage = changeImage;
+        window.prevImage = prevImage;
+        window.nextImage = nextImage;
+    });
 </script>
 <!--   Core JS Files   -->
 <script src="/assets/js/core/jquery-3.7.1.min.js"></script>

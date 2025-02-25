@@ -42,6 +42,9 @@ public class UserController {
             session.setAttribute("loggedInUser", result.get("user"));
             result.put("redirect", "/");
         }
+        //Kiểm tra product có dữ liệu ko
+        System.out.println(result);
+
         return ResponseEntity.ok(result);
     }
 
@@ -94,7 +97,7 @@ public class UserController {
                 } catch (IOException e) {
                     e.printStackTrace();
                     redirectAttributes.addFlashAttribute("error", "Lỗi khi lưu ảnh!");
-                    return "redirect:/user/profile?error";
+                    return "redirect:/user/profile";
                 }
             }
 
@@ -107,10 +110,13 @@ public class UserController {
             userService.updateUser(loggedInUser.getId(), loggedInUser);
             session.setAttribute("loggedInUser", loggedInUser);
 
+            // Gửi thông báo thành công
             redirectAttributes.addFlashAttribute("success", "Cập nhật thành công!");
             return "redirect:/user/profile";
         }
 
-        return "redirect:/user/profile?error";
+        // Gửi thông báo lỗi nếu không tìm thấy user
+        redirectAttributes.addFlashAttribute("error", "Lỗi! Người dùng không tồn tại.");
+        return "redirect:/user/profile";
     }
 }*/

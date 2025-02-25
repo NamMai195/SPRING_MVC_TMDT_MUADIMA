@@ -3,7 +3,7 @@
         <!-- Logo Header -->
         <div class="logo-header" data-background-color="dark">
             <a href="/seller" class="logo">
-                <img src="/assets/img/muadima_web.png" alt="navbar brand" class="navbar-brand mt-3" height="75" width="100%"/>
+                <img src="/assets/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand" height="20"/>
             </a>
             <div class="nav-toggle">
                 <button class="btn btn-toggle toggle-sidebar">
@@ -24,98 +24,23 @@
             <ul class="nav nav-secondary">
                 <!--  home-->
                 <li class="nav-item active">
-                    <a  href="/seller" class="collapsed" aria-expanded="false"><i class="fas fa-home"></i>
+                    <a  href="/" class="collapsed" aria-expanded="false"><i class="fas fa-home"></i>
                         <p>Home</p>
                     </a>
                 </li>
 
-                <li class="nav-section"><span class="sidebar-mini-icon"><i class="fa fa-ellipsis-h"></i></span>
-                    <h4 class="text-section">Thao tác</h4>
+                <li class="nav-section">
+                    <span class="sidebar-mini-icon"><i class="fa fa-ellipsis-h"></i></span>
+                    <h4 class="text-section">Loại sản phẩm</h4>
                 </li>
-                <!--  quản lí sản phẩm-->
-                <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#base"><i class="fas fa-layer-group"></i><p>Product Management</p>
-                    <span class="caret"></span>
+
+                <!-- Duyệt danh sách loại sản phẩm -->
+                <li th:each="type : ${productTypes}" class="nav-item">
+                    <a th:href="@{/(typeId=${type.id})}"
+                       th:classappend="${type.id == selectedTypeId} ? 'active'">
+                        <i class="fas fa-layer-group"></i>
+                        <p th:text="${type.name}">Tên loại</p>
                     </a>
-                    <div class="collapse" id="base">
-                        <ul class="nav nav-collapse">
-                            <li>
-                                <a href="/products">
-                                    <span class="sub-item">Đăng bán sản phẩm</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/manager_product_list">
-                                    <span class="sub-item">Sản phẩm đã đăng bán</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <!--quản lý voucher-->
-                <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#sidebarLayouts"><i class="fas fa-th-list"></i> <p>Voucher Management</p>
-                        <span class="caret"></span>
-                    </a>
-                    <div class="collapse" id="sidebarLayouts">
-                        <ul class="nav nav-collapse">
-                            <li>
-                                <a href="#">
-                                    <span class="sub-item">Thêm Voucher</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <span class="sub-item">Voucher đợi duyệt</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <!--quản lý đơn hàng-->
-                <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#forms"> <i class="fas fa-pen-square"></i> <p>Order Management</p>
-                        <span class="caret"></span>
-                    </a>
-                    <div class="collapse" id="forms">
-                        <ul class="nav nav-collapse">
-                            <li>
-                                <a href="/manager_order">
-                                    <span class="sub-item">Đơn hàng đã đặt</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <span class="sub-item">Đơn hàng đang giao</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <span class="sub-item">Đơn hàng đã hủy</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <!--số dư và lịch sử giao dịch-->
-                <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#tables"> <i class="fas fa-table"></i> <p>Turnover</p>
-                        <span class="caret"></span>
-                    </a>
-                    <div class="collapse" id="tables">
-                        <ul class="nav nav-collapse">
-                            <li>
-                                <a href="#">
-                                    <span class="sub-item">Số dư và lịch sử giao dịch</span>
-                                </a>
-                            </li>
-                            <!--<li>
-                                <a href="/tables/datatables.html">
-                                    <span class="sub-item">Datatables</span>
-                                </a>
-                            </li>-->
-                        </ul>
-                    </div>
                 </li>
 
                 <!--<li class="nav-item"> <a data-bs-toggle="collapse" href="#maps"> <i class="fas fa-map-marker-alt"></i> <p>Maps</p>
@@ -136,30 +61,7 @@
                         </ul>
                     </div>
                 </li>-->
-                <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#charts"> <i class="far fa-chart-bar"></i> <p>Statistics</p>
-                        <span class="caret"></span>
-                    </a>
-                    <div class="collapse" id="charts">
-                        <ul class="nav nav-collapse">
-                            <li>
-                                <a href="widgets.html">
-                                    <span class="sub-item">Lượt truy cập shop</span>
-                                </a>
-                            </li>
-                            <!--<li>
-                                <a href="/charts/sparkline.html">
-                                    <span class="sub-item">Sparkline</span>
-                                </a>
-                            </li>-->
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a href="#"> <i class="fas fa-desktop"></i><p>Customer Support</p>
-                        <span class="badge badge-success">4</span>
-                    </a>
-                </li>
+
 <!--                <li class="nav-item">-->
 <!--                    <a href="../../documentation/index.html">-->
 <!--                        <i class="fas fa-file"></i>-->

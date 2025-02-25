@@ -242,7 +242,7 @@
                                                 <a th:href="@{/detail/{id}(id=${product.id})}" th:title="${product.name}" th:text="${product.name}"></a>
                                             </h3>
                                             <div class="price-box position-relative">
-                                                <span th:text="${product.price} + '₫'"></span>
+                                                <span th:text="${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')} + ' đ'"></span>
                                             </div>
                                         </div>
                                     </form>
