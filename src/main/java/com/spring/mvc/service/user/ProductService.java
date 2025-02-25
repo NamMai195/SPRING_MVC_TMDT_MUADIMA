@@ -3,7 +3,7 @@ package com.spring.mvc.service.user;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.mvc.domain.Product;
-import com.spring.mvc.repository.user.ProductRepository;
+import com.spring.mvc.repository.user.User_ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Service
 public class ProductService {
     @Autowired
-    private ProductRepository productRepository;
+    private User_ProductRepository productRepository;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -29,6 +29,10 @@ public class ProductService {
         } catch (JsonProcessingException e) {
             return "/uploads/default.jpg";
         }
+    }
+
+    public Product getProductById(Long id) {
+        return productRepository.findById(id).orElse(null);
     }
 
 

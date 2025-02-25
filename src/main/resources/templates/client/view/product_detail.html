@@ -50,15 +50,6 @@
 <body>
 <header th:replace="/client/layout/header :: header"></header>
 <main class="wrapperMain_content">
-  <nav class="bread-crumb">
-    <div class="container">
-      <ul class="breadcrumb" >
-        <li class="home"><a href="index.html">Trang chủ</a> / </li>
-        <li><a href="dong-ho.html" title="Đồng hồ">Đồng hồ</a> / </li>
-        <li class="active">Apple Watch Series 7 GPS 45mm viền nhôm dây cao su<li>
-      </ul>
-    </div>
-  </nav>
   <section class="product details-main" itemscope itemtype="https://schema.org/Product">
     <meta itemprop="category" content="Đồng hồ">
     <meta itemprop="url" content="//oh-thuong-mai-dien-tu.mysapo.net/apple-watch-series-7-gps-45mm-vien-nhom-day-cao-su">
@@ -219,13 +210,14 @@ Có hàng nghìn ứng dụng từ kho ứng dụng App Store dành cho Apple Wa
             </div>
           </div>
         </div>
-        <div class="details-pro col-lg-7 col-md-12 col-12 ">
-          <h1 class="title-head bold margin-bottom-10">Apple Watch Series 7 GPS 45mm viền nh&#244;m d&#226;y cao su</h1>
+        <div class="details-pro col-lg-7 col-md-12 col-12" >
+          <p th:text="${product}"></p>
+          <h1 class="title-head bold margin-bottom-10" th:text="${product.name}"></h1>
           <div class="flex-vd margin-bottom-10">
             <div class="skuuu sku-product margin-right-30">
-              <span class="variant-sku">Mã sản phẩm: <b>(Đang cập nhật...)</b></span>
+              <span class="variant-sku">Mã sản phẩm: <b th:text="${product.id}"></b></span>
             </div>
-            <div class="vendor">Thương hiệu: <b>Apple</b></div>
+            <div class="vendor">Thương hiệu: <b>Đang cập nhật...</b></div>
           </div>
           <div class="product-wish">
             <a href="javascript:void(0)" class="setWishlist" data-wish="apple-watch-series-7-gps-45mm-vien-nhom-day-cao-su" tabindex="0" title="Thêm vào yêu thích">
@@ -240,7 +232,7 @@ Có hàng nghìn ứng dụng từ kho ứng dụng App Store dành cho Apple Wa
 
             </div>					<div class="price-box clearfix">
 						<span class="special-price">
-							<span class="price product-price">13.990.000₫</span>
+							<span class="price product-price" th:text="${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')} + ' đ'"></span>
 						</span> <!-- Giá Khuyến mại -->
             <span class="old-price">
 							Giá cũ:
@@ -272,64 +264,64 @@ Có hàng nghìn ứng dụng từ kho ứng dụng App Store dành cho Apple Wa
                     timestamp: new Date().getTime(),
                   }
                 </script>
-                <script src="../bizweb.dktcdn.net/100/479/080/themes/897121/assets/flashsale47e9.js?1735554303306" defer ></script>							<div class="product-summary margin-bottom-25">Đang cập nhật</div>
+                <script src="../bizweb.dktcdn.net/100/479/080/themes/897121/assets/flashsale47e9.js?1735554303306" defer ></script>							<div class="product-summary margin-bottom-25" th:text="${product.describe}"></div>
                 <form enctype="multipart/form-data" id="add-to-cart-form" data-cart-form action="https://oh-thuong-mai-dien-tu.mysapo.net/cart/add" method="post" class="wishItem">
                   <div class="form-product">
-                    <div class="select-swatch">
-                      <div class="swatch-color swatch clearfix" data-option-index="0">
-                        <div class="options-title">Màu sắc: <span class="var"></span></div>
-                        <div data-value="Đen" class="swatch-element color den available">
-                          <input id="swatch-0-den" type="radio" name="option-0" value="Đen" checked  />
-                          <label for="swatch-0-den" title="Đen" style="background-image:url(../bizweb.dktcdn.net/thumb/small/100/479/080/products/1-126a08a9-cfef-4dc1-9076-f22c741df1c8-1011aff3-698b-40a8-bccb-3b76afa5ba693727.jpg?v=1677614077360);background-size:cover;background-repeat:no-repeat;background-position: center;">
-                          </label>
-                        </div>
-                        <script>
-                          jQuery('.swatch[data-option-index="0"] .Đen').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');
-                        </script>
-                        <div data-value="Kem" class="swatch-element color kem available">
-                          <input id="swatch-0-kem" type="radio" name="option-0" value="Kem"  />
-                          <label for="swatch-0-kem" title="Kem" style="background-image:url(../bizweb.dktcdn.net/thumb/small/100/479/080/products/3-02a687e2-7e81-4758-8755-cd4aa9aba981-ec23bdc6-4c6b-4390-a148-2f2d8c8545553727.jpg?v=1677614077360);background-size:cover;background-repeat:no-repeat;background-position: center;">
-                          </label>
-                        </div>
-                        <script>
-                          jQuery('.swatch[data-option-index="0"] .Kem').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');
-                        </script>
-                        <div data-value="Đỏ" class="swatch-element color do available">
-                          <input id="swatch-0-do" type="radio" name="option-0" value="Đỏ"  />
-                          <label for="swatch-0-do" title="Đỏ" style="background-image:url(../bizweb.dktcdn.net/thumb/small/100/479/080/products/4-98d50224-5a37-4f75-b766-258d67b713d2-b9276e33-19b6-4a83-8823-520cc5ee9a3a3727.jpg?v=1677614077360);background-size:cover;background-repeat:no-repeat;background-position: center;">
-                          </label>
-                        </div>
-                        <script>
-                          jQuery('.swatch[data-option-index="0"] .Đỏ').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');
-                        </script>
-                        <div data-value="Xanh l&#225;" class="swatch-element color xanh-la available">
-                          <input id="swatch-0-xanh-la" type="radio" name="option-0" value="Xanh l&#225;"  />
-                          <label for="swatch-0-xanh-la" title="Xanh lá" style="background-image:url(../bizweb.dktcdn.net/thumb/small/100/479/080/products/5-4947d6fd-35ef-4e53-acfa-66da8f87d1c6-a7e78378-6f5b-4e3a-90e2-d1fa8090ad293727.jpg?v=1677614077360);background-size:cover;background-repeat:no-repeat;background-position: center;">
-                          </label>
-                        </div>
-                        <script>
-                          jQuery('.swatch[data-option-index="0"] .Xanh lá').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');
-                        </script>
-                        <div data-value="Xanh dương" class="swatch-element color xanh-duong available">
-                          <input id="swatch-0-xanh-duong" type="radio" name="option-0" value="Xanh dương"  />
-                          <label for="swatch-0-xanh-duong" title="Xanh dương" style="background-image:url(../bizweb.dktcdn.net/thumb/small/100/479/080/products/2-5b0d9d86-1ef0-46eb-a237-2af81832efd2-40a46b7c-a0a4-4101-bb2f-b2c88375dc2e3727.jpg?v=1677614077360);background-size:cover;background-repeat:no-repeat;background-position: center;">
-                          </label>
-                        </div>
-                        <script>
-                          jQuery('.swatch[data-option-index="0"] .Xanh dương').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');
-                        </script>
-                      </div>
-                    </div>
-                    <div class="box-variant clearfix  d-none ">
+<!--                    <div class="select-swatch">-->
+<!--                      <div class="swatch-color swatch clearfix" data-option-index="0">-->
+<!--                        <div class="options-title">Màu sắc: <span class="var"></span></div>-->
+<!--                        <div data-value="Đen" class="swatch-element color den available">-->
+<!--                          <input id="swatch-0-den" type="radio" name="option-0" value="Đen" checked  />-->
+<!--                          <label for="swatch-0-den" title="Đen" style="background-image:url(../bizweb.dktcdn.net/thumb/small/100/479/080/products/1-126a08a9-cfef-4dc1-9076-f22c741df1c8-1011aff3-698b-40a8-bccb-3b76afa5ba693727.jpg?v=1677614077360);background-size:cover;background-repeat:no-repeat;background-position: center;">-->
+<!--                          </label>-->
+<!--                        </div>-->
+<!--                        <script>-->
+<!--                          jQuery('.swatch[data-option-index="0"] .Đen').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');-->
+<!--                        </script>-->
+<!--                        <div data-value="Kem" class="swatch-element color kem available">-->
+<!--                          <input id="swatch-0-kem" type="radio" name="option-0" value="Kem"  />-->
+<!--                          <label for="swatch-0-kem" title="Kem" style="background-image:url(../bizweb.dktcdn.net/thumb/small/100/479/080/products/3-02a687e2-7e81-4758-8755-cd4aa9aba981-ec23bdc6-4c6b-4390-a148-2f2d8c8545553727.jpg?v=1677614077360);background-size:cover;background-repeat:no-repeat;background-position: center;">-->
+<!--                          </label>-->
+<!--                        </div>-->
+<!--                        <script>-->
+<!--                          jQuery('.swatch[data-option-index="0"] .Kem').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');-->
+<!--                        </script>-->
+<!--                        <div data-value="Đỏ" class="swatch-element color do available">-->
+<!--                          <input id="swatch-0-do" type="radio" name="option-0" value="Đỏ"  />-->
+<!--                          <label for="swatch-0-do" title="Đỏ" style="background-image:url(../bizweb.dktcdn.net/thumb/small/100/479/080/products/4-98d50224-5a37-4f75-b766-258d67b713d2-b9276e33-19b6-4a83-8823-520cc5ee9a3a3727.jpg?v=1677614077360);background-size:cover;background-repeat:no-repeat;background-position: center;">-->
+<!--                          </label>-->
+<!--                        </div>-->
+<!--                        <script>-->
+<!--                          jQuery('.swatch[data-option-index="0"] .Đỏ').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');-->
+<!--                        </script>-->
+<!--                        <div data-value="Xanh l&#225;" class="swatch-element color xanh-la available">-->
+<!--                          <input id="swatch-0-xanh-la" type="radio" name="option-0" value="Xanh l&#225;"  />-->
+<!--                          <label for="swatch-0-xanh-la" title="Xanh lá" style="background-image:url(../bizweb.dktcdn.net/thumb/small/100/479/080/products/5-4947d6fd-35ef-4e53-acfa-66da8f87d1c6-a7e78378-6f5b-4e3a-90e2-d1fa8090ad293727.jpg?v=1677614077360);background-size:cover;background-repeat:no-repeat;background-position: center;">-->
+<!--                          </label>-->
+<!--                        </div>-->
+<!--                        <script>-->
+<!--                          jQuery('.swatch[data-option-index="0"] .Xanh lá').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');-->
+<!--                        </script>-->
+<!--                        <div data-value="Xanh dương" class="swatch-element color xanh-duong available">-->
+<!--                          <input id="swatch-0-xanh-duong" type="radio" name="option-0" value="Xanh dương"  />-->
+<!--                          <label for="swatch-0-xanh-duong" title="Xanh dương" style="background-image:url(../bizweb.dktcdn.net/thumb/small/100/479/080/products/2-5b0d9d86-1ef0-46eb-a237-2af81832efd2-40a46b7c-a0a4-4101-bb2f-b2c88375dc2e3727.jpg?v=1677614077360);background-size:cover;background-repeat:no-repeat;background-position: center;">-->
+<!--                          </label>-->
+<!--                        </div>-->
+<!--                        <script>-->
+<!--                          jQuery('.swatch[data-option-index="0"] .Xanh dương').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');-->
+<!--                        </script>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                    <div class="box-variant clearfix  d-none ">-->
 
-                      <select id="product-selectors" class="form-control form-control-lg" name="variantId" style="display:none">
-                        <option  selected="selected"  value="82804542">Đen - 13.990.000₫</option>
-                        <option  value="82804543">Kem - 13.990.000₫</option>
-                        <option  value="82804544">Đỏ - 13.990.000₫</option>
-                        <option  value="82804545">Xanh l&#225; - 13.990.000₫</option>
-                        <option  value="82804546">Xanh dương - 13.990.000₫</option>
-                      </select>
-                    </div>
+<!--                      <select id="product-selectors" class="form-control form-control-lg" name="variantId" style="display:none">-->
+<!--                        <option  selected="selected"  value="82804542">Đen - 13.990.000₫</option>-->
+<!--                        <option  value="82804543">Kem - 13.990.000₫</option>-->
+<!--                        <option  value="82804544">Đỏ - 13.990.000₫</option>-->
+<!--                        <option  value="82804545">Xanh l&#225; - 13.990.000₫</option>-->
+<!--                        <option  value="82804546">Xanh dương - 13.990.000₫</option>-->
+<!--                      </select>-->
+<!--                    </div>-->
                     <div class="clearfix from-action-addcart ">
                       <div class="qty-ant clearfix custom-btn-number ">
                         <label class="d-none">Số lượng:</label>
@@ -852,19 +844,19 @@ Có hàng nghìn ứng dụng từ kho ứng dụng App Store dành cho Apple Wa
           }
         };
       };
-      var addToCart = jQuery('.form-product .btn-cart'),
-              btnNow = jQuery('.form-product .btn-buy-now'),
-              form = jQuery('.form-product .from-action-addcart'),
-              productPrice = jQuery('.details-pro .special-price .product-price'),
-              qty = jQuery('.inventory_quantity .a-stock'),
-              comparePrice = jQuery('.details-pro .old-price .product-price-old'),
-              comparePriceText = jQuery('.details-pro .old-price'),
-              savePrice = jQuery('.details-pro .save-price .product-price-save'),
-              savePriceText = jQuery('.details-pro .save-price'),
-              qtyBtn = jQuery('.form-product .custom-btn-number'),
-              BtnSold = jQuery('.form-product .btn-mua'),
-              Unit = jQuery('.donvitinh'),
-              product_sku = jQuery('.variant-sku');
+      // var addToCart = jQuery('.form-product .btn-cart'),
+      //         btnNow = jQuery('.form-product .btn-buy-now'),
+      //         form = jQuery('.form-product .from-action-addcart'),
+      //         productPrice = jQuery('.details-pro .special-price .product-price'),
+      //         qty = jQuery('.inventory_quantity .a-stock'),
+      //         comparePrice = jQuery('.details-pro .old-price .product-price-old'),
+      //         comparePriceText = jQuery('.details-pro .old-price'),
+      //         savePrice = jQuery('.details-pro .save-price .product-price-save'),
+      //         savePriceText = jQuery('.details-pro .save-price'),
+      //         qtyBtn = jQuery('.form-product .custom-btn-number'),
+      //         BtnSold = jQuery('.form-product .btn-mua'),
+      //         Unit = jQuery('.donvitinh'),
+      //         product_sku = jQuery('.variant-sku');
       if (variant && variant.sku != "" && variant.sku != null){
         product_sku.html("Mã sản phẩm: <strong>" + variant.sku + " </strong>");
       } else {
