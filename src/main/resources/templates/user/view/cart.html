@@ -1,418 +1,122 @@
 <!DOCTYPE html>
-<html lang="en">
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/user/layout/head :: head"></head>
-
-<body>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{user/layout/head :: head}"></head> <body>
 <div class="wrapper">
-    <!-- Sidebar -->
-    <div th:replace="/user/layout/Sidebar :: sidebar"></div>
-    <!-- End Sidebar -->
+    <div th:replace="~{user/layout/Sidebar :: sidebar}"></div>
     <div class="main-panel">
-        <div th:replace="/user/layout/header :: header"></div>
+        <div th:replace="~{user/layout/header :: header}"></div>
 
         <div class="container">
             <div class="page-inner">
-                            <h2 class="fw-bold text-center text-info">Giỏ Hàng</h2>
-              <!-- Tổng cộng -->
-              <div class="cart-footer d-flex justify-content-end align-items-center py-3">
-                <h4 class="fw-bold">
-                  Tổng Cộng: <span id="totalAmount">0</span>
-                </h4>
-              </div>
-                <!-- Danh sách sản phẩm trong giỏ hàng -->
+                <h2 class="fw-bold text-center text-info">Giỏ Hàng</h2>
+                <div th:if="${message}" class="alert alert-success" role="alert">
+                    <span th:text="${message}"></span>
+                </div>
+                <div th:if="${error}" class="alert alert-danger" role="alert">
+                    <span th:text="${error}"></span>
+                </div>
                 <div class="cart-items py-5 ">
-                  <th:block th:each="cartItem : ${cartItems}">
+                    <th:block th:each="cartItem : ${cartItems}">
+                        <div class="cart-item d-flex align-items-center py-3 border-bottom">
+                            <input type="checkbox" class="cart-checkbox form-check-input me-3" onchange="updateTotal()">
+                            <img th:src="@{'/uploads/' + ${cartItem.product.firstImage}}" alt="Product Image" class="rounded" style="width: 80px; height: 80px;">
+                            <div class="ms-3 flex-grow-1">
+                                <h5 class="mb-1 text-primary" th:text="${cartItem.product.name}">Tên Sản Phẩm</h5>
+                                <p class="text-muted mb-1">
+                                    Giá: <span th:text="${#numbers.formatDecimal(cartItem.product.price, 0, 'COMMA', 0, 'POINT')}"></span> VND
+                                </p>
 
-                      <div class="cart-item d-flex align-items-center py-3 border-bottom">
-                        <!--tick chọn sản phẩm-->
-                        <input type="checkbox" class="cart-checkbox form-check-input me-3" onchange="updateTotal()">
-                        <!-- Ảnh sản phẩm -->
-                              <img th:src="@{'/uploads/' + ${cartItem.product.firstImage}}" alt="Product Image" class="rounded" style="width: 80px; height: 80px;">
-                       <!-- Thông tin sản phẩm -->
-                        <div class="ms-3 flex-grow-1">
-                          <h5 class="mb-1 text-primary" th:text="${cartItem.product.name}">Tên Sản Phẩm</h5>
-                          <p class="text-muted mb-1">
-                            Giá: <span th:text="${#numbers.formatDecimal(cartItem.product.price, 0, 'COMMA', 0, 'POINT')}"></span> VND
-                          </p>
+                                <form method="POST" th:action="@{/cart/update}">
+                                    <div class="d-flex align-items-center">
+                                        <label class="me-2">Số lượng:</label>
+                                        <input type="number" name="quantity" class="form-control form-control-sm quantity-input"
+                                               style="width: 80px;" min="1"
+                                               th:value="${cartItem.quantity}"
+                                               th:data-price="${cartItem.product.price}"
+                                               oninput="updateTotalPrice(this)">
 
-                          <!-- Form cập nhật số lượng -->
-                          <form method="POST" th:action="@{/cart/update}">
-                            <div class="d-flex align-items-center">
-                              <label class="me-2">Số lượng:</label>
-                              <input type="number" name="quantity" class="form-control form-control-sm quantity-input"
-                                     style="width: 60px;" min="1"
-                                     th:value="${cartItem.quantity}"
-                                     th:data-price="${cartItem.product.price}"
-                                     oninput="updateTotalPrice(this)">
-
-                              <input type="hidden" name="cartId" th:value="${cartItem.id}">
-                              <button type="submit" class="btn btn-primary btn-sm ms-2">Cập Nhật</button>
+                                        <input type="hidden" name="cartId" th:value="${cartItem.id}">
+                                        <button type="submit" class="btn btn-primary btn-sm ms-2">Cập Nhật</button>
+                                    </div>
+                                </form>
                             </div>
-                          </form>
+
+                            <p class="fw-bold text-end me-4">
+                                Tổng: <span class="total-price"
+                                            th:text="${#numbers.formatDecimal(cartItem.product.price * cartItem.quantity, 0, 'COMMA', 0, 'POINT')} + ' VND'"></span>
+                            </p>
+
+                            <form method="POST" th:action="@{/cart/delete}">
+                                <input type="hidden" name="cartId" th:value="${cartItem.id}">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Xóa</button>
+                            </form>
                         </div>
+                    </th:block>
 
-                        <!-- Tổng giá -->
-                        <p class="fw-bold text-end me-4">
-                          Tổng: <span class="total-price"
-                                      th:data-price="${cartItem.product.price * cartItem.quantity}"
-                                      th:text="${#numbers.formatDecimal(cartItem.product.price * cartItem.quantity, 0, 'COMMA', 0, 'POINT')}"></span> VND
-                        </p>
-
-                        <!-- Form xóa sản phẩm -->
-                        <form method="POST" th:action="@{/cart/delete}">
-                          <input type="hidden" name="cartId" th:value="${cartItem.id}">
-                          <button type="submit" class="btn btn-outline-danger btn-sm">Xóa</button>
-                        </form>
-                      </div>
-                  </th:block>
+                    <div th:if="${cartItems == null or cartItems.isEmpty()}" class="alert alert-info">
+                        Your cart is empty.
+                    </div>
                 </div>
 
-                <!-- Nút tiếp tục -->
+                <div class="cart-footer d-flex justify-content-end align-items-center py-3">
+                    <h4 class="fw-bold">
+                        Tổng Cộng: <span id="totalAmount">0</span> VND </h4>
+                </div>
                 <div class="d-flex justify-content-end mt-3">
-                    <a href="/" class="btn btn-success btn-lg">Thanh Toán</a>
+                    <a th:href="@{/cart/checkout}" class="btn btn-success btn-lg" id = "checkout-btn">Checkout</a>
                 </div>
-            </div>
 
-
-        </div>
-
-        <footer th:replace="/user/layout/footer :: footer"></footer>
-    </div>
-
-    <!-- Custom template | don't include it in your project! -->
-    <div class="custom-template">
-        <div class="title">Settings</div>
-        <div class="custom-content">
-            <div class="switcher">
-                <div class="switch-block">
-                    <h4>Logo Header</h4>
-                    <div class="btnSwitch">
-                        <button
-                                type="button"
-                                class="selected changeLogoHeaderColor"
-                                data-color="dark"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="blue"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="purple"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="light-blue"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="green"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="orange"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="red"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="white"
-                        ></button>
-                        <br/>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="dark2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="blue2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="purple2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="light-blue2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="green2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="orange2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeLogoHeaderColor"
-                                data-color="red2"
-                        ></button>
-                    </div>
-                </div>
-                <div class="switch-block">
-                    <h4>Navbar Header</h4>
-                    <div class="btnSwitch">
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="dark"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="blue"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="purple"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="light-blue"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="green"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="orange"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="red"
-                        ></button>
-                        <button
-                                type="button"
-                                class="selected changeTopBarColor"
-                                data-color="white"
-                        ></button>
-                        <br/>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="dark2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="blue2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="purple2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="light-blue2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="green2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="orange2"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeTopBarColor"
-                                data-color="red2"
-                        ></button>
-                    </div>
-                </div>
-                <div class="switch-block">
-                    <h4>Sidebar</h4>
-                    <div class="btnSwitch">
-                        <button
-                                type="button"
-                                class="changeSideBarColor"
-                                data-color="white"
-                        ></button>
-                        <button
-                                type="button"
-                                class="selected changeSideBarColor"
-                                data-color="dark"
-                        ></button>
-                        <button
-                                type="button"
-                                class="changeSideBarColor"
-                                data-color="dark2"
-                        ></button>
-                    </div>
-                </div>
             </div>
         </div>
-        <div class="custom-toggle">
-            <i class="icon-settings"></i>
-        </div>
+
+        <footer th:replace="~{user/layout/footer :: footer}"></footer>
     </div>
-    <!-- End Custom template -->
 </div>
+
 <script>
-  function updateTotal() {
-    let total = 0;
-    let checkboxes = document.querySelectorAll('.cart-checkbox');
+    function updateTotalPrice(input) {
+        let quantity = parseInt(input.value);
 
-    checkboxes.forEach((checkbox, index) => {
-      if (checkbox.checked) {
-        let totalPriceElement = document.querySelectorAll('.total-price')[index];
-        let price = totalPriceElement.getAttribute('data-price').replace(/,/g, ""); // Xóa dấu phẩy
-        price = parseFloat(price); // Chuyển thành số thực
-
-        if (!isNaN(price)) {
-          total += price;
+        if (isNaN(quantity) || quantity < 1) {
+            quantity = 1;
+            input.value = 1;
         }
-      }
-    });
 
-    // Định dạng số có dấu phẩy
-    let formattedTotal = total.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        let price = parseFloat(input.getAttribute('data-price'));
+        let totalPriceElement = input.closest('.cart-item').querySelector('.total-price');
 
-    // Hiển thị tổng tiền
-    document.getElementById("totalAmount").innerText = formattedTotal;
-  }
-</script>
-
-<script>
-  function updateTotalPrice(input) {
-    let quantity = parseInt(input.value);
-
-    if (isNaN(quantity) || quantity < 1) {
-      quantity = 1;
-      input.value = 1;
-    }
-
-    let price = parseFloat(input.getAttribute('data-price'));
-    let totalPriceElement = input.closest('.cart-item').querySelector('.total-price');
-
-    if (isNaN(price)) {
-      console.error("Lỗi: Giá sản phẩm không hợp lệ!", price);
-      return;
-    }
-
-    let newTotal = price * quantity;
-    totalPriceElement.innerText = newTotal.toLocaleString('vi-VN'); // Hiển thị số có dấu phẩy
-
-    updateTotal(); // Cập nhật tổng tiền giỏ hàng
-  }
-
-  function updateTotal() {
-    let total = 0;
-    document.querySelectorAll('.cart-item').forEach(item => {
-      let checkbox = item.querySelector('.cart-checkbox');
-      if (checkbox && checkbox.checked) {
-        let totalPriceText = item.querySelector('.total-price').innerText.replace(/\D/g, ""); // Xóa ký tự không phải số
-        let totalPrice = parseFloat(totalPriceText);
-        if (!isNaN(totalPrice)) {
-          total += totalPrice;
+        if (isNaN(price)) {
+            console.error("Lỗi: Giá sản phẩm không hợp lệ!", price);
+            return;
         }
-      }
+
+        let newTotal = price * quantity;
+        totalPriceElement.innerText = newTotal.toLocaleString('vi-VN');
+        updateTotal(); // Cập nhật tổng tiền giỏ hàng
+    }
+    function updateTotal() {
+        let total = 0;
+        document.querySelectorAll('.cart-item').forEach(item => {
+            let checkbox = item.querySelector('.cart-checkbox');
+            if (checkbox && checkbox.checked) {
+                let totalPriceText = item.querySelector('.total-price').innerText.replace(/\D/g, ""); // Xóa ký tự không phải số
+                let totalPrice = parseFloat(totalPriceText);
+                if (!isNaN(totalPrice)) {
+                    total += totalPrice;
+                }
+            }
+        });
+
+        document.getElementById("totalAmount").innerText = total.toLocaleString('vi-VN') + " VND";
+    }
+    // Update total when checkbox is clicked
+    document.querySelectorAll('.cart-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', updateTotal);
     });
 
-    document.getElementById("totalAmount").innerText = total.toLocaleString('vi-VN') + " VND";
-  }
-
-  // Khi click checkbox cũng cập nhật tổng cộng
-  document.querySelectorAll('.cart-checkbox').forEach(checkbox => {
-    checkbox.addEventListener('change', updateTotal);
-  });
+    // Initial total calculation on page load (important!)
+    updateTotal();
 </script>
 
-
-
-
-<!--   Core JS Files   -->
-<script src="/assets/js/core/jquery-3.7.1.min.js"></script>
-<script src="/assets/js/core/popper.min.js"></script>
-<script src="/assets/js/core/bootstrap.min.js"></script>
-
-<!-- jQuery Scrollbar -->
-<script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-
-<!-- Chart JS -->
-<script src="/assets/js/plugin/chart.js/chart.min.js"></script>
-
-<!-- jQuery Sparkline -->
-<script src="/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
-
-<!-- Chart Circle -->
-<script src="/assets/js/plugin/chart-circle/circles.min.js"></script>
-
-<!-- Datatables -->
-<script src="/assets/js/plugin/datatables/datatables.min.js"></script>
-
-<!-- Bootstrap Notify -->
-<script src="/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
-
-<!-- jQuery Vector Maps -->
-<script src="/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
-<script src="/assets/js/plugin/jsvectormap/world.js"></script>
-
-<!-- Sweet Alert -->
-<script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- Kaiadmin JS -->
-<script src="/assets/js/kaiadmin.min.js"></script>
-
-<!-- Kaiadmin DEMO methods, don't include it in your project! -->
-<script src="/assets/js/setting-demo.js"></script>
-<script src="/assets/js/demo.js"></script>
-<script>
-    $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
-        type: "line",
-        height: "70",
-        width: "100%",
-        lineWidth: "2",
-        lineColor: "#177dff",
-        fillColor: "rgba(23, 125, 255, 0.14)",
-    });
-
-    $("#lineChart2").sparkline([99, 125, 122, 105, 110, 124, 115], {
-        type: "line",
-        height: "70",
-        width: "100%",
-        lineWidth: "2",
-        lineColor: "#f3545d",
-        fillColor: "rgba(243, 84, 93, .14)",
-    });
-
-    $("#lineChart3").sparkline([105, 103, 123, 100, 95, 105, 115], {
-        type: "line",
-        height: "70",
-        width: "100%",
-        lineWidth: "2",
-        lineColor: "#ffa534",
-        fillColor: "rgba(255, 165, 52, .14)",
-    });
-</script>
 </body>
 </html>
