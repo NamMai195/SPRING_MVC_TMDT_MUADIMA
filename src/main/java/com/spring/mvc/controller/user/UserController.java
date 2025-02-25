@@ -1,3 +1,4 @@
+/*
 // UserController.java
 package com.spring.mvc.controller.user;
 
@@ -112,4 +113,4 @@ public class UserController {
 
         return "redirect:/user/profile?error";
     }
-}
+}*/

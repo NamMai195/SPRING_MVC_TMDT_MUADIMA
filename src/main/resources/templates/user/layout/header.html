@@ -268,14 +268,14 @@
                 <li class="nav-item topbar-user dropdown hidden-caret">
                     <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
                         <div class="avatar-sm">
-                            <img th:src="${session.loggedInSeller != null ? '/uploads/'+session.loggedInSeller.image : 'https://th.bing.com/th/id/OIP.b0OQvXXKNtK8qw6EU0MaKQHaFj?w=271&h=203&c=7&r=0&o=5&dpr=1.6&pid=1.7'}"
+                            <img th:src="${session.loggedInUser != null ? '/uploads/'+session.loggedInUser.image : 'https://th.bing.com/th/id/OIP.b0OQvXXKNtK8qw6EU0MaKQHaFj?w=271&h=203&c=7&r=0&o=5&dpr=1.6&pid=1.7'}"
                                  class="avatar-img rounded"/>
 
                         </div>
                         <span class="profile-username">
-                            <span class="op-7 fw-bold">Shop,</span>
-                            <p th:if="${session.loggedInSeller != null}"><span class="fw-bold text-success" th:text="${session.loggedInSeller.nameShop}"></span>!</p>
-                                <p th:unless="${session.loggedInSeller != null}">Bạn chưa đăng nhập!</p>
+                            <p th:if="${session.loggedInUser != null}"><span class="fw-bold text-success"
+                                                                               th:text="${session.loggedInUser.name}"></span>!</p>
+                                <p th:unless="${session.loggedInUser != null}">Bạn chưa đăng nhập!</p>
                     </span>
                     </a>
                     <ul class="dropdown-menu dropdown-user animated fadeIn">
@@ -283,14 +283,14 @@
                             <li>
                                 <div class="user-box">
                                     <div class="avatar-lg">
-                                        <img th:src="${session.loggedInSeller != null ? '/uploads/'+session.loggedInSeller.image : 'https://th.bing.com/th/id/OIP.6fYhzferp02cows5AXbPEAHaEK?w=328&h=184&c=7&r=0&o=5&dpr=1.6&pid=1.7'}"
+                                        <img th:src="${session.loggedInUser != null ? '/uploads/'+session.loggedInUser.image : 'https://th.bing.com/th/id/OIP.6fYhzferp02cows5AXbPEAHaEK?w=328&h=184&c=7&r=0&o=5&dpr=1.6&pid=1.7'}"
                                              class="avatar-img rounded"/>
                                     </div>
                                     <div class="u-text">
-                                        <p class="text-muted" th:if="${session.loggedInSeller != null}">
-                                            <span th:text="${session.loggedInSeller.email}"></span>
+                                        <p class="text-muted" th:if="${session.loggedInUser != null}">
+                                            <span th:text="${session.loggedInUser.email}"></span>
                                         </p>
-                                        <p class="text-muted" th:unless="${session.loggedInSeller != null}">
+                                        <p class="text-muted" th:unless="${session.loggedInUser != null}">
                                             Chưa đăng nhập
                                         </p>
                                         <a href="/profile" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
@@ -299,13 +299,15 @@
                             </li>
                             <li>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/profile">My Profile</a>
-                                <a class="dropdown-item" href="/sellerlogin">Login</a>
-                                <a class="dropdown-item" href="/registerseller">Register</a>
+                                <a class="dropdown-item" href="">My Profile</a>
+                                <a class="dropdown-item" href="/login">Login</a>
+                                <a class="dropdown-item" href="">Register</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/change-password">Change Password</a>
+                                <a class="dropdown-item" href="">Change Password</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/sellerlogout">Logout</a>
+                                <a class="dropdown-item" href="/cart">Cart</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="/logout">Logout</a>
                             </li>
                         </div>
                     </ul>

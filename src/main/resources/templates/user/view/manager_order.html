@@ -2,59 +2,6 @@
 <html lang="en">
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="/seller/layout/head :: head"></head>
-<style>
-    .login-card {
-        background-color: white;
-        border-radius: 20px;
-        padding: 40px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        width: 100%;
-        max-width: 400px;
-    }
-
-    .login-card h2 {
-        font-weight: bold;
-        color: #007bff;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-    .form-label {
-        font-weight: bold;
-    }
-    .form-control {
-        border-radius: 10px;
-    }
-
-    .btn-login {
-        background-color: #007bff;
-        color: white;
-        border-radius: 10px;
-        transition: all 0.3s ease-in-out;
-    }
-
-    .btn-login:hover {
-        background-color: #0056b3;
-        transform: scale(1.05);
-    }
-
-    .form-check-label {
-        font-size: 0.9rem;
-    }
-
-    .forgot-password {
-        display: block;
-        text-align: center;
-        font-size: 0.9rem;
-        color: #6c757d;
-        margin-top: 10px;
-        text-decoration: none;
-    }
-
-    .forgot-password:hover {
-        color: #007bff;
-    }
-</style>
-
 <body>
 <div class="wrapper">
     <!-- Sidebar -->
@@ -65,32 +12,78 @@
         <div th:replace="/seller/layout/header :: header"></div>
 
         <div class="container">
-            <div class="container py-5 d-flex justify-content-center align-items-center">
-                <div class="login-card " >
-                    <h2>Đăng Nhập</h2>
-                    <!--thông báo nếu lỗi -->
-                    <!--<div th:if="${error}" style="color: red;">
-                        <p th:text="${error}"></p>
-                    </div>-->
-
-                    <form id="loginForm" action="/loginseller" method="post">
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email Đăng Nhập</label>
-                            <input type="email" class="form-control" id="email" name="email" placeholder="email..." required>
+            <div class="page-inner">
+                <div class="container mt-5">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <input type="text" class="form-control" placeholder="Search product">
                         </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Mật Khẩu</label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Nhập mật khẩu" required>
-                        </div>
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="rememberMe">
-                            <label class="form-check-label" for="rememberMe">Ghi nhớ đăng nhập</label>
-                        </div>
-                        <button type="submit" class="btn btn-login w-100">Đăng Nhập</button>
-                    </form>
-                    <a href="/forgot-password" class="forgot-password text-primary fw-bold">Quên mật khẩu?</a>
+                    </div>
+                    <table class="table table-striped">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">NAME</th>
+                            <th scope="col">PRICE</th>
+                            <th scope="col">QUANTITY</th>
+                            <th scope="col">STATUS</th>
+                            <th scope="col">ACTIONS</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Áo thun tay lỡ nam nữ, áo phông rộng unisex Sani</td>
+                            <td>100000</td>
+                            <td>100</td>
+                            <td>Đợi duyệt</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal">Edit</button>
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        <!-- Add more product rows as needed -->
+                        </tbody>
+                    </table>
                 </div>
-            </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editModalLabel">Edit Product</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="product-name">Name</label>
+                                        <input type="text" class="form-control" id="product-name" value="Áo thun tay lỡ nam nữ, áo phông rộng unisex Sani">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="product-price">Price</label>
+                                        <input type="text" class="form-control" id="product-price" value="165000.0">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="product-quantity">Quantity</label>
+                                        <input type="text" class="form-control" id="product-quantity" value="100">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="product-category">Category</label>
+                                        <input type="text" class="form-control" id="product-category" value="Áo thun">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                </div>
         </div>
 
         <footer th:replace="/seller/layout/footer :: footer"></footer>
@@ -291,27 +284,6 @@
     </div>
     <!-- End Custom template -->
 </div>
-<!-- Import SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Lấy thông báo lỗi từ Flash Attribute
-        let errorMessage = "[[${error}]]";
-
-        if (errorMessage && errorMessage !== "null") {
-            Swal.fire({
-                title: "Lỗi!",
-                text: errorMessage,
-                icon: "error",
-                confirmButtonText: "OK"
-            }).then(() => {
-                window.history.replaceState(null, null, window.location.pathname);
-            });
-        }
-    });
-</script>
-
 <!--   Core JS Files   -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

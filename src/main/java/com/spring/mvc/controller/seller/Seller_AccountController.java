@@ -81,7 +81,7 @@ public class Seller_AccountController {
     }
 
 
-    @PostMapping("/login")
+    @PostMapping("/loginseller")
     public String login(@RequestParam("email") String email,
                         @RequestParam("password") String password,
                         HttpSession session, RedirectAttributes redirectAttributes) {
@@ -109,7 +109,7 @@ public class Seller_AccountController {
     }
 
     // logout
-    @GetMapping("/logout")
+    @GetMapping("/sellerlogout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/sellerlogin";

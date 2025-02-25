@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/seller/layout/head :: head"></head>
+<head th:replace="/user/layout/head :: head"></head>
 <style>
     .login-card {
         background-color: white;
@@ -58,22 +58,18 @@
 <body>
 <div class="wrapper">
     <!-- Sidebar -->
-    <div th:replace="/seller/layout/Sidebar :: sidebar"></div>
+    <div th:replace="/user/layout/Sidebar :: sidebar"></div>
     <!-- End Sidebar -->
 
     <div class="main-panel">
-        <div th:replace="/seller/layout/header :: header"></div>
+        <div th:replace="/user/layout/header :: header"></div>
 
         <div class="container">
             <div class="container py-5 d-flex justify-content-center align-items-center">
+
                 <div class="login-card " >
                     <h2>Đăng Nhập</h2>
-                    <!--thông báo nếu lỗi -->
-                    <!--<div th:if="${error}" style="color: red;">
-                        <p th:text="${error}"></p>
-                    </div>-->
-
-                    <form id="loginForm" action="/loginseller" method="post">
+                    <form id="loginForm" action="/login" method="post">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email Đăng Nhập</label>
                             <input type="email" class="form-control" id="email" name="email" placeholder="email..." required>
@@ -88,12 +84,13 @@
                         </div>
                         <button type="submit" class="btn btn-login w-100">Đăng Nhập</button>
                     </form>
-                    <a href="/forgot-password" class="forgot-password text-primary fw-bold">Quên mật khẩu?</a>
+                    <a href="#" class="forgot-password text-primary fw-bold">Quên mật khẩu?</a>
                 </div>
+
             </div>
         </div>
 
-        <footer th:replace="/seller/layout/footer :: footer"></footer>
+        <footer th:replace="/user/layout/footer :: footer"></footer>
     </div>
 
     <!-- Custom template | don't include it in your project! -->

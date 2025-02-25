@@ -1,5 +1,6 @@
 package com.spring.mvc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
@@ -17,6 +18,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @JsonIgnore  // ⚠️ Tránh vòng lặp khi serialize
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "seller_id")
@@ -47,7 +49,7 @@ public class Product {
     private List<Cart> carts;
 
     // Phương thức lấy ảnh đầu tiên từ chuỗi JSON
-   /* public String getFirstImage() {
+    public String getFirstImage() {
         if (this.firstImage == null) { // Nếu chưa có giá trị
             this.firstImage = extractFirstImage();
         }
@@ -65,5 +67,5 @@ public class Product {
             e.printStackTrace();
         }
         return "default.png"; // Trả về ảnh mặc định nếu không có ảnh
-    }*/
+    }
 }

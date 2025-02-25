@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/seller/layout/head :: head"></head>
+<body>
+<div class="wrapper">
+  <!-- Sidebar -->
+  <div th:replace="/seller/layout/Sidebar :: sidebar"></div>
+  <!-- End Sidebar -->
+
+  <div class="main-panel">
+    <div th:replace="/seller/layout/header :: header"></div>
+
+    <div class="container">
+      <div class="page-inner">
+        <div class="container mt-5">
+          <div class="row mb-3">
+            <form th:action="@{/search}" method="get">
+              <div class="col">
+                <input type="text" name="query" class="form-control v-50" placeholder="Search product">
+                <button type="submit" class="btn btn-info mt-1">Search</button>
+              </div>
+            </form>
+
+          </div>
+          <table class="table table-striped">
+            <thead class="thead-light">
+            <tr>
+              <th scope="col">NAME</th>
+              <th scope="col">PRICE</th>
+              <th scope="col">QUANTITY</th>
+              <th scope="col">STATUS</th>
+              <th scope="col">ACTIONS</th>
+            </tr>
+            </thead>
+            <!--dùng vòng lặp để hiển thị tất cả sản phẩm-->
+            <tbody>
+            <tr th:each="product : ${products}">
+              <td th:text="${product.name}"></td>
+              <td th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')} + ' VNĐ'"></td>
+              <td th:text="${product.quantity}"></td>
+              <td th:text="${product.status}"></td>
+              <td>
+                <!-- Nút Edit -->
+                <button class="btn btn-warning btn-sm edit-btn"
+                        data-toggle="modal" data-target="#editModal"
+                        th:data-id="${product.id}"
+                        th:data-name="${product.name}"
+                        th:data-price="${product.price}"
+                        th:data-quantity="${product.quantity}"
+                        th:data-describe="${product.describe}"
+                        th:data-images="${product.image}"> <!-- JSON chứa danh sách ảnh -->
+                  Edit
+                </button>
+
+                <!-- Nút Delete -->
+                <button class="btn btn-danger btn-sm delete-btn"
+                        th:data-id="${product.id}">
+                  Delete
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Modal để hiển thị chi tiết sản phẩm khi chọn edit ở từng sản phẩm -->
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Chỉnh sửa sản phẩm</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <form action="/editProduct" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                  <input type="hidden" id="product-id" name="id">
+
+                  <div class="form-group">
+                    <label for="product-name">Tên sản phẩm</label>
+                    <input type="text" class="form-control" id="product-name" name="name" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="product-price">Giá</label>
+                    <input type="number" class="form-control" id="product-price" name="price" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="product-quantity">Số lượng</label>
+                    <input type="number" class="form-control" id="product-quantity" name="quantity" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="description">Mô tả</label>
+                    <textarea class="form-control" id="description" name="describe" rows="3"></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="new-images">Hình ảnh mới (tùy chọn)</label>
+                    <input type="file" class="form-control-file" id="new-images" name="images" multiple>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Hình ảnh hiện tại</label>
+                    <div id="current-images"></div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                  <button type="submit" class="btn btn-primary">Cập nhật</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <footer th:replace="/seller/layout/footer :: footer"></footer>
+  </div>
+
+  <!-- Custom template | don't include it in your project! -->
+  <div class="custom-template">
+    <div class="title">Settings</div>
+    <div class="custom-content">
+      <div class="switcher">
+        <div class="switch-block">
+          <h4>Logo Header</h4>
+          <div class="btnSwitch">
+            <button
+                    type="button"
+                    class="selected changeLogoHeaderColor"
+                    data-color="dark"
+            ></button>
+            <button
+                    type="button"
+                    class="changeLogoHeaderColor"
+                    data-color="blue"
+            ></button>
+            <button
+                    type="button"
+                    class="changeLogoHeaderColor"
+                    data-color="purple"
+            ></button>
+            <button
+                    type="button"
+                    class="changeLogoHeaderColor"
+                    data-color="light-blue"
+            ></button>
+            <button
+                    type="button"
+                    class="changeLogoHeaderColor"
+                    data-color="green"
+            ></button>
+            <button
+                    type="button"
+                    class="changeLogoHeaderColor"
+                    data-color="orange"
+            ></button>
+            <button
+                    type="button"
+                    class="changeLogoHeaderColor"
+                    data-color="red"
+            ></button>
+            <button
+                    type="button"
+                    class="changeLogoHeaderColor"
+                    data-color="white"
+            ></button>
+            <br />
+            <button
+                    type="button"
+                    class="changeLogoHeaderColor"
+                    data-color="dark2"
+            ></button>
+            <button
+                    type="button"
+                    class="changeLogoHeaderColor"
+                    data-color="blue2"
+            ></button>
+            <button
+                    type="button"
+                    class="changeLogoHeaderColor"
+                    data-color="purple2"
+            ></button>
+            <button
+                    type="button"
+                    class="changeLogoHeaderColor"
+                    data-color="light-blue2"
+            ></button>
+            <button
+                    type="button"
+                    class="changeLogoHeaderColor"
+                    data-color="green2"
+            ></button>
+            <button
+                    type="button"
+                    class="changeLogoHeaderColor"
+                    data-color="orange2"
+            ></button>
+            <button
+                    type="button"
+                    class="changeLogoHeaderColor"
+                    data-color="red2"
+            ></button>
+          </div>
+        </div>
+        <div class="switch-block">
+          <h4>Navbar Header</h4>
+          <div class="btnSwitch">
+            <button
+                    type="button"
+                    class="changeTopBarColor"
+                    data-color="dark"
+            ></button>
+            <button
+                    type="button"
+                    class="changeTopBarColor"
+                    data-color="blue"
+            ></button>
+            <button
+                    type="button"
+                    class="changeTopBarColor"
+                    data-color="purple"
+            ></button>
+            <button
+                    type="button"
+                    class="changeTopBarColor"
+                    data-color="light-blue"
+            ></button>
+            <button
+                    type="button"
+                    class="changeTopBarColor"
+                    data-color="green"
+            ></button>
+            <button
+                    type="button"
+                    class="changeTopBarColor"
+                    data-color="orange"
+            ></button>
+            <button
+                    type="button"
+                    class="changeTopBarColor"
+                    data-color="red"
+            ></button>
+            <button
+                    type="button"
+                    class="selected changeTopBarColor"
+                    data-color="white"
+            ></button>
+            <br />
+            <button
+                    type="button"
+                    class="changeTopBarColor"
+                    data-color="dark2"
+            ></button>
+            <button
+                    type="button"
+                    class="changeTopBarColor"
+                    data-color="blue2"
+            ></button>
+            <button
+                    type="button"
+                    class="changeTopBarColor"
+                    data-color="purple2"
+            ></button>
+            <button
+                    type="button"
+                    class="changeTopBarColor"
+                    data-color="light-blue2"
+            ></button>
+            <button
+                    type="button"
+                    class="changeTopBarColor"
+                    data-color="green2"
+            ></button>
+            <button
+                    type="button"
+                    class="changeTopBarColor"
+                    data-color="orange2"
+            ></button>
+            <button
+                    type="button"
+                    class="changeTopBarColor"
+                    data-color="red2"
+            ></button>
+          </div>
+        </div>
+        <div class="switch-block">
+          <h4>Sidebar</h4>
+          <div class="btnSwitch">
+            <button
+                    type="button"
+                    class="changeSideBarColor"
+                    data-color="white"
+            ></button>
+            <button
+                    type="button"
+                    class="selected changeSideBarColor"
+                    data-color="dark"
+            ></button>
+            <button
+                    type="button"
+                    class="changeSideBarColor"
+                    data-color="dark2"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="custom-toggle">
+      <i class="icon-settings"></i>
+    </div>
+  </div>
+  <!-- End Custom template -->
+</div>
+<!-- Thêm thư viện SweetAlert2 -->
+<script>
+  document.querySelectorAll('.edit-btn').forEach(button => {
+    button.addEventListener('click', function () {
+      // Load dữ liệu vào form
+      document.getElementById('product-id').value = this.getAttribute('data-id');
+      document.getElementById('product-name').value = this.getAttribute('data-name');
+      document.getElementById('product-price').value = this.getAttribute('data-price');
+      document.getElementById('product-quantity').value = this.getAttribute('data-quantity');
+      document.getElementById('description').value = this.getAttribute('data-describe');
+
+      // Xử lý ảnh JSON
+      let currentImagesContainer = document.getElementById('current-images');
+      currentImagesContainer.innerHTML = ''; // Xóa ảnh cũ
+
+      let imageJson = this.getAttribute('data-images'); // Lấy dữ liệu ảnh JSON
+
+      if (imageJson && imageJson.trim() !== '') {  // Kiểm tra nếu chuỗi JSON không rỗng
+        try {
+          // Định dạng lại JSON nếu cần (loại bỏ dấu ngoặc kép dư thừa)
+          let cleanedJson = imageJson.replace(/&quot;/g, '"');
+          let imagePaths = JSON.parse(cleanedJson); // Chuyển JSON thành mảng ảnh
+
+          if (Array.isArray(imagePaths)) {
+            imagePaths.forEach(imgPath => {
+              if (imgPath.trim() !== '') {
+                let imgElement = document.createElement('img');
+                imgElement.src = '/uploads/'+imgPath.trim(); // Gán đường dẫn ảnh
+                imgElement.style.width = '100px';
+                imgElement.style.marginRight = '10px';
+                imgElement.style.border = '1px solid #ddd';
+                imgElement.style.borderRadius = '5px';
+                imgElement.style.padding = '5px';
+                currentImagesContainer.appendChild(imgElement);
+              }
+            });
+          } else {
+            console.error("Lỗi: JSON không phải là mảng hợp lệ");
+          }
+        } catch (error) {
+          console.error("Lỗi khi đọc JSON ảnh: ", error);
+        }
+      }
+    });
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  document.querySelectorAll('.delete-btn').forEach(button => {
+    button.addEventListener('click', function () {
+      let productId = this.getAttribute('data-id');
+
+      Swal.fire({
+        title: "Bạn có chắc muốn xóa?",
+        text: "Hành động này không thể hoàn tác!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Xóa ngay"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch('/deleteProduct', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `id=${productId}`
+          })
+                  .then(response => response.text())
+                  .then(() => {
+                    Swal.fire("Đã xóa!", "Sản phẩm đã được xóa thành công.", "success")
+                            .then(() => location.reload());  // Reload sau khi xóa thành công
+                  })
+                  .catch(error => console.error("Lỗi khi xóa sản phẩm:", error));
+        }
+      });
+    });
+  });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Hiển thị thông báo thành công
+    const successMessage = "[[${successMessage}]]";
+    if (successMessage !== "null" && successMessage.trim() !== "") {
+      Swal.fire({
+        icon: 'success',
+        title: 'Thành công!',
+        text: successMessage,
+        showConfirmButton: false,
+        timer: 3000
+      });
+    }
+
+    // Hiển thị thông báo lỗi
+    const errorMessage = "[[${errorMessage}]]";
+    if (errorMessage !== "null" && errorMessage.trim() !== "") {
+      Swal.fire({
+        icon: 'error',
+        title: 'Lỗi!',
+        text: errorMessage,
+        showConfirmButton: false,
+        timer: 3000
+      });
+    }
+  });
+</script>
+<!--   Core JS Files   -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="/assets/js/core/jquery-3.7.1.min.js"></script>
+<script src="/assets/js/core/popper.min.js"></script>
+<script src="/assets/js/core/bootstrap.min.js"></script>
+
+<!-- jQuery Scrollbar -->
+<script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+
+<!-- Chart JS -->
+<script src="/assets/js/plugin/chart.js/chart.min.js"></script>
+
+<!-- jQuery Sparkline -->
+<script src="/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+
+<!-- Chart Circle -->
+<script src="/assets/js/plugin/chart-circle/circles.min.js"></script>
+
+<!-- Datatables -->
+<script src="/assets/js/plugin/datatables/datatables.min.js"></script>
+
+<!-- Bootstrap Notify -->
+<script src="/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<!-- jQuery Vector Maps -->
+<script src="/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
+<script src="/assets/js/plugin/jsvectormap/world.js"></script>
+
+<!-- Sweet Alert -->
+<script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+
+<!-- Kaiadmin JS -->
+<script src="/assets/js/kaiadmin.min.js"></script>
+
+<!-- Kaiadmin DEMO methods, don't include it in your project! -->
+<script src="/assets/js/setting-demo.js"></script>
+<script src="/assets/js/demo.js"></script>
+<script>
+  $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
+    type: "line",
+    height: "70",
+    width: "100%",
+    lineWidth: "2",
+    lineColor: "#177dff",
+    fillColor: "rgba(23, 125, 255, 0.14)",
+  });
+
+  $("#lineChart2").sparkline([99, 125, 122, 105, 110, 124, 115], {
+    type: "line",
+    height: "70",
+    width: "100%",
+    lineWidth: "2",
+    lineColor: "#f3545d",
+    fillColor: "rgba(243, 84, 93, .14)",
+  });
+
+  $("#lineChart3").sparkline([105, 103, 123, 100, 95, 105, 115], {
+    type: "line",
+    height: "70",
+    width: "100%",
+    lineWidth: "2",
+    lineColor: "#ffa534",
+    fillColor: "rgba(255, 165, 52, .14)",
+  });
+</script>
+</body>
+</html>
