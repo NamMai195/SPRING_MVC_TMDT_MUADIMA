@@ -1,40 +1,49 @@
 package com.spring.mvc.service.user;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.mvc.domain.Product;
 import com.spring.mvc.repository.user.User_ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 public class ProductService {
     @Autowired
     private User_ProductRepository productRepository;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
-    public List<Product> getActivePhonesAndComputers() {
-        return productRepository.findTop6ByProductTypeIdAndStatus(2L, "Hoạt động").stream()
-                .peek(product -> product.setImage(getFirstImage(product.getImage())))
-                .collect(Collectors.toList());
+    public Optional<Product> getProductById(Long id) {
+        return productRepository.findById(id);
     }
-    public String getFirstImage(String jsonImages) {
-        try {
-            List<String> images = objectMapper.readValue(jsonImages, List.class);
-            String firstImage = images.isEmpty() ? "/uploads/default.jpg" : images.get(0);
-            return firstImage;
-        } catch (JsonProcessingException e) {
-            return "/uploads/default.jpg";
+    public List<Product> getProductsByType(Long typeId) {
+        return productRepository.findByProductTypeIdAndStatus(typeId, "Hoạt động");
+    }
+    public List<Product> getActiveProducts() {
+        List<Product> products = productRepository.findByStatus("Hoạt động");
+        setFirstImageForProducts(products);
+        return products;
+    }
+
+    private void setFirstImageForProducts(List<Product> products) {
+        for (Product product : products) {
+            product.setImage(getFirstImageFromJson(product.getImage()));
         }
     }
 
-    public Product getProductById(Long id) {
-        return productRepository.findById(id).orElse(null);
+    private String getFirstImageFromJson(String imageJson) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(imageJson);
+            if (jsonNode.isArray() && jsonNode.size() > 0) {
+                return jsonNode.get(0).asText(); // Lấy ảnh đầu tiên
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "default.png"; // Ảnh mặc định nếu không có ảnh
     }
-
-
 }
+
 
