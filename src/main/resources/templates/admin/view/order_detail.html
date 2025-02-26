@@ -22,7 +22,7 @@
                             <div class="card-body">
                                 <p><b>Khách hàng:</b> <span th:text="${order.user.name}"></span></p>
                                 <p><b>Ngày tạo:</b> <span th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}"></span></p>
-                                <p><b>Tổng giá trị:</b> <span th:text="${order.totalAmount}"></span></p>
+                                <p><b>Tổng giá trị:</b> <span th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 2, 'POINT')}"></span></p>
                                 <p><b>Trạng thái:</b> <span th:text="${order.status? 'Hoàn thành': 'Chờ xử lý'}"></span></p>
 
                                 <h4>Danh sách sản phẩm</h4>
@@ -39,8 +39,8 @@
                                     <tr th:each="orderItem: ${order.orderItems}">
                                         <td th:text="${orderItem.product.name}"></td>
                                         <td th:text="${orderItem.quantity}"></td>
-                                        <td th:text="${orderItem.price}"></td>
-                                        <td th:text="${orderItem.subtotal}"></td>
+                                        <td th:text="${#numbers.formatDecimal(orderItem.price, 0, 'COMMA', 2, 'POINT')}"></td>
+                                        <td th:text="${#numbers.formatDecimal(orderItem.subtotal, 0, 'COMMA', 2, 'POINT')}"></td>
                                     </tr>
                                     </tbody>
                                 </table>

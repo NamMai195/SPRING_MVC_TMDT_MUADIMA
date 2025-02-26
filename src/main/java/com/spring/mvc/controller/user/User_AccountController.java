@@ -1,7 +1,6 @@
 package com.spring.mvc.controller.user;
 
 
-import com.spring.mvc.domain.Seller;
 import com.spring.mvc.domain.User;
 
 import com.spring.mvc.repository.user.User_UserRepository;
@@ -9,6 +8,8 @@ import com.spring.mvc.service.seller.Seller_EmailService;
 import com.spring.mvc.service.user.User_LoginService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +24,10 @@ import java.util.Optional;
 import java.util.Random;
 
 @Controller
-public class User_LoginController {
+public class User_AccountController {
+
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     @Autowired
     private User_LoginService userService;
 
@@ -38,13 +42,14 @@ public class User_LoginController {
     public String login(@RequestParam("email") String email,
                         @RequestParam("password") String password,
                         HttpSession session, RedirectAttributes redirectAttributes) {
+
         Optional<User> userOptional = userRepository.findByEmail(email);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
 
-            if (user.getPassword().equals(password)) {
+            if (passwordEncoder.matches(password, user.getPassword())) { // Kiểm tra mật khẩu đã mã hóa
                 session.setAttribute("loggedInUser", user);
-                return "redirect:/"; //đăng nhập xong về trang
+                return "redirect:/";
             } else {
                 redirectAttributes.addFlashAttribute("error", "Mật khẩu không đúng!");
             }
@@ -53,6 +58,7 @@ public class User_LoginController {
         }
         return "redirect:/login";
     }
+
 
     // logout
     @GetMapping("/logout")
@@ -85,6 +91,7 @@ public class User_LoginController {
             redirectAttributes.addFlashAttribute("error", "Email đã tồn tại!");
             return "redirect:/registeruser";
         }
+
         if (userRepository.findBySdt(sdt).isPresent()) {
             redirectAttributes.addFlashAttribute("error", "Số điện thoại đã tồn tại!");
             return "redirect:/registeruser";
@@ -92,15 +99,16 @@ public class User_LoginController {
 
         User newUser = new User();
         newUser.setName(name);
-        newUser.setPassword(password);
+        newUser.setPassword(passwordEncoder.encode(password)); // Mã hóa mật khẩu
         newUser.setEmail(email);
         newUser.setSdt(sdt);
         newUser.setStatus(true);
         userRepository.save(newUser);
 
-        redirectAttributes.addFlashAttribute("success", "Đăng ký thành công!.");
+        redirectAttributes.addFlashAttribute("success", "Đăng ký thành công!");
         return "redirect:/registeruser";
     }
+
 
 
     // edit profile
@@ -187,25 +195,44 @@ public class User_LoginController {
         return "user/view/forgotpass_user";
     }
 
+    private String generateRandomPassword() {
+        int length = 8;
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$!";
+        Random random = new Random();
+        StringBuilder password = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            password.append(chars.charAt(random.nextInt(chars.length())));
+        }
+        return password.toString();
+    }
+
     @PostMapping("/forgotpassword")
     public String processForgotPassword(@RequestParam("email") String email, Model model) {
         Optional<User> userOptional = userRepository.findByEmail(email);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            String password = user.getPassword();
 
+            // 1️⃣ Tạo mật khẩu tạm thời
+            String tempPassword = generateRandomPassword();
+            String encodedPassword = passwordEncoder.encode(tempPassword);
+
+            // 2️⃣ Cập nhật mật khẩu đã mã hóa vào database
+            user.setPassword(encodedPassword);
+            userRepository.save(user);
+
+            // 3️⃣ Gửi email chứa mật khẩu mới
             String subject = "Khôi phục mật khẩu";
-            String message = "Mật khẩu của bạn là: " + password;
-
+            String message = "Mật khẩu tạm thời của bạn là: " + tempPassword +
+                    ". Vui lòng đăng nhập và đổi mật khẩu ngay.";
             sellerEmailService.sendEmail(email, subject, message);
 
-            model.addAttribute("success", "Mật khẩu đã được gửi đến email của bạn!");
+            model.addAttribute("success", "Mật khẩu tạm thời đã được gửi đến email của bạn!");
         } else {
             model.addAttribute("error", "Email không tồn tại trong hệ thống!");
         }
-
         return "user/view/forgotpass_user";
     }
+
 
 
 
@@ -247,11 +274,10 @@ public class User_LoginController {
 
     // Xác nhận OTP và đổi mật khẩu
     @PostMapping("/confirmchangepassword")
-    public String confirmChangePassword(
-            @RequestParam("otp") int enteredOtp,
-            @RequestParam("newPassword") String newPassword,
-            HttpSession session,
-            RedirectAttributes redirectAttributes) {
+    public String confirmChangePassword(@RequestParam("otp") int enteredOtp,
+                                        @RequestParam("newPassword") String newPassword,
+                                        HttpSession session,
+                                        RedirectAttributes redirectAttributes) {
 
         Integer sessionOtp = (Integer) session.getAttribute("otp");
         User user = (User) session.getAttribute("loggedInUser");
@@ -262,19 +288,19 @@ public class User_LoginController {
 
         if (sessionOtp == null || enteredOtp != sessionOtp) {
             redirectAttributes.addFlashAttribute("error", "Mã OTP không đúng. Vui lòng thử lại!");
-            return "redirect:/change-password";
+            return "redirect:/changepassword";
         }
 
-        // Đổi mật khẩu
-        user.setPassword(newPassword);
+        // Mã hóa mật khẩu trước khi lưu
+        user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
 
-        // Xóa OTP và đăng xuất
         session.removeAttribute("otp");
         session.removeAttribute("loggedInUser");
 
         redirectAttributes.addFlashAttribute("success", "Mật khẩu đã được thay đổi thành công! Vui lòng đăng nhập lại.");
         return "redirect:/login";
     }
+
 
 }
