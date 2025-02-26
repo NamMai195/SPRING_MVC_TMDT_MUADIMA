@@ -41,7 +41,7 @@
                                         <tr th:each="order: ${orders}">
                                             <td th:text="${order.id}"></td>
                                             <td th:text="${order.user.name}"></td>
-                                            <td th:text="${#dates.format(order.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
+                                            <td th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
                                             <td th:text="${order.totalAmount}"></td>
                                             <td th:text="${order.status? 'Hoàn thành': 'Chờ xử lý'}"></td>
                                             <td>

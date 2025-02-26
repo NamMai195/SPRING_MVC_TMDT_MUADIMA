@@ -3,6 +3,7 @@ package com.spring.mvc.service.admin;
 import com.spring.mvc.domain.Product;
 import com.spring.mvc.domain.ProductType;
 import com.spring.mvc.domain.Seller;
+
 import com.spring.mvc.repository.admin.Admin_ProductRepository;
 import com.spring.mvc.repository.admin.Admin_ProductTypeRepository;
 import com.spring.mvc.repository.admin.Admin_SellerRepository;
@@ -12,58 +13,60 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+//No need for streams: import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class Admin_ProductService {
 
     @Autowired
-    private Admin_ProductRepository adminProductRepository;
-
+    private Admin_ProductRepository productRepository;
     @Autowired
-    private Admin_SellerRepository adminSellerRepository;
-
+    private Admin_ProductTypeRepository productTypeRepository;
     @Autowired
-    private Admin_ProductTypeRepository adminProductTypeRepository; // Inject the product type repository
+    private Admin_SellerRepository sellerRepository;
 
-    public List<Product> findAllProducts() {
-        return adminProductRepository.findAll();
+
+    public void saveProduct(Product product) {
+        productRepository.save(product);
     }
 
-    public List<Product> findApprovedProducts() {
-        return adminProductRepository.findByStatus("Hoạt động");
-    }
-
-    public List<Product> findPendingProducts() {
-        return adminProductRepository.findByStatus("Chưa duyệt");
+    @Transactional
+    public void deleteProduct(Long id) {
+        productRepository.deleteById(id);
     }
 
     public Optional<Product> findProductById(Long id) {
-        return adminProductRepository.findById(id);
+        return productRepository.findById(id);
     }
 
-    public Product saveProduct(Product product) {
-        return adminProductRepository.save(product);
+    public List<Product> findApprovedProducts() {
+        return productRepository.findByStatus("Hoạt động"); // Corrected
     }
 
-    public void deleteProduct(Long id) {
-        adminProductRepository.deleteById(id);
+    public List<Product> findPendingProducts() {
+        return productRepository.findByStatus("Chờ duyệt"); // Corrected
+    }
+    @Transactional
+    public void approveProduct(Long id) {
+        productRepository.findById(id).ifPresent(product -> {
+            product.setStatus("Hoạt động"); // Approve the product (set status)
+            productRepository.save(product);
+        });
     }
 
-    public List<Seller> findAllSellers() {
-        return adminSellerRepository.findAll();
+    public Optional<ProductType> findProductTypeById(Long id) {
+        return productTypeRepository.findById(id);
+    }
+
+    public Optional<Seller> findSellerById(Long id) {
+        return sellerRepository.findById(id);
     }
 
     public List<ProductType> findAllProductTypes() {
-        return adminProductTypeRepository.findAll();
+        return productTypeRepository.findAll();
     }
 
-    public void approveProduct(Long id) {
-        Product product = adminProductRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + id));
-        product.setStatus("Hoạt động");
-        adminProductRepository.save(product);
+    public List<Seller> findAllSellers() {
+        return sellerRepository.findAll();  // Or filter, if needed
     }
-
-
 }

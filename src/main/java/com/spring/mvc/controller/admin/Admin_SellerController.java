@@ -1,10 +1,10 @@
-
 package com.spring.mvc.controller.admin;
 
 import com.spring.mvc.domain.Seller;
-import com.spring.mvc.service.admin.Admin_SellerService; // You'll need to create this service
+import com.spring.mvc.service.admin.Admin_SellerService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,56 +16,66 @@ import java.util.Optional;
 public class Admin_SellerController {
 
     @Autowired
-    private Admin_SellerService adminSellerService; // Inject the Seller service
+    private Admin_SellerService adminSellerService;
 
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("seller", new Seller());
-        model.addAttribute("isEditMode", false);
+        model.addAttribute("isEditMode", false);  // Still good practice, even with modal
         return "admin/view/from_seller";
     }
 
     @PostMapping("/save")
     public String saveSeller(@ModelAttribute("seller") Seller seller) {
         adminSellerService.saveSeller(seller);
-        return "redirect:/admin/seller/list";
+        return "redirect:/admin/seller/listNoAccept"; // Redirect to the pending list after saving
     }
 
-    @DeleteMapping("/delete/{id}")
+    @GetMapping("/delete/{id}")
     @Transactional
     public String deleteSeller(@PathVariable("id") Long id) {
         adminSellerService.deleteSeller(id);
-        return "redirect:/admin/seller/list";
+        return "redirect:/admin/seller/listNoAccept"; // Redirect to pending list after delete
     }
+    // No edit form needed
 
-    @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable("id") Long id, Model model) {
-        Optional<Seller> sellerOptional = adminSellerService.findSellerById(id);
-        if (sellerOptional.isPresent()) {
-            model.addAttribute("seller", sellerOptional.get());
-            model.addAttribute("isEditMode", true);
-            return "admin/view/from_seller";
-        } else {
-            // Handle seller not found
-            return "redirect:/admin/seller/list";
-        }
-    }
     @PostMapping("/approve/{id}")
     public String approveSeller(@PathVariable("id") Long id) {
         adminSellerService.approveSeller(id);
-        return "redirect:/admin/seller/listNoAccept";
+        return "redirect:/admin/seller/listNoAccept"; // Redirect to pending list (it will be removed on reload)
     }
 
     @GetMapping("/list")
     public String listSellers(Model model) {
         model.addAttribute("sellers", adminSellerService.findApprovedSellers());
-        model.addAttribute("pendingSellers", adminSellerService.findPendingSellers());
         return "admin/view/manager_seler";
     }
+
     @GetMapping("/listNoAccept")
-    public String listSellers_No_accept(Model model) {
-        model.addAttribute("sellers", adminSellerService.findAllSellers());
-        model.addAttribute("pendingSellers", adminSellerService.findPendingSellers());
+    public String listSellersNoAccept(Model model) {
+        model.addAttribute("pendingSellers", adminSellerService.findPendingSellers()); // Corrected attribute name
         return "admin/view/manager_accept_seller";
+    }
+
+    @GetMapping("/get/{id}")
+    @ResponseBody
+    public ResponseEntity<Seller> getSeller(@PathVariable("id") Long id) {
+        Optional<Seller> sellerOptional = adminSellerService.findSellerById(id);
+        return sellerOptional
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    @PostMapping("/lock/{id}")
+    @Transactional // Important for database updates
+    public String lockSeller(@PathVariable("id") Long id) {
+        adminSellerService.lockSeller(id); // You'll need to implement this service method
+        return "redirect:/admin/seller/list"; // Redirect back to the seller list
+    }
+
+    @PostMapping("/unlock/{id}")
+    @Transactional
+    public String unlockSeller(@PathVariable("id") Long id) {
+        adminSellerService.unlockSeller(id); // You'll need to implement this service method
+        return "redirect:/admin/seller/list";
     }
 }

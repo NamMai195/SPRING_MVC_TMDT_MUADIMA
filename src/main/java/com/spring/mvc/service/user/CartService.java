@@ -1,13 +1,13 @@
-package com.spring.mvc.service.user;
+package com.spring.mvc.service.user; // Correct package
 
 import com.spring.mvc.domain.Cart;
 import com.spring.mvc.domain.Product;
 import com.spring.mvc.domain.User;
-import com.spring.mvc.repository.seller.Seller_ProductReponsitory;
 import com.spring.mvc.repository.user.CartReponsitory;
-
+import com.spring.mvc.repository.user.User_ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,52 +15,56 @@ import java.util.Optional;
 @Service
 public class CartService {
     @Autowired
-    private CartReponsitory cartRepository;
+    private CartReponsitory cartRepository; // Corrected name
     @Autowired
-    private Seller_ProductReponsitory productRepository;
+    private User_ProductRepository productRepository;
 
     public List<Cart> getCartItemsByUser(User user) {
-        List<Cart> cartItems = cartRepository.findByUser(user);
-        for (Cart cart : cartItems) {
-            cart.getProduct().setFirstImage(cart.getProduct().getFirstImage()); // Đảm bảo firstImage được gán
-        }
-        return cartItems;
+        return cartRepository.findByUser(user);
     }
-    // Cập nhật số lượng sản phẩm trong giỏ hàng
+
+    @Transactional // Important for update operations
     public void updateCartItem(Long cartId, int quantity) {
         Optional<Cart> optionalCart = cartRepository.findById(cartId);
-        if (optionalCart.isPresent()) {
-            Cart cart = optionalCart.get();
+        optionalCart.ifPresent(cart -> {
             if (quantity > 0) {
                 cart.setQuantity(quantity);
                 cartRepository.save(cart);
             } else {
-                cartRepository.delete(cart); // Nếu số lượng = 0 thì xóa luôn
+                cartRepository.delete(cart); // Delete if quantity is 0 or less
             }
-        }
+        });
     }
 
-    // Xóa sản phẩm khỏi giỏ hàng
+    @Transactional
     public void removeCartItem(Long cartId) {
         cartRepository.deleteById(cartId);
     }
-
+    @Transactional
     public void addToCart(User user, Long productId) {
-        Product product = productRepository.findById(productId).orElse(null);
-        if (product == null) return;
+        Optional<Product> productOptional = productRepository.findById(productId);
+        if (productOptional.isEmpty()) {
+            // Handle the case where the product doesn't exist.  Throw an exception, log, etc.
+            throw new IllegalArgumentException("Product with ID " + productId + " not found.");
+        }
+        Product product = productOptional.get();
 
-        // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
         Cart existingCartItem = cartRepository.findByUserAndProduct(user, product);
         if (existingCartItem != null) {
-            // Nếu có rồi thì tăng số lượng
             existingCartItem.setQuantity(existingCartItem.getQuantity() + 1);
+            cartRepository.save(existingCartItem); // Save the updated item
         } else {
-            // Nếu chưa có thì tạo mới
             Cart cartItem = new Cart();
             cartItem.setUser(user);
             cartItem.setProduct(product);
             cartItem.setQuantity(1);
             cartRepository.save(cartItem);
         }
+    }
+    // Clear cart after checkout.
+    @Transactional
+    public  void clearCart(User user){
+        List<Cart> carts = cartRepository.findByUser(user);
+        cartRepository.deleteAll(carts);
     }
 }

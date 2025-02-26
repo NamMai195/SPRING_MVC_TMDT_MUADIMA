@@ -22,23 +22,31 @@ public class HomeController {
     private ProductTypeService productTypeService;
 
     @GetMapping("/")
-    public String home(@RequestParam(value = "typeId", required = false) Long typeId, Model model) {
+    public String home(
+            @RequestParam(value = "typeId", required = false) Long typeId,
+            @RequestParam(value = "keyword", required = false) String keyword,
+            Model model) {
+
         List<ProductType> productTypes = productTypeService.getAllActiveProductTypes(); // Lấy danh sách loại sản phẩm
         List<Product> products;
 
-        if (typeId != null) {
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            // Nếu có keyword -> Tìm kiếm sản phẩm theo tên
+            products = productService.searchByName(keyword);
+        } else if (typeId != null) {
             // Nếu có typeId -> Lọc sản phẩm theo loại
             products = productService.getProductsByType(typeId);
         } else {
-            // Nếu không có typeId -> Lấy toàn bộ sản phẩm có trạng thái "Hoạt động"
+            // Nếu không có filter nào -> Lấy toàn bộ sản phẩm có trạng thái "Hoạt động"
             products = productService.getActiveProducts();
         }
 
         model.addAttribute("productTypes", productTypes);
         model.addAttribute("products", products);
-        model.addAttribute("selectedTypeId", typeId); // Để biết loại sản phẩm nào đang được chọn
+        model.addAttribute("selectedTypeId", typeId);
+        model.addAttribute("keyword", keyword); // Lưu keyword để hiển thị lại khi tìm kiếm
 
-        return "user/view/index"; // Trả về trang giao diện chính
+        return "user/view/index"; // Trả về trang index hiển thị kết quả
     }
 
     @GetMapping("/type")

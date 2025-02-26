@@ -9,9 +9,11 @@
         height: 80px;
         object-fit: cover;
         margin-right: 5px;
+        border-radius: 5px;
     }
     .thumbnail:hover {
         opacity: 0.7;
+        transform: scale(1.1);
     }
     .image-container {
         position: relative;
@@ -20,9 +22,9 @@
     .main-image {
         width: 100%;
         height: 500px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
+        border-radius: 10px;
         padding: 5px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     }
     .nav-arrow {
         position: absolute;
@@ -33,20 +35,10 @@
         border: none;
         padding: 10px;
         cursor: pointer;
-        border-radius: 5px;
+        border-radius: 50%;
     }
     .nav-arrow.left { left: 10px; }
     .nav-arrow.right { right: 10px; }
-
-    .btn-primary {
-        background-color: #007bff;
-        border: none;
-    }
-
-    .btn-primary:hover {
-        background-color: #0056b3;
-    }
-
 </style>
 
 <body>
@@ -59,46 +51,37 @@
 
         <div class="container">
             <div class="page-inner">
-                <div class="container">
-                    <div class="text-center my-2 mb-3">
-                        <h1  class="fw-bold text-danger" th:text="${product.name}" ></h1>
+                <div class="container py-4">
+                    <div class="text-center my-2">
+                        <h1 class="fw-bold text-primary" th:text="${product.name}"></h1>
                     </div>
-
-                    <div class="container mt-5">
-                        <div class="row">
-                            <!-- Cột bên trái: Ảnh lớn + danh sách ảnh nhỏ -->
-                            <div class="col-md-6">
-                                <div class="image-container">
-                                    <!-- Nút điều hướng ảnh -->
-                                    <button class="nav-arrow left" onclick="prevImage()">❮</button>
-                                    <img id="mainImage" th:src="'/uploads/'+${product.firstImage} " class="img-fluid main-image" alt="Ảnh sản phẩm">
-                                    <button class="nav-arrow right" onclick="nextImage()">❯</button>
-                                </div>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="image-container position-relative">
+                                <button class="nav-arrow left" onclick="prevImage()">❮</button>
+                                <img id="mainImage" th:src="'/uploads/'+${product.firstImage}" class="img-fluid main-image" alt="Ảnh sản phẩm">
+                                <button class="nav-arrow right" onclick="nextImage()">❯</button>
                             </div>
-
-                            <!-- Thông tin sản phẩm -->
-                            <div class="col-md-6">
-                                <h2 th:text="${product.name}">Tên sản phẩm</h2>
-                                <p><strong>Giá:</strong> <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')} + ' VNĐ'"></span></p>
-                                <p><strong>Mô tả:</strong> <span th:text="${product.describe}">Mô tả sản phẩm.</span></p>
-                                <div class="d-flex gap-2">
-                                    <a href="/" class="btn btn-secondary">Quay lại</a>
-                                    <form method="POST" th:action="@{/cart/add}">
-                                        <input type="hidden" name="productId" th:value="${product.id}">
-                                        <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>
-                                    </form>
-                                </div>
-                                <!-- Danh sách ảnh nhỏ -->
-                                <div class="d-flex flex-wrap mt-2">
-                                    <div th:each="img, iterStat : ${images}">
-                                        <img th:src="'/uploads/'+${img}" class="img-thumbnail thumbnail" th:attr="data-index=${iterStat.index}" onclick="changeImage(this)">
-                                    </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h2 th:text="${product.name}"></h2>
+                            <p class="fs-5"><strong>Giá:</strong> <span class="text-danger fw-bold" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')} + ' VNĐ'"></span></p>
+                            <p class="text-muted"><strong>Mô tả:</strong> <span th:text="${product.describe}"></span></p>
+                            <div class="d-flex gap-3">
+                                <a href="/" class="btn btn-secondary">Quay lại</a>
+                                <form method="POST" th:action="@{/cart/add}">
+                                    <input type="hidden" name="productId" th:value="${product.id}">
+                                    <button type="submit" class="btn btn-success">Thêm vào giỏ hàng</button>
+                                </form>
+                            </div>
+                            <div class="d-flex flex-wrap mt-3">
+                                <div th:each="img, iterStat : ${images}">
+                                    <img th:src="'/uploads/'+${img}" class="img-thumbnail thumbnail" th:attr="data-index=${iterStat.index}" onclick="changeImage(this)">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -302,30 +285,55 @@
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        let images = Array.from(document.querySelectorAll('.thumbnail')).map(img => img.src);
-        let currentIndex = 0;
+        let thumbnails = document.querySelectorAll('.thumbnail');
         let mainImage = document.getElementById("mainImage");
+        let images = Array.from(thumbnails).map(img => img.src);
+        let currentIndex = 0;
 
-        function changeImage(imgElement) {
-            mainImage.src = imgElement.src;
-            currentIndex = parseInt(imgElement.getAttribute("data-index"));
+        // Hiệu ứng chuyển đổi ảnh
+        function fadeInEffect(imgElement) {
+            imgElement.style.opacity = 0;
+            setTimeout(() => {
+                imgElement.style.transition = "opacity 0.3s";
+                imgElement.style.opacity = 1;
+            }, 50);
         }
 
+        // Cập nhật ảnh chính
+        function changeImage(imgElement) {
+            currentIndex = parseInt(imgElement.getAttribute("data-index"));
+            mainImage.src = images[currentIndex];
+            fadeInEffect(mainImage);
+        }
+
+        // Điều hướng ảnh trước
         function prevImage() {
             currentIndex = (currentIndex > 0) ? currentIndex - 1 : images.length - 1;
             mainImage.src = images[currentIndex];
+            fadeInEffect(mainImage);
         }
 
+        // Điều hướng ảnh sau
         function nextImage() {
             currentIndex = (currentIndex < images.length - 1) ? currentIndex + 1 : 0;
             mainImage.src = images[currentIndex];
+            fadeInEffect(mainImage);
         }
 
-        window.changeImage = changeImage;
+        // Gán sự kiện click cho ảnh nhỏ
+        thumbnails.forEach((img, index) => {
+            img.setAttribute("data-index", index);
+            img.addEventListener("click", function () {
+                changeImage(this);
+            });
+        });
+
+        // Xuất hàm ra global để gọi từ HTML
         window.prevImage = prevImage;
         window.nextImage = nextImage;
     });
 </script>
+
 <!--   Core JS Files   -->
 <script src="/assets/js/core/jquery-3.7.1.min.js"></script>
 <script src="/assets/js/core/popper.min.js"></script>

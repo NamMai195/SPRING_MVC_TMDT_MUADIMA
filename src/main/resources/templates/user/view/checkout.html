@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{user/layout/head :: head}">
+  <title>Checkout</title>
+</head>
+<body>
+<div class="wrapper">
+  <div th:replace="~{user/layout/Sidebar :: sidebar}"></div>
+  <div class="main-panel">
+    <div th:replace="~{user/layout/header :: header}"></div>
+    <div class="container">
+      <h1>Checkout</h1>
+
+      <p>Review your order and proceed to payment.</p>
+
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Subtotal</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${cartItems}">
+          <td th:text="${item.product.name}"></td>
+          <td th:text="${#numbers.formatCurrency(item.product.price)}"></td>
+          <td th:text="${item.quantity}"></td>
+          <td th:text="${#numbers.formatCurrency(item.product.price * item.quantity)}"></td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+          <td colspan="3" class="text-right"><strong>Total:</strong></td>
+          <td th:text="${#aggregates.sum(cartItems.![product.price * quantity])}"></td>
+
+        </tr>
+        </tfoot>
+      </table>
+
+      <form th:action="@{/cart/checkout}" method="post">
+        <button type="submit" class="btn btn-primary">Confirm Order</button>
+      </form>
+    </div>
+    <footer th:replace="~{user/layout/footer :: footer}"></footer>
+  </div>
+</div>
+</body>
+</html>

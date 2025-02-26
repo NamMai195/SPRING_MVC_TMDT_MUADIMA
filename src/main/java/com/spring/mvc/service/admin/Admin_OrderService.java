@@ -1,6 +1,7 @@
 package com.spring.mvc.service.admin;
 
 import com.spring.mvc.domain.Order;
+import com.spring.mvc.domain.User;
 import com.spring.mvc.repository.admin.Admin_OrderRepository; // You'll need to create this repository
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,4 +31,16 @@ public class Admin_OrderService {
 
     public Object calculateTotalRevenue() {
      return null;}
+
+    public void saveOrder(Order order) {
+        this.adminOrderRepository.save(order);
+    }
+
+    public List<Order> findOrdersByUserId(Long userId) {
+        return adminOrderRepository.findByUser_Id(userId); // Change method in Order Repository
+    }
+    //In OrderService
+    public List<Order> findOrdersByUser(User user) {
+        return adminOrderRepository.findByUser(user);
+    }
 }

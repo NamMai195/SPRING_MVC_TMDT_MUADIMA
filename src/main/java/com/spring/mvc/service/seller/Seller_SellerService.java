@@ -1,8 +1,7 @@
-package com.spring.mvc.service.admin;
+package com.spring.mvc.service.seller;
 
 import com.spring.mvc.domain.Seller;
-import com.spring.mvc.repository.admin.Admin_SellerRepository; // You'll need to create this repository
-import org.apache.el.parser.AstFalse;
+import com.spring.mvc.repository.admin.Admin_SellerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class Admin_SellerService {
+public class Seller_SellerService {
 
     @Autowired
     private Admin_SellerRepository adminSellerRepository;

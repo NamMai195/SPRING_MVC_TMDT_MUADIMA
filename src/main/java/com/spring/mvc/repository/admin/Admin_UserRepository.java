@@ -17,4 +17,5 @@ public interface Admin_UserRepository extends JpaRepository<User, Integer> {
 
     User findById(long id);
 
+    long countByStatus(boolean status);
 }

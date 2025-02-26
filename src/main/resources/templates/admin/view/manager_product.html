@@ -34,8 +34,7 @@
                       <th>Giá</th>
                       <th>Số lượng</th>
                       <th>Loại sản phẩm</th>
-                      <th>Trạng thái</th>
-                      <th>Hành động</th>
+                      <th>Trạng thái</th>  <th>Hành động</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -45,15 +44,17 @@
                       <td th:text="${product.price}"></td>
                       <td th:text="${product.quantity}"></td>
                       <td th:text="${product.productType.name}"></td>
-                      <td th:text="${product.status}"></td>
-                      <td>
-                        <a href="#" th:data-id="${product.id}" class="btn btn-link btn-success btn-sm approve-btn" data-bs-toggle="tooltip" title="Duyệt">
-                          <i class="fas fa-check"></i>
-                        </a>
-                        <a href="#" th:data-id="${product.id}" class="btn btn-link btn-danger btn-sm delete-btn" data-bs-toggle="tooltip" title="Xóa">
-                          <i class="fas fa-trash-alt"></i>
-                        </a>
-                      </td>
+                      <td th:text="${product.status == 'Chờ duyệt' ? 'Chờ duyệt' : 'Đã duyệt'}"></td> <td>
+                      <button th:data-id="${product.id}" class="btn btn-link btn-info btn-sm view-btn" data-bs-toggle="tooltip" title="Xem">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button th:data-id="${product.id}" class="btn btn-link btn-success btn-sm approve-btn" data-bs-toggle="tooltip" title="Duyệt">
+                        <i class="fas fa-check"></i>
+                      </button>
+                      <button th:data-id="${product.id}" class="btn btn-link btn-danger btn-sm reject-btn" data-bs-toggle="tooltip" title="Từ chối">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </td>
                     </tr>
                     </tbody>
                   </table>
@@ -86,6 +87,7 @@
                       <th>Số lượng</th>
                       <th>Người bán</th>
                       <th>Loại sản phẩm</th>
+                      <th>Trạng thái</th>
                       <th>Hành động</th>
                     </tr>
                     </thead>
@@ -97,17 +99,18 @@
                       <td th:text="${product.quantity}"></td>
                       <td th:text="${product.seller.name}"></td>
                       <td th:text="${product.productType.name}"></td>
+                      <td th:text="${product.status == 'Hoạt động' ? 'Hoạt động' : 'Không hoạt động'}"></td>
                       <td>
-                        <a th:href="@{/admin/product/edit/{id}(id=${product.id})}" class="btn btn-link btn-primary btn-sm" data-bs-toggle="tooltip" title="Sửa">
-                          <i class="fas fa-edit"></i>
-                        </a>
-                        <a href="#" th:data-id="${product.id}" class="btn btn-link btn-danger btn-sm delete-btn" data-bs-toggle="tooltip" title="Xóa">
+                        <button th:data-id="${product.id}" class="btn btn-link btn-info btn-sm view-btn" data-bs-toggle="tooltip" title="Xem">
+                          <i class="fas fa-eye"></i>
+                        </button>
+                        <button th:data-id="${product.id}" class="btn btn-link btn-danger btn-sm delete-btn" data-bs-toggle="tooltip" title="Xóa">
                           <i class="fas fa-trash-alt"></i>
-                        </a>
+                        </button>
                       </td>
                     </tr>
                     <tr th:if="${products.isEmpty()}">
-                      <td colspan="7">Không tìm thấy sản phẩm.</td>
+                      <td colspan="8">Không tìm thấy sản phẩm.</td>
                     </tr>
                     </tbody>
                   </table>
@@ -121,6 +124,32 @@
 
     <footer th:replace="/admin/layout/footer:: footer"></footer>
   </div>
+
+  <div class="modal fade" id="viewProductModal" tabindex="-1" role="dialog" aria-labelledby="viewProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="viewProductModalLabel">Chi tiết sản phẩm</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Tên sản phẩm:</strong> <span id="viewName"></span></p>
+          <p><strong>Mô tả:</strong> <span id="viewDescribe"></span></p>
+          <p><strong>Giá:</strong> <span id="viewPrice"></span></p>
+          <p><strong>Số lượng:</strong> <span id="viewQuantity"></span></p>
+          <p><strong>Người bán:</strong> <span id="viewSeller"></span></p>
+          <p><strong>Loại sản phẩm:</strong> <span id="viewProductType"></span></p>
+          <p><strong>Trạng thái:</strong> <span id="viewStatus"></span></p>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script th:src="@{/assets/js/core/jquery-3.7.1.min.js}"></script>
@@ -129,109 +158,147 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script th:src="@{/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js}"></script>
-<script th:src="@{/assets/js/plugin/chart.js/chart.min.js}"></script>
-<script th:src="@{/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js}"></script>
-<script th:src="@{/assets/js/plugin/chart-circle/circles.min.js}"></script>
 <script th:src="@{/assets/js/plugin/datatables/datatables.min.js}"></script>
-<script th:src="@{/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js}"></script>
-<script th:src="@{/assets/js/plugin/jsvectormap/jsvectormap.min.js}"></script>
-<script th:src="@{/assets/js/plugin/jsvectormap/world.js}"></script>
-<script th:src="@{/assets/js/plugin/sweetalert/sweetalert.min.js}"></script>
 <script th:src="@{/assets/js/kaiadmin.min.js}"></script>
-<script th:src="@{/assets/js/setting-demo.js}"></script>
-<script th:src="@{/assets/js/demo.js}"></script>
+
 
 <script>
-  //... (Your existing JavaScript code for charts and DataTable)...
-  $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
-    type: "line",
-    height: "70",
-    width: "100%",
-    lineWidth: "2",
-    lineColor: "#177dff",
-    fillColor: "rgba(23, 125, 255, 0.14)",
-  });
+  $(document).ready(function() {
+    $('#pending-product-table').DataTable({
+      pageLength: 5,
+    });
+    $('#product-table').DataTable({
+      pageLength: 5,
+    });
 
-  $("#lineChart2").sparkline([99, 125, 122, 105, 110, 124, 115], {
-    type: "line",
-    height: "70",
-    width: "100%",
-    lineWidth: "2",
-    lineColor: "#f3545d",
-    fillColor: "rgba(243, 84, 93, .14)",
-  });
+    // View Product
+    $('.view-btn').click(function() {
+      var productId = $(this).data('id');
+      $.ajax({
+        url: '/admin/product/get/' + productId,
+        type: 'GET',
+        success: function(product) {
+          $('#viewName').text(product.name);
+          $('#viewDescribe').text(product.describe);
+          $('#viewPrice').text(product.price);
+          $('#viewQuantity').text(product.quantity);
+          $('#viewSeller').text(product.seller.name);
+          $('#viewProductType').text(product.productType.name);
+          $('#viewStatus').text(product.status); // Directly display the status string
+          $('#viewProductModal').modal('show');
+        },
+        error: function() {
+          Swal.fire('Lỗi!', 'Không thể lấy thông tin sản phẩm.', 'error');
+        }
+      });
+    });
 
-  $("#lineChart3").sparkline([105, 103, 123, 100, 95, 105, 115], {
-    type: "line",
-    height: "70",
-    width: "100%",
-    lineWidth: "2",
-    lineColor: "#ffa534",
-    fillColor: "rgba(255, 165, 52, .14)",
-  });
-  // Add Row
-  $("#add-row").DataTable({
-    pageLength: 5,
-  });
+    // Approve Product
+    $('.approve-btn').click(function(event) {
+      event.preventDefault();
+      var productId = $(this).data('id');
 
-  var action =
-          '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
+      Swal.fire({
+        title: 'Duyệt sản phẩm?',
+        text: "Bạn có chắc chắn muốn duyệt sản phẩm này?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Duyệt',
+        cancelButtonText: 'Hủy'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: '/admin/product/approve/' + productId,
+            type: 'POST',
+            success: function(result) {
+              Swal.fire(
+                      'Thành công!',
+                      'Sản phẩm đã được duyệt.',
+                      'success'
+              ).then(() => {
+                window.location.reload();
+              });
+            },
+            error: function() {
+              Swal.fire('Lỗi!', 'Đã xảy ra lỗi khi duyệt sản phẩm.', 'error');
+            }
+          });
+        }
+      });
+    });
 
-  $("#addRowButton").click(function () {
-    $("#add-row")
-            .dataTable()
-            .fnAddData([
-              $("#addName").val(),
-              $("#addPosition").val(),
-              $("#addOffice").val(),
-              action,
-            ]);
-    $("#addRowModal").modal("hide");
-  })
-  $('.delete-btn').click(function(event) {
-    event.preventDefault();
-    var productId = $(this).data('id'); // Lấy ID sản phẩm
+    // Reject Product (using event delegation for dynamically added buttons)
+    $(document).on('click', '.reject-btn', function(event) {
+      event.preventDefault();
+      var productId = $(this).data('id');
 
-    Swal.fire({
-      title: 'Bạn có chắc chắn muốn xóa?',
-      text: "Hành động này không thể hoàn tác!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Xóa',
-      cancelButtonText: 'Hủy'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Gửi yêu cầu DELETE bằng AJAX
-        $.ajax({
-          url: '/admin/product/delete/' + productId, // Thay đổi URL
-          type: 'DELETE',
-          success: function(result) {
-            Swal.fire(
-                    'Đã xóa!',
-                    'Sản phẩm đã được xóa.',
-                    'success'
-            ).then(() => {
-              window.location.reload();
-            });
-          },
-          error: function(xhr, status, error) {
-            Swal.fire(
-                    'Lỗi!',
-                    'Đã xảy ra lỗi khi xóa sản phẩm.',
-                    'error'
-            );
-          }
-        });
-      } else {
-        Swal.fire(
-                'Hủy bỏ xóa!',
-                'Dữ liệu của bạn vẫn an toàn.',
-                'info'
-        )
-      }
-    })
+      Swal.fire({
+        title: 'Từ chối sản phẩm?',
+        text: "Bạn có chắc chắn muốn từ chối sản phẩm này? Hành động này sẽ xóa sản phẩm.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Từ chối',
+        cancelButtonText: 'Hủy'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: '/admin/product/reject/' + productId, // Correct URL for rejection
+            type: 'POST', // Correct method for rejection
+            success: function(result) {
+              Swal.fire(
+                      'Đã từ chối!',
+                      'Sản phẩm đã bị từ chối và xóa.',
+                      'success'
+              ).then(() => {
+                window.location.reload();
+              });
+            },
+            error: function() {
+              Swal.fire('Lỗi!', 'Đã xảy ra lỗi khi từ chối sản phẩm.', 'error');
+            }
+          });
+        }
+      });
+    });
+    // Delete Product (Approved Products)
+    $('.delete-btn').click(function(event) {
+      event.preventDefault();
+      var productId = $(this).data('id');
+
+      Swal.fire({
+        title: 'Xóa sản phẩm?',
+        text: "Bạn có chắc chắn muốn xóa sản phẩm này? Hành động này không thể hoàn tác.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Hủy'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: '/admin/product/delete/' + productId,
+            type: 'GET', // Use POST or DELETE if your controller is set up that way
+            success: function(result) {
+              Swal.fire(
+                      'Đã xóa!',
+                      'Sản phẩm đã bị xóa.',
+                      'success'
+              ).then(() => {
+                window.location.reload();
+              });
+            },
+            error: function() {
+              Swal.fire('Lỗi!', 'Đã xảy ra lỗi khi xóa sản phẩm.', 'error');
+            }
+          });
+        }
+      });
+    });
   });
 </script>
 </body>
