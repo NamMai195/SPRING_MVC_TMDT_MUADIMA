@@ -116,6 +116,14 @@
                         </li>
                     </ul>
                 </li>
+
+                <li class="nav-item topbar-icon ">
+                    <a class="nav-link dropdown-toggle" href="/cart" role="button">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </a>
+
+                </li>
+
                 <li class="nav-item topbar-icon dropdown hidden-caret">
                     <a
                             class="nav-link dropdown-toggle"
@@ -293,19 +301,18 @@
                                         <p class="text-muted" th:unless="${session.loggedInUser != null}">
                                             Chưa đăng nhập
                                         </p>
-                                        <a href="/profile" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
+                                        <a href="/login" class="btn btn-xs btn-secondary btn-sm">Login</a>
                                     </div>
                                 </div>
                             </li>
                             <li>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="/profileuser">My Profile</a>
-                                <a class="dropdown-item" href="/login">Login</a>
                                 <a class="dropdown-item" href="/registeruser">Register</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="/changepassword">Change Password</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/cart">Cart</a>
+                                <a class="dropdown-item" href="/registerseller">Register Seller</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="/logout">Logout</a>
                             </li>

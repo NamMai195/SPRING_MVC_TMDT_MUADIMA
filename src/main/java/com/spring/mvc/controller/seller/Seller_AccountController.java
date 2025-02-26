@@ -5,6 +5,8 @@ import com.spring.mvc.repository.seller.Seller_AccountRepository;
 import com.spring.mvc.service.seller.Seller_EmailService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,8 @@ import java.util.Random;
 
 @Controller
 public class Seller_AccountController {
+
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
     private Seller_AccountRepository sellerRepository;
@@ -62,7 +66,7 @@ public class Seller_AccountController {
 
         Seller newSeller = new Seller();
         newSeller.setName(name);
-        newSeller.setPassword(password);
+        newSeller.setPassword(passwordEncoder.encode(password));
         newSeller.setEmail(email);
         newSeller.setSdt(sdt);
         newSeller.setCccd(cccd);
@@ -86,17 +90,11 @@ public class Seller_AccountController {
                         @RequestParam("password") String password,
                         HttpSession session, RedirectAttributes redirectAttributes) {
         Optional<Seller> sellerOptional = sellerRepository.findByEmail(email);
-
         if (sellerOptional.isPresent()) {
             Seller seller = sellerOptional.get();
-
-            if (!seller.isStatus()) {
-                redirectAttributes.addFlashAttribute("error", "Tài khoản bán hàng chưa được duyệt!");
-                return "redirect:/sellerlogin";
-            }
-
-            if (seller.getPassword().equals(password)) {
+            if (passwordEncoder.matches(password, seller.getPassword())) {
                 session.setAttribute("loggedInSeller", seller);
+                redirectAttributes.addFlashAttribute("success", "Đăng nhập thành công!");
                 return "redirect:/seller";
             } else {
                 redirectAttributes.addFlashAttribute("error", "Mật khẩu không đúng!");
@@ -104,7 +102,6 @@ public class Seller_AccountController {
         } else {
             redirectAttributes.addFlashAttribute("error", "Email không tồn tại!");
         }
-
         return "redirect:/sellerlogin";
     }
 
@@ -216,17 +213,17 @@ public class Seller_AccountController {
     @PostMapping("/forgot-password")
     public String processForgotPassword(@RequestParam("email") String email, Model model) {
         Optional<Seller> sellerOptional = sellerRepository.findByEmail(email);
-
         if (sellerOptional.isPresent()) {
             Seller seller = sellerOptional.get();
-            String password = seller.getPassword();
+            String tempPassword = generateRandomPassword();
+            seller.setPassword(passwordEncoder.encode(tempPassword));
+            sellerRepository.save(seller);
 
             String subject = "Khôi phục mật khẩu";
-            String message = "Mật khẩu của bạn là: " + password;
-
+            String message = "Mật khẩu tạm thời của bạn là: " + tempPassword;
             sellerEmailService.sendEmail(email, subject, message);
 
-            model.addAttribute("success", "Mật khẩu đã được gửi đến email của bạn!");
+            model.addAttribute("success", "Mật khẩu tạm thời đã được gửi đến email của bạn!");
         } else {
             model.addAttribute("error", "Email không tồn tại trong hệ thống!");
         }
@@ -234,6 +231,16 @@ public class Seller_AccountController {
         return "/seller/view/forgotpass_seller";
     }
 
+    private String generateRandomPassword() {
+        int length = 8;
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$!";
+        Random random = new Random();
+        StringBuilder password = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            password.append(chars.charAt(random.nextInt(chars.length())));
+        }
+        return password.toString();
+    }
 
 
     // Mở trang đổi mật khẩu (chỉ hiển thị nút gửi OTP ban đầu)
@@ -257,14 +264,11 @@ public class Seller_AccountController {
         }
         Random random = new Random();
         int otp = 100000 + random.nextInt(900000);
-
         // Lưu OTP vào session
         session.setAttribute("otp", otp);
-
         // Gửi OTP qua email
         String subject = "Mã OTP xác nhận đổi mật khẩu";
         String message = "Mã OTP của bạn là: " + otp + ". Vui lòng nhập mã này để đổi mật khẩu.";
-
         sellerEmailService.sendEmail(seller.getEmail(), subject, message);
 
         model.addAttribute("success", "Mã OTP đã được gửi đến email của bạn.");
@@ -292,15 +296,17 @@ public class Seller_AccountController {
             return "redirect:/change-password";
         }
 
-        // Đổi mật khẩu
-        seller.setPassword(newPassword);
+        // Mã hóa mật khẩu trước khi lưu
+        seller.setPassword(passwordEncoder.encode(newPassword));
         sellerRepository.save(seller);
+
+        redirectAttributes.addFlashAttribute("success", "Mật khẩu đã được thay đổi thành công! Vui lòng đăng nhập lại.");
 
         // Xóa OTP và đăng xuất
         session.removeAttribute("otp");
         session.removeAttribute("loggedInSeller");
 
-        redirectAttributes.addFlashAttribute("success", "Mật khẩu đã được thay đổi thành công! Vui lòng đăng nhập lại.");
+
         return "redirect:/sellerlogin";
     }
 
