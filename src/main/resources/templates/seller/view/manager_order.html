@@ -41,7 +41,7 @@
                                             <td th:text="${order.id}"></td>
                                             <td th:text="${order.user.name}"></td>
                                             <td th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
-                                            <td th:text="${order.totalAmount}"></td>
+                                            <td th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 2, 'POINT')}"></td>
                                             <td th:text="${order.status? 'Hoàn thành': 'Chờ xử lý'}"></td>
                                             <td>
                                                 <a th:href="@{/seller/orders/detail/{id}(id=${order.id})}" class="btn btn-link btn-primary btn-sm" data-bs-toggle="tooltip" title="Chi tiết">
